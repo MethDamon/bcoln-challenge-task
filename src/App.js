@@ -5,7 +5,8 @@ import { Button } from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
 import styled from 'styled-components';
 import { Input, InputGroup, Icon } from 'rsuite';
-
+import CurrentGame from './components/CurrentGame'
+import GAME_STATUS from './const/GameStatus';
 
 
 const Container = styled.div`
@@ -25,13 +26,15 @@ const Footer = styled.div`
   align-items: center;
   color: white;
 `;
-const GameStatus = styled.div`
-
-`
 
 const styles = {
     width: 300,
     marginBottom: 10,
+};
+const stylesCurrentGame= {
+    width: 300,
+    marginBottom: 100,
+    borderRadius: 7
 };
 class App extends Component {
   render() {
@@ -40,7 +43,11 @@ class App extends Component {
         <header className="App-header" >
         </header>
           <Container>
-              <GameStatus style={styles}>Current Game Status</GameStatus>
+              <CurrentGame style={stylesCurrentGame}
+                           nrOfPlayers={5}
+                           currentBet ={200}
+                           gameStatus = {GAME_STATUS.GAME_STARTED}
+              />
               <InputGroup inside style={styles}>
                   <InputGroup.Addon>
                       <Icon icon="avatar" />
