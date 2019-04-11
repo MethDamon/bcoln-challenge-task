@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux'
 import './App.css';
 import { Button } from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
@@ -142,6 +143,12 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = state =>{
+    return state;
+}
 
+const mapActionsToProps = state =>{
+    isLoading : {}
+}
 
-export default App;
+export default connect(mapStateToProps, mapActionsToProps)(App);
