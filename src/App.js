@@ -1,14 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 import './App.css';
-import { Button } from 'rsuite';
+import {Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
 import styled from 'styled-components';
-import { Input, InputGroup, Icon } from 'rsuite';
+import {Input, InputGroup, Icon} from 'rsuite';
 import CurrentGame from './components/CurrentGame'
 import GAME_STATUS from './const/GameStatus';
 import Web3 from 'web3';
 import contractConfig from './const/contractConfig'
+import {uiStartLoading, uiStopLoading} from './store/actions/uiActionCreators';
+
 
 let web3 = window.web3;
 const Web3Providers = {
@@ -40,13 +43,13 @@ const styles = {
     width: 300,
     marginBottom: 10,
 };
-const stylesCurrentGame= {
+const stylesCurrentGame = {
     width: 300,
     marginBottom: 100,
     borderRadius: 7
 };
-class App extends Component {
 
+class App extends Component {
     async componentDidMount() {
         this.state.contract.methods
             .all(0)
@@ -69,7 +72,7 @@ class App extends Component {
             // MetaMask
             CONTRACT_ADDRESS = contractConfig.METAMASK_CONTRACT_ADDRESS;
             provider = Web3Providers.META_MASK
-        }else {
+        } else {
             this.web3Provider = new Web3.providers.HttpProvider(
                 'http://localhost:8545'
             );
@@ -92,63 +95,79 @@ class App extends Component {
     }
 
     render() {
-    return (
-      <div className="App">
-        <header className="App-header" >
-        </header>
-          <Container>
-              <CurrentGame style={stylesCurrentGame}
-                           nrOfPlayers={5}
-                           currentBet ={200}
-                           gameStatus = {GAME_STATUS.GAME_STARTED}
-              />
-              <InputGroup inside style={styles}>
-                  <InputGroup.Addon>
-                      <Icon icon="avatar" />
-                  </InputGroup.Addon>
-                  <Input />
-              </InputGroup>
+        return (
+            <div className="App">
+                <button onClick={()=>{
+                    if(this.props.isLoading){
+                        this.props.stopLoading()
+                    }else{
+                        this.props.startLoading()
+                    }
+                }}>TOGGLE LOADING</button>
+                {this.props.isLoading ?
+                    (<div>TEST CARICAMENTO</div>) : (
+                        <div>
+                        <header className="App-header">
+                        </header>
+                        < Container >
+                        < CurrentGame style={stylesCurrentGame}
+                    nrOfPlayers={5}
+                    currentBet={200}
+                    gameStatus={GAME_STATUS.GAME_STARTED}
+                    />
+                    <InputGroup inside style={styles}>
+                    <InputGroup.Addon>
+                    <Icon icon="avatar"/>
+                    </InputGroup.Addon>
+                    <Input/>
+                    </InputGroup>
 
-              <InputGroup style={styles}>
-                      <InputGroup.Addon>$</InputGroup.Addon>
-                      <Input />
-                      <InputGroup.Addon>.00</InputGroup.Addon>
-                  </InputGroup>
-              <Button color="yellow" >
-                  Login
-              </Button>
-          </Container>
-          <Footer>
+                    <InputGroup style={styles}>
+                    <InputGroup.Addon>$</InputGroup.Addon>
+                    <Input/>
+                    <InputGroup.Addon>.00</InputGroup.Addon>
+                    </InputGroup>
+                    <Button color="yellow">
+                    Login
+                    </Button>
+                    </Container>
+                    <Footer>
 
-              <p
-                  style={{
-                      marginBottom: 0,
-                      marginTop: '5em',
-                      fontSize: 18,
-                      fontWeight: 'bold'
-                  }}
-              >
-                  Developed by:{' '}
-              </p>
-              <p style={{marginTop: 5, marginBottom: 0}}>Ile Cepilov </p>
-              <p style={{marginTop: 5, marginBottom: 0}}>Elfat Esati</p>
-              <p style={{marginTop: 5, marginBottom: 0}}>Tim Strasser</p>
-              <p style={{marginTop: 5, marginBottom: 0}}>Erion Sula</p>
-              <p style={{marginTop: 5, marginBottom: 0}}>Ledri Thaqi</p>
+                    <p
+                    style={{
+                    marginBottom: 0,
+                    marginTop: '5em',
+                    fontSize: 18,
+                    fontWeight: 'bold'
+                }}
+                    >
+                    Developed by:{' '}
+                    </p>
+                    <p style={{marginTop: 5, marginBottom: 0}}>Ile Cepilov </p>
+                    <p style={{marginTop: 5, marginBottom: 0}}>Elfat Esati</p>
+                    <p style={{marginTop: 5, marginBottom: 0}}>Tim Strasser</p>
+                    <p style={{marginTop: 5, marginBottom: 0}}>Erion Sula</p>
+                    <p style={{marginTop: 5, marginBottom: 0}}>Ledri Thaqi</p>
 
 
-          </Footer>
-      </div>
-    );
-  }
+                    </Footer>
+                        </div>)}
+            </div>
+        );
+    }
 }
 
-const mapStateToProps = state =>{
-    return state;
+const mapStateToProps = (state) => {
+    return {
+        isLoading: state.ui.isLoading,
+    };
 }
 
-const mapActionsToProps = state =>{
-    isLoading : {}
-}
+const mapActionsToProps = (dispatch) => {
+    return {
+        startLoading: ()=>dispatch(uiStartLoading()),
+        stopLoading: ()=>dispatch(uiStopLoading()),
+    }
+};
 
 export default connect(mapStateToProps, mapActionsToProps)(App);
