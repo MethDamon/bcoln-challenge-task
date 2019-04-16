@@ -51,8 +51,14 @@ const stylesCurrentGame = {
 
 class App extends Component {
     async componentDidMount() {
-        this.state.contract.methods
-            .all(0)
+        await this.state.contract.methods
+            .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
+            .send({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
+            .then(res => {
+                console.log(res)
+            })
+        await this.state.contract.methods
+            .getCommitted()
             .call({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
             .then(res => {
                 console.log(res)

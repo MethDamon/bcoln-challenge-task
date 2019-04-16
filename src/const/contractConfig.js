@@ -1,5 +1,37 @@
 const contractConfig = {
-    CONTRACT_ABI:  [
+    CONTRACT_ABI: [
+        {
+            "constant": false,
+            "inputs": [],
+            "name": "abortCommitPhase",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "hash",
+                    "type": "bytes32"
+                }
+            ],
+            "name": "commit",
+            "outputs": [],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [],
+            "name": "goToRevealPhase",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
         {
             "inputs": [],
             "payable": false,
@@ -10,27 +42,15 @@ const contractConfig = {
             "constant": true,
             "inputs": [
                 {
-                    "name": "pos",
-                    "type": "uint256"
+                    "name": "",
+                    "type": "address"
                 }
             ],
-            "name": "all",
+            "name": "adresses_to_committed_numbers",
             "outputs": [
                 {
-                    "name": "lotteryId",
-                    "type": "uint256"
-                },
-                {
-                    "name": "jackpot",
-                    "type": "uint256"
-                },
-                {
-                    "name": "price",
-                    "type": "uint256"
-                },
-                {
-                    "name": "startTime",
-                    "type": "uint256"
+                    "name": "",
+                    "type": "bytes32"
                 }
             ],
             "payable": false,
@@ -45,23 +65,139 @@ const contractConfig = {
                     "type": "uint256"
                 }
             ],
-            "name": "lotteries",
+            "name": "committed",
             "outputs": [
                 {
-                    "name": "lotteryId",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "current_phase",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint8"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "current_timestamps",
+            "outputs": [
+                {
+                    "name": "commit",
                     "type": "uint256"
                 },
                 {
-                    "name": "jackpot",
+                    "name": "commit_and_ready_for_reveal",
                     "type": "uint256"
                 },
                 {
-                    "name": "price",
+                    "name": "reveal",
                     "type": "uint256"
                 },
                 {
-                    "name": "startTime",
+                    "name": "payout",
                     "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "getCommitted",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address[]"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "getRevealed",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address[]"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "firstNumber",
+                    "type": "uint8"
+                },
+                {
+                    "name": "secondNumber",
+                    "type": "uint8"
+                }
+            ],
+            "name": "reveal",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "revealed",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "",
+                    "type": "uint8"
+                },
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "revealed_numbers_to_addresses",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
                 }
             ],
             "payable": false,
@@ -69,8 +205,8 @@ const contractConfig = {
             "type": "function"
         }
     ],
-    LOCALHOST_CONTRACT_ADDRESS: '0xb4b8a9ed20985e7662c1d908da2a0d0a527df6ce',
-    METAMASK_CONTRACT_ADDRESS: '0xb4b8a9ed20985e7662c1d908da2a0d0a527df6ce'
+    LOCALHOST_CONTRACT_ADDRESS: '0x715f7ce74092f45320a774e703c73c87d2622c7f',
+    METAMASK_CONTRACT_ADDRESS: '0x715f7ce74092f45320a774e703c73c87d2622c7f'
 };
 
 export default contractConfig;
