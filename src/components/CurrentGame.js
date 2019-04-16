@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 const Tab = styled.div`    
 background: linear-gradient(to right, #f7971e, #ffd200)
-  
-
 `
 
 

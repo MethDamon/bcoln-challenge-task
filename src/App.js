@@ -11,6 +11,7 @@ import GAME_STATUS from './const/GameStatus';
 import Web3 from 'web3';
 import contractConfig from './const/contractConfig'
 import {uiStartLoading, uiStopLoading} from './store/actions/uiActionCreators';
+import Home from "./components/Home";
 
 
 let web3 = window.web3;
@@ -19,35 +20,12 @@ const Web3Providers = {
     LOCALHOST: 'LOCAL HOST',
     MIST: 'MIST'
 };
-
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 55vh;
-  color: white;
-`;
 const Footer = styled.div`
-  min-height: 10vh;
-
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   color: white;
 `;
 
-const styles = {
-    width: 300,
-    marginBottom: 10,
-};
-const stylesCurrentGame = {
-    width: 300,
-    marginBottom: 100,
-    borderRadius: 7
-};
 
 class App extends Component {
     async componentDidMount() {
@@ -102,52 +80,29 @@ class App extends Component {
 
     render() {
         return (
-            <div className="App">
-                <button onClick={()=>{
-                    if(this.props.isLoading){
-                        this.props.stopLoading()
-                    }else{
-                        this.props.startLoading()
-                    }
-                }}>TOGGLE LOADING</button>
-                {this.props.isLoading ?
-                    (<div>TEST CARICAMENTO</div>) : (
-                        <div>
-                        <header className="App-header">
-                        </header>
-                        < Container >
-                        < CurrentGame style={stylesCurrentGame}
-                    nrOfPlayers={5}
-                    currentBet={200}
-                    gameStatus={GAME_STATUS.GAME_STARTED}
-                    />
-                    <InputGroup inside style={styles}>
-                    <InputGroup.Addon>
-                    <Icon icon="avatar"/>
-                    </InputGroup.Addon>
-                    <Input/>
-                    </InputGroup>
-
-                    <InputGroup style={styles}>
-                    <InputGroup.Addon>$</InputGroup.Addon>
-                    <Input/>
-                    <InputGroup.Addon>.00</InputGroup.Addon>
-                    </InputGroup>
-                    <Button color="yellow">
-                    Login
-                    </Button>
-                    </Container>
-                    <Footer>
+            <div class="App">
+                <header>
+                    <button onClick={() => {
+                        if (this.props.isLoading) {
+                            this.props.stopLoading()
+                        } else {
+                            this.props.startLoading()
+                        }
+                    }}>TOGGLE LOADING
+                    </button>
+                </header>
+                <Home/>
+                <Footer>
 
                     <p
-                    style={{
-                    marginBottom: 0,
-                    marginTop: '5em',
-                    fontSize: 18,
-                    fontWeight: 'bold'
-                }}
+                        style={{
+                            marginBottom: 0,
+                            marginTop: '5em',
+                            fontSize: 18,
+                            fontWeight: 'bold'
+                        }}
                     >
-                    Developed by:{' '}
+                        Developed by:{' '}
                     </p>
                     <p style={{marginTop: 5, marginBottom: 0}}>Ile Cepilov </p>
                     <p style={{marginTop: 5, marginBottom: 0}}>Elfat Esati</p>
@@ -156,8 +111,7 @@ class App extends Component {
                     <p style={{marginTop: 5, marginBottom: 0}}>Ledri Thaqi</p>
 
 
-                    </Footer>
-                        </div>)}
+                </Footer>
             </div>
         );
     }
@@ -171,8 +125,8 @@ const mapStateToProps = (state) => {
 
 const mapActionsToProps = (dispatch) => {
     return {
-        startLoading: ()=>dispatch(uiStartLoading()),
-        stopLoading: ()=>dispatch(uiStopLoading()),
+        startLoading: () => dispatch(uiStartLoading()),
+        stopLoading: () => dispatch(uiStopLoading()),
     }
 };
 
