@@ -3,10 +3,12 @@ import {connect} from 'react-redux'
 import {Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
 import styled from 'styled-components';
+import { css } from '@emotion/core';
 import {Input, InputGroup, Icon} from 'rsuite';
 import CurrentGame from './CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
+import RingLoader from 'react-spinners/RingLoader';
 
 const Container = styled.div`
   display: flex;
@@ -17,8 +19,16 @@ const Container = styled.div`
 `;
 
 const HomeStyle = styled.div`
-  max-height: 55vh;
-  min-height: 55vh;
+    height: 70vh
+`;
+
+const Loader = styled.div`
+    height: 70vh
+        display: flex;
+      flex-direction: column;
+  justify-content: center;
+  align-items: center;
+    border-color: red;
 `;
 
 
@@ -45,7 +55,13 @@ class Home extends Component {
         return (
             <HomeStyle>
                 {this.props.isLoading ?
-                    (<div>TEST CARICAMENTO</div>) : (
+                    (<Loader>
+                    <RingLoader
+                        sizeUnit={"px"}
+                        size={'500'}
+                        color={'red'}
+                        loading={this.props.isLoading}/>
+                    </Loader>) : (
                         <div>
                             < Container >
                                 < CurrentGame style={stylesCurrentGame}

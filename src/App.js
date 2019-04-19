@@ -12,6 +12,9 @@ import Web3 from 'web3';
 import contractConfig from './const/contractConfig'
 import {uiStartLoading, uiStopLoading} from './store/actions/uiActionCreators';
 import Home from "./components/Home";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
 
 
 let web3 = window.web3;
@@ -20,15 +23,14 @@ const Web3Providers = {
     LOCALHOST: 'LOCAL HOST',
     MIST: 'MIST'
 };
-const Footer = styled.div`
-  justify-content: center;
-  align-items: center;
-  color: white;
-`;
 
 
 class App extends Component {
     async componentDidMount() {
+        //TODO: get the other variables required
+        await this.loadDataFromSC();
+        this.props.stopLoading();
+        //document.getElementById('root').style.height = "100vh";
         await this.state.contract.methods
             .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
             .send({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
@@ -36,6 +38,35 @@ class App extends Component {
                 console.log(res)
             })
         await this.state.contract.methods
+            .getCommitted()
+            .call({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
+            .then(res => {
+                console.log(res)
+            })
+    }
+
+    getUser(){
+        return this.state.web3.eth
+            .getAccounts()
+            .then(addresses => {
+                return addresses[0];
+            })
+            .catch(err => {
+                console.log('error getting address ' + err);
+            });
+    }
+
+    async loadDataFromSC(){
+        this.setState({user: await this.getUser()});
+        //await  this.getNumberOfPlayers();
+        //Load jackpot
+        //load time
+        //load numberofPlayers
+        //load entryFee
+    }
+
+    getNumberOfPlayers(){
+        this.state.contract.methods
             .getCommitted()
             .call({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
             .then(res => {
@@ -74,44 +105,17 @@ class App extends Component {
 
         this.state = {
             web3: web3Instance,
-            contract: dLotteryContract
+            contract: dLotteryContract,
+            user: {},
         }
     }
 
     render() {
         return (
-            <div class="App">
-                <header>
-                    <button onClick={() => {
-                        if (this.props.isLoading) {
-                            this.props.stopLoading()
-                        } else {
-                            this.props.startLoading()
-                        }
-                    }}>TOGGLE LOADING
-                    </button>
-                </header>
+            <div className="App">
+                <Header/>
                 <Home/>
-                <Footer>
-
-                    <p
-                        style={{
-                            marginBottom: 0,
-                            marginTop: '5em',
-                            fontSize: 18,
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        Developed by:{' '}
-                    </p>
-                    <p style={{marginTop: 5, marginBottom: 0}}>Ile Cepilov </p>
-                    <p style={{marginTop: 5, marginBottom: 0}}>Elfat Esati</p>
-                    <p style={{marginTop: 5, marginBottom: 0}}>Tim Strasser</p>
-                    <p style={{marginTop: 5, marginBottom: 0}}>Erion Sula</p>
-                    <p style={{marginTop: 5, marginBottom: 0}}>Ledri Thaqi</p>
-
-
-                </Footer>
+                <Footer/>
             </div>
         );
     }
