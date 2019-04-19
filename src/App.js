@@ -16,7 +16,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 
-
 let web3 = window.web3;
 const Web3Providers = {
     META_MASK: 'META MASK',
@@ -29,23 +28,24 @@ class App extends Component {
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
+        console.log(this.state.timestamps)
         this.props.stopLoading();
         //document.getElementById('root').style.height = "100vh";
-        await this.state.contract.methods
-            .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
-            .send({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
-            .then(res => {
-                console.log(res)
-            })
-        await this.state.contract.methods
-            .getCommitted()
-            .call({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
-            .then(res => {
-                console.log(res)
-            })
+        // await this.state.contract.methods
+        //     .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
+        //     .send({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
+        //     .then(res => {
+        //         console.log(res)
+        //     })
+        // await this.state.contract.methods
+        //     .getCommitted()
+        //     .call({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
+        //     .then(res => {
+        //         console.log(res)
+        //     })
     }
 
-    getUser(){
+    getUser() {
         return this.state.web3.eth
             .getAccounts()
             .then(addresses => {
@@ -56,8 +56,26 @@ class App extends Component {
             });
     }
 
-    async loadDataFromSC(){
-        this.setState({user: await this.getUser()});
+    async getCurrentTimestamp() {
+        return await this.state.contract.methods
+            .current_timestamps()
+            .call({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
+            .then(res => {
+                let hexToString = (n) => this.state.web3.utils.hexToNumber(n);
+                return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
+                    commit = new Date(hexToString(commit._hex));
+                    commit_and_ready_for_reveal = new Date(hexToString(commit_and_ready_for_reveal._hex));
+                    payout = new Date(hexToString(payout));
+                    reveal = new Date(hexToString(reveal));
+                    return {commit, commit_and_ready_for_reveal, payout, reveal}
+                })(res);
+            })
+    }
+
+    async loadDataFromSC() {
+        this.setState({
+            user: await this.getUser(),
+            timestamps: await this.getCurrentTimestamp()});
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -65,7 +83,7 @@ class App extends Component {
         //load entryFee
     }
 
-    getNumberOfPlayers(){
+    getNumberOfPlayers() {
         this.state.contract.methods
             .getCommitted()
             .call({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
@@ -106,7 +124,8 @@ class App extends Component {
         this.state = {
             web3: web3Instance,
             contract: dLotteryContract,
-            user: {},
+            user: '',
+            timestamps: {}
         }
     }
 

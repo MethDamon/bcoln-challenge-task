@@ -205,8 +205,8 @@ const contractConfig = {
             "type": "function"
         }
     ],
-    LOCALHOST_CONTRACT_ADDRESS: '0x715f7ce74092f45320a774e703c73c87d2622c7f',
-    METAMASK_CONTRACT_ADDRESS: '0x715f7ce74092f45320a774e703c73c87d2622c7f'
+    LOCALHOST_CONTRACT_ADDRESS: '0x860b296d86222f91dac1c843f9fa0dacc9a90030',
+    METAMASK_CONTRACT_ADDRESS: '0x860b296d86222f91dac1c843f9fa0dacc9a90030'
 };
 
 export default contractConfig;

@@ -58,7 +58,7 @@ class Home extends Component {
                     (<Loader>
                     <RingLoader
                         sizeUnit={"px"}
-                        size={'500'}
+                        size={500}
                         color={'red'}
                         loading={this.props.isLoading}/>
                     </Loader>) : (
