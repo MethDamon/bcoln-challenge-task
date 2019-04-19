@@ -19,7 +19,7 @@ const Container = styled.div`
 `;
 
 const HomeStyle = styled.div`
-    height: 70vh
+    height: 65vh
 `;
 
 const Loader = styled.div`
@@ -47,7 +47,7 @@ class Home extends Component {
 
     }
 
-    constructor() {
+    constructor({user}) {
        super()
     }
 
@@ -65,15 +65,16 @@ class Home extends Component {
                         <div>
                             < Container >
                                 < CurrentGame style={stylesCurrentGame}
-                                              nrOfPlayers={5}
+                                              nrOfPlayers={this.props.committed}
                                               currentBet={200}
-                                              gameStatus={GAME_STATUS.GAME_STARTED}
+                                              gameStatus={GAME_STATUS[this.props.currentPhase]}
                                 />
                                 <InputGroup inside style={styles}>
                                     <InputGroup.Addon>
                                         <Icon icon="avatar"/>
                                     </InputGroup.Addon>
-                                    <Input/>
+                                    <Input defaultValue = {this.props.user}
+                                    disabled = {true}/>
                                 </InputGroup>
 
                                 <InputGroup style={styles}>
@@ -81,6 +82,7 @@ class Home extends Component {
                                     <Input/>
                                     <InputGroup.Addon>.00</InputGroup.Addon>
                                 </InputGroup>
+                                {this.user}
                                 <Button color="yellow">
                                     Login
                                 </Button>
@@ -92,9 +94,16 @@ class Home extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+// const props = ({user})=>{
+//     return {user}
+// }
+
+const mapStateToProps = (state, {user, committed, currentPhase}) => {
     return {
         isLoading: state.ui.isLoading,
+        user,
+        committed,
+        currentPhase
     };
 }
 

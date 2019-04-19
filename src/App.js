@@ -28,7 +28,6 @@ class App extends Component {
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
-        console.log(this.state.timestamps)
         this.props.stopLoading();
         //document.getElementById('root').style.height = "100vh";
         // await this.state.contract.methods
@@ -59,7 +58,7 @@ class App extends Component {
     async getCurrentTimestamp() {
         return await this.state.contract.methods
             .current_timestamps()
-            .call({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
+            .call({from: this.state.user})
             .then(res => {
                 let hexToString = (n) => this.state.web3.utils.hexToNumber(n);
                 return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
@@ -75,7 +74,12 @@ class App extends Component {
     async loadDataFromSC() {
         this.setState({
             user: await this.getUser(),
-            timestamps: await this.getCurrentTimestamp()});
+        });
+        this.setState({
+            timestamps: await this.getCurrentTimestamp(),
+            currentPhase: await this.getCurrentPhase(),
+            committed: await this.getCommitted()
+        });
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -86,9 +90,28 @@ class App extends Component {
     getNumberOfPlayers() {
         this.state.contract.methods
             .getCommitted()
-            .call({from: '0xc428991310E99c64bc097Ea5495DB5D9217F543b'})
+            .call({from: this.state.user})
             .then(res => {
                 console.log(res)
+            })
+    }
+
+    getCurrentPhase(){
+        return this.state.contract.methods
+            .current_phase()
+            .call({from: this.state.user})
+            .then(res => {
+                return res
+            })
+    }
+
+    getCommitted(){
+        return this.state.contract.methods
+            .getCommitted()
+            .call({from: this.state.user})
+            .then(res => {
+                console.log(res);
+                return res.length
             })
     }
 
@@ -125,7 +148,9 @@ class App extends Component {
             web3: web3Instance,
             contract: dLotteryContract,
             user: '',
-            timestamps: {}
+            timestamps: {},
+            committed: 0,
+            currentPhase: '',
         }
     }
 
@@ -133,7 +158,9 @@ class App extends Component {
         return (
             <div className="App">
                 <Header/>
-                <Home/>
+                <Home user = {this.state.user}
+                committed = {this.state.committed}
+                currentPhase = {this.state.currentPhase}/>
                 <Footer/>
             </div>
         );

@@ -16,7 +16,7 @@ class Footer extends Component {
 
     render() {
         return (
-            <div style = {{'height':'200px', 'color': 'white'}}>
+            <div style = {{ 'color': 'white'}}>
             <p
                 style={{
                     marginBottom: 0,
