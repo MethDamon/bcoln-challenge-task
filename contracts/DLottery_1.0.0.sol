@@ -36,7 +36,15 @@ contract DLottery {
         return revealed;
     }
     
-    function commit(bytes32 hash) payable public {
+    function getFee() public view returns (uint256){
+        return ENTRY_FEE;
+    }
+
+    event NewCommit(
+       bytes32 commitHash
+    );
+
+    function commit(bytes32 hash) payable public returns (bytes32) {
         //require(msg.value == ENTRY_FEE);
         require(current_phase == Phase.Commit || current_phase == Phase.CommitAndReadyForReveal);
         if (current_phase == Phase.CommitAndReadyForReveal) {
@@ -49,8 +57,10 @@ contract DLottery {
             current_phase = Phase.CommitAndReadyForReveal;
             current_timestamps.commit_and_ready_for_reveal = now;
         }
+        emit NewCommit(hash);
+        return hash;
     }
-    
+
     function abortCommitPhase() public {
         require(current_phase == Phase.Commit || current_phase == Phase.CommitAndReadyForReveal);
         require((now - current_timestamps.commit_and_ready_for_reveal) < 3 * 60 * 60 * 1000); // 3 hours

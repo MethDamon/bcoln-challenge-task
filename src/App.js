@@ -28,7 +28,14 @@ class App extends Component {
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
+
         this.props.stopLoading();
+        const commitEvent = this.state.contract.events.NewCommit();
+        commitEvent.on('data', async ()=>{
+            console.log("new event");
+            //TODO: load only the new committed players?
+            await this.loadDataFromSC();
+        })
         //document.getElementById('root').style.height = "100vh";
         // await this.state.contract.methods
         //     .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
@@ -60,14 +67,30 @@ class App extends Component {
             .current_timestamps()
             .call({from: this.state.user})
             .then(res => {
-                let hexToString = (n) => this.state.web3.utils.hexToNumber(n);
                 return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
-                    commit = new Date(hexToString(commit._hex));
-                    commit_and_ready_for_reveal = new Date(hexToString(commit_and_ready_for_reveal._hex));
-                    payout = new Date(hexToString(payout));
-                    reveal = new Date(hexToString(reveal));
+                    commit = new Date(this.hexToNumber(commit._hex));
+                    commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex));
+                    payout = new Date(this.hexToNumber(payout._hex));
+                    reveal = new Date(this.hexToNumber(reveal._hex));
                     return {commit, commit_and_ready_for_reveal, payout, reveal}
                 })(res);
+            })
+    }
+
+    hexToNumber(n){
+        return this.state.web3.utils.hexToNumber(n);
+    }
+    hexToNumberString(n){
+        return this.state.web3.utils.hexToNumberString(n);
+    }
+
+
+    async getFee(){
+        return await this.state.contract.methods
+            .getFee()
+            .call({from: this.state.user})
+            .then(res => {
+                return this.state.web3.utils.fromWei(this.hexToNumberString(res._hex))
             })
     }
 
@@ -78,7 +101,8 @@ class App extends Component {
         this.setState({
             timestamps: await this.getCurrentTimestamp(),
             currentPhase: await this.getCurrentPhase(),
-            committed: await this.getCommitted()
+            committed: await this.getCommitted(),
+            fee: await this.getFee(),
         });
         //await  this.getNumberOfPlayers();
         //Load jackpot
@@ -86,16 +110,6 @@ class App extends Component {
         //load numberofPlayers
         //load entryFee
     }
-
-    getNumberOfPlayers() {
-        this.state.contract.methods
-            .getCommitted()
-            .call({from: this.state.user})
-            .then(res => {
-                console.log(res)
-            })
-    }
-
     getCurrentPhase(){
         return this.state.contract.methods
             .current_phase()
@@ -110,7 +124,6 @@ class App extends Component {
             .getCommitted()
             .call({from: this.state.user})
             .then(res => {
-                console.log(res);
                 return res.length
             })
     }
@@ -151,6 +164,7 @@ class App extends Component {
             timestamps: {},
             committed: 0,
             currentPhase: '',
+            fee: 0,
         }
     }
 
@@ -160,7 +174,10 @@ class App extends Component {
                 <Header/>
                 <Home user = {this.state.user}
                 committed = {this.state.committed}
-                currentPhase = {this.state.currentPhase}/>
+                currentPhase = {this.state.currentPhase}
+                fee = {this.state.fee}
+                contract = {this.state.contract}
+                web3 = {this.state.web3}/>
                 <Footer/>
             </div>
         );

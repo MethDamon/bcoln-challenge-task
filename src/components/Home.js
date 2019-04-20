@@ -33,13 +33,23 @@ const Loader = styled.div`
 
 
 const styles = {
-    width: 300,
+    width: 450,
     marginBottom: 10,
 };
+
+const loginButtonStyle = {
+    width: 250,
+    height: 50,
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: 800
+}
 const stylesCurrentGame = {
-    width: 300,
+    width: 500,
+    marginTop: 20,
     marginBottom: 100,
-    borderRadius: 7
+    borderRadius: 7,
+    fontSize: 30
 };
 
 class Home extends Component {
@@ -47,8 +57,19 @@ class Home extends Component {
 
     }
 
-    constructor({user}) {
+    constructor() {
        super()
+    }
+
+    async commitNumbers(n1, n2){
+        let toHash = n1+this.props.user+n2;
+        let hash = this.props.web3.utils.sha3(toHash);
+        await this.props.contract.methods
+            .commit(hash)
+            .send({from: this.props.user})
+            .then(res => {
+                console.log(res)
+            })
     }
 
     render() {
@@ -73,18 +94,21 @@ class Home extends Component {
                                     <InputGroup.Addon>
                                         <Icon icon="avatar"/>
                                     </InputGroup.Addon>
-                                    <Input defaultValue = {this.props.user}
+                                    <Input  size = {'lg'} defaultValue = {this.props.user}
                                     disabled = {true}/>
                                 </InputGroup>
 
                                 <InputGroup style={styles}>
-                                    <InputGroup.Addon>$</InputGroup.Addon>
-                                    <Input/>
-                                    <InputGroup.Addon>.00</InputGroup.Addon>
+                                    <InputGroup.Addon>ETH</InputGroup.Addon>
+                                    <Input size={'lg'}
+                                           defaultValue = {this.props.fee}
+                                            disabled = {true}
+                                    />
                                 </InputGroup>
-                                {this.user}
-                                <Button color="yellow">
-                                    Login
+                                <Button style={loginButtonStyle}
+                                        color="yellow"
+                                        onClick={this.commitNumbers.bind(this)}>
+                                    Commit number TEST
                                 </Button>
                             </Container>
 
@@ -98,12 +122,15 @@ class Home extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
         committed,
-        currentPhase
+        currentPhase,
+        fee,
+        web3,
+        contract
     };
 }
 
