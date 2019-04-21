@@ -1,20 +1,22 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux'
-import {bindActionCreators} from 'redux'
-import './App.css';
-import {Button} from 'rsuite';
-import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
-import styled from 'styled-components';
-import {Input, InputGroup, Icon} from 'rsuite';
-import CurrentGame from './components/CurrentGame'
-import GAME_STATUS from './const/GameStatus';
-import Web3 from 'web3';
-import contractConfig from './const/contractConfig'
-import {uiStartLoading, uiStopLoading} from './store/actions/uiActionCreators';
+import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
+import Web3 from "web3";
+import contractConfig from "./const/contractConfig";
 import Home from "./components/Home";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
+import RingLoader from 'react-spinners/RingLoader';
+import styled from "styled-components";
+import './AppRouter.css';
+import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
+import connect from "react-redux/es/connect/connect";
 
+
+// The Main component renders one of the three provided
+// Routes (provided that one matches). Both the /roster
+// and /schedule routes will match any pathname that starts
+// with /roster or /schedule. The / route will only match
+// when the pathname is exactly the string "/"
 
 let web3 = window.web3;
 const Web3Providers = {
@@ -24,14 +26,24 @@ const Web3Providers = {
 };
 
 
-class App extends Component {
+const Loader = styled.div`
+    height: 70vh
+        display: flex;
+      flex-direction: column;
+  justify-content: center;
+  align-items: center;
+    border-color: red;
+`;
+
+class AppRouter extends Component {
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
 
-        this.props.stopLoading();
+        //this.props.stopLoading();
+        this.setState({isLoading: false})
         const commitEvent = this.state.contract.events.NewCommit();
-        commitEvent.on('data', async ()=>{
+        commitEvent.on('data', async () => {
             console.log("new event");
             //TODO: load only the new committed players?
             await this.loadDataFromSC();
@@ -77,15 +89,15 @@ class App extends Component {
             })
     }
 
-    hexToNumber(n){
+    hexToNumber(n) {
         return this.state.web3.utils.hexToNumber(n);
     }
-    hexToNumberString(n){
+
+    hexToNumberString(n) {
         return this.state.web3.utils.hexToNumberString(n);
     }
 
-
-    async getFee(){
+    async getFee() {
         return await this.state.contract.methods
             .getFee()
             .call({from: this.state.user})
@@ -110,7 +122,8 @@ class App extends Component {
         //load numberofPlayers
         //load entryFee
     }
-    getCurrentPhase(){
+
+    getCurrentPhase() {
         return this.state.contract.methods
             .current_phase()
             .call({from: this.state.user})
@@ -119,7 +132,7 @@ class App extends Component {
             })
     }
 
-    getCommitted(){
+    getCommitted() {
         return this.state.contract.methods
             .getCommitted()
             .call({from: this.state.user})
@@ -158,6 +171,7 @@ class App extends Component {
         );
 
         this.state = {
+            isLoading: true,
             web3: web3Instance,
             contract: dLotteryContract,
             user: '',
@@ -168,33 +182,54 @@ class App extends Component {
         }
     }
 
+    stopLoading() {
+
+    }
+
     render() {
         return (
-            <div className="App">
-                <Header/>
-                <Home user = {this.state.user}
-                committed = {this.state.committed}
-                currentPhase = {this.state.currentPhase}
-                fee = {this.state.fee}
-                contract = {this.state.contract}
-                web3 = {this.state.web3}/>
-                <Footer/>
+            <div className="AppRouter">
+                {this.state.isLoading ?
+                    (<Loader>
+                        <RingLoader
+                            sizeUnit={"px"}
+                            size={500}
+                            color={'red'}
+                            loading={this.state.isLoading}/>
+                    </Loader>) : (
+                        <div>
+                            <Header/>
+                            <Switch>
+                                <Route path="/join"
+                                       exact
+                                       render={() => (
+                                           <Home user={this.state.user}
+                                                 committed={this.state.committed}
+                                                 currentPhase={this.state.currentPhase}
+                                                 fee={this.state.fee}
+                                                 contract={this.state.contract}
+                                                 web3={this.state.web3}/>)}/>
+                                <Route render={() => <Redirect to="/join"/>}/>
+                            </Switch>
+                            <Footer/>
+                        </div>)}
             </div>
         );
     }
 }
+// const mapStateToProps = (state) => {
+//     return {
+//         isLoading: state.ui.isLoading,
+//     };
+// }
+//
+// const mapActionsToProps = (dispatch) => {
+//     return {
+//         startLoading: () => dispatch(uiStartLoading()),
+//         stopLoading: () => dispatch(uiStopLoading()),
+//     }
+// };
 
-const mapStateToProps = (state) => {
-    return {
-        isLoading: state.ui.isLoading,
-    };
-}
+// export default withRouter(connect(mapStateToProps, mapActionsToProps)(App));
 
-const mapActionsToProps = (dispatch) => {
-    return {
-        startLoading: () => dispatch(uiStartLoading()),
-        stopLoading: () => dispatch(uiStopLoading()),
-    }
-};
-
-export default connect(mapStateToProps, mapActionsToProps)(App);
+export default AppRouter;

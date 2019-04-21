@@ -9,6 +9,7 @@ import CurrentGame from './CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import RingLoader from 'react-spinners/RingLoader';
+import { withRouter } from 'react-router-dom'
 
 const Container = styled.div`
   display: flex;
@@ -75,14 +76,6 @@ class Home extends Component {
     render() {
         return (
             <HomeStyle>
-                {this.props.isLoading ?
-                    (<Loader>
-                    <RingLoader
-                        sizeUnit={"px"}
-                        size={500}
-                        color={'red'}
-                        loading={this.props.isLoading}/>
-                    </Loader>) : (
                         <div>
                             < Container >
                                 < CurrentGame style={stylesCurrentGame}
@@ -112,7 +105,7 @@ class Home extends Component {
                                 </Button>
                             </Container>
 
-                        </div>)}
+                        </div>
             </HomeStyle>
         );
     }
@@ -141,4 +134,4 @@ const mapActionsToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(Home);
+export default withRouter(connect(mapStateToProps, mapActionsToProps)(Home));
