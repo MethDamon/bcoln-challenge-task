@@ -3,70 +3,84 @@ import {connect} from 'react-redux'
 import {Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
 import styled from 'styled-components';
-import { css } from '@emotion/core';
+import {css} from '@emotion/core';
 import {Input, InputGroup, Icon} from 'rsuite';
 import CurrentGame from './CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import RingLoader from 'react-spinners/RingLoader';
-import { withRouter } from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
+import Slot from "./Slot";
 
-const Container = styled.div`
+const Table = styled.div`
+width: 350px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   color: white;
+  flex-wrap: wrap;
 `;
 
-const HomeStyle = styled.div`
-    height: 65vh
-`;
-
-const Loader = styled.div`
-    height: 70vh
-        display: flex;
-      flex-direction: column;
+const Container = styled.div`
+    height: 65vh;
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-    border-color: red;
+  color: white;
+  flex-wrap: wrap;
 `;
 
-
-const styles = {
-    width: 450,
-    marginBottom: 10,
-};
-
-const loginButtonStyle = {
-    width: 250,
-    height: 50,
-    marginBottom: 10,
-    fontSize: 20,
-    fontWeight: 800
-}
-const stylesCurrentGame = {
-    width: 500,
-    marginTop: 20,
-    marginBottom: 100,
-    borderRadius: 7,
-    fontSize: 30
-};
 
 class Lottery extends Component {
     async componentDidMount() {
+        this.createTable()
+    }
 
+    createTable() {
+        let table = [];
+        for (let i = 0; i < 15; i++) {
+            table.push(<Slot key={i} number={i + 1} chosenNumbers={this.state.chosenNumbers} callback={() => {
+                this.choseNumber(i + 1)
+            }}/>)
+        }
+        this.setState({table})
+    }
+
+    choseNumber(n) {
+        let numbers = Object.assign([], this.state.chosenNumbers);
+        if (!numbers.includes(n)) {
+            numbers[this.state.counter % 2] = n;
+            this.setState({
+                chosenNumbers: numbers,
+                counter: this.state.counter + 1
+            });
+            setTimeout(() => {
+                this.createTable()
+            })
+        }
     }
 
     constructor() {
-       super()
-    }
+        super();
+        this.state = {
+            chosenNumbers: [-1, -1],
+            counter: 0,
+        }
 
+        this.state = {...this.state}
+
+    }
 
     render() {
 
         return (
-           <div>lottery</div>
+            <Container>
+                <Table>
+                    {this.state.table}
+                </Table>
+            </Container>
         );
     }
 }
@@ -90,8 +104,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
 
 const mapActionsToProps = (dispatch) => {
     return {
-        startLoading: ()=>dispatch(uiStartLoading()),
-        stopLoading: ()=>dispatch(uiStopLoading()),
+        startLoading: () => dispatch(uiStartLoading()),
+        stopLoading: () => dispatch(uiStopLoading()),
     }
 };
 

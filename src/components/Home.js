@@ -115,7 +115,6 @@ class Home extends Component {
                                     Join the Lottery
                                 </Button>
                             </Container>
-
                         </div>
             </HomeStyle>
         );
