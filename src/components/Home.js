@@ -74,6 +74,7 @@ class Home extends Component {
     }
 
     render() {
+        console.log(this.props.cookies)
         return (
             <HomeStyle>
                         <div>
@@ -115,7 +116,7 @@ class Home extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -123,7 +124,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         currentPhase,
         fee,
         web3,
-        contract
+        contract,
+        cookies
     };
 }
 

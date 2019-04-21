@@ -10,6 +10,7 @@ import styled from "styled-components";
 import './AppRouter.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
+import {withCookies} from "react-cookie"
 
 
 // The Main component renders one of the three provided
@@ -208,8 +209,13 @@ class AppRouter extends Component {
                                                  currentPhase={this.state.currentPhase}
                                                  fee={this.state.fee}
                                                  contract={this.state.contract}
-                                                 web3={this.state.web3}/>)}/>
-                                <Route render={() => <Redirect to="/join"/>}/>
+                                                 web3={this.state.web3}
+                                                 cookies = {this.props.cookies}/>)
+                                       }/>
+                                <Route render={() => {
+                                    console.log("Redirect to /join");
+                                    return (<Redirect to="/join"/>)
+                                }}/>
                             </Switch>
                             <Footer/>
                         </div>)}
@@ -217,7 +223,8 @@ class AppRouter extends Component {
         );
     }
 }
-const mapStateToProps = (state) => {
+
+const mapStateToProps = (state, props) => {
     return {
         isLoading: state.ui.isLoading,
     };
@@ -230,4 +237,4 @@ const mapActionsToProps = (dispatch) => {
     }
 };
 
-export default withRouter(connect(mapStateToProps, mapActionsToProps)(AppRouter));
+export default withCookies(withRouter(connect(mapStateToProps, mapActionsToProps)(AppRouter)));
