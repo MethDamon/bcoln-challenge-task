@@ -40,8 +40,8 @@ class AppRouter extends Component {
         //TODO: get the other variables required
         await this.loadDataFromSC();
 
-        //this.props.stopLoading();
-        this.setState({isLoading: false})
+        this.props.stopLoading();
+        //this.setState({isLoading: false})
         const commitEvent = this.state.contract.events.NewCommit();
         commitEvent.on('data', async () => {
             console.log("new event");
@@ -189,13 +189,13 @@ class AppRouter extends Component {
     render() {
         return (
             <div className="AppRouter">
-                {this.state.isLoading ?
+                {this.props.isLoading ?
                     (<Loader>
                         <RingLoader
                             sizeUnit={"px"}
                             size={500}
                             color={'red'}
-                            loading={this.state.isLoading}/>
+                            loading={this.props.isLoading}/>
                     </Loader>) : (
                         <div>
                             <Header/>
@@ -217,19 +217,17 @@ class AppRouter extends Component {
         );
     }
 }
-// const mapStateToProps = (state) => {
-//     return {
-//         isLoading: state.ui.isLoading,
-//     };
-// }
-//
-// const mapActionsToProps = (dispatch) => {
-//     return {
-//         startLoading: () => dispatch(uiStartLoading()),
-//         stopLoading: () => dispatch(uiStopLoading()),
-//     }
-// };
+const mapStateToProps = (state) => {
+    return {
+        isLoading: state.ui.isLoading,
+    };
+}
 
-// export default withRouter(connect(mapStateToProps, mapActionsToProps)(App));
+const mapActionsToProps = (dispatch) => {
+    return {
+        startLoading: () => dispatch(uiStartLoading()),
+        stopLoading: () => dispatch(uiStopLoading()),
+    }
+};
 
-export default AppRouter;
+export default withRouter(connect(mapStateToProps, mapActionsToProps)(AppRouter));
