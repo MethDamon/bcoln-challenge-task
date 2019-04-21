@@ -9,7 +9,7 @@ import CurrentGame from './CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import RingLoader from 'react-spinners/RingLoader';
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 
 const Container = styled.div`
   display: flex;
@@ -59,22 +59,32 @@ class Home extends Component {
     }
 
     constructor() {
-       super()
+       super();
+        this.state = {
+            redirectToLottery: false,
+        }
     }
 
-    async commitNumbers(n1, n2){
-        let toHash = n1+this.props.user+n2;
-        let hash = this.props.web3.utils.sha3(toHash);
-        await this.props.contract.methods
-            .commit(hash)
-            .send({from: this.props.user})
-            .then(res => {
-                console.log(res)
-            })
+    joinLottery(){
+        // let toHash = n1+this.props.user+n2;
+        // let hash = this.props.web3.utils.sha3(toHash);
+        // this.props.contract.methods
+        //     .commit(hash)
+        //     .send({from: this.props.user}, (res)=>{
+        //         if(!res.message.includes('error'))
+        //         this.setState({redirectToLottery: true})
+        //     })
+        this.setState({redirectToLottery: true})
+
     }
 
     render() {
-        console.log(this.props.cookies)
+        console.log(this.props);
+        if (this.state.redirectToLottery) {
+            return (
+                <Redirect to='/lottery'/>
+            )
+        }
         return (
             <HomeStyle>
                         <div>
@@ -101,8 +111,8 @@ class Home extends Component {
                                 </InputGroup>
                                 <Button style={loginButtonStyle}
                                         color="yellow"
-                                        onClick={this.commitNumbers.bind(this)}>
-                                    Commit number TEST
+                                        onClick={this.joinLottery.bind(this)}>
+                                    Join the Lottery
                                 </Button>
                             </Container>
 

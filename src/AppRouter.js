@@ -11,6 +11,7 @@ import './AppRouter.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
+import Lottery from "./components/Lottery";
 
 
 // The Main component renders one of the three provided
@@ -200,23 +201,31 @@ class AppRouter extends Component {
                     </Loader>) : (
                         <div>
                             <Header/>
-                            <Switch>
-                                <Route path="/join"
-                                       exact
-                                       render={() => (
-                                           <Home user={this.state.user}
-                                                 committed={this.state.committed}
-                                                 currentPhase={this.state.currentPhase}
-                                                 fee={this.state.fee}
-                                                 contract={this.state.contract}
-                                                 web3={this.state.web3}
-                                                 cookies = {this.props.cookies}/>)
-                                       }/>
-                                <Route render={() => {
-                                    console.log("Redirect to /join");
-                                    return (<Redirect to="/join"/>)
-                                }}/>
-                            </Switch>
+                            <div style = {{height: '65vh'}}>
+                                <Switch>
+                                    <Route path="/join"
+                                           exact
+                                           render={(props) => (
+                                               <Home {...props}
+                                                     user={this.state.user}
+                                                     committed={this.state.committed}
+                                                     currentPhase={this.state.currentPhase}
+                                                     fee={this.state.fee}
+                                                     contract={this.state.contract}
+                                                     web3={this.state.web3}
+                                                     cookies={this.props.cookies}/>)
+                                           }/>
+                                    <Route path="/lottery"
+                                           exact
+                                           render={(props) => (
+                                               <Lottery {...props}/>)
+                                           }/>
+                                    <Route render={() => {
+                                        console.log("Redirect to /join");
+                                        return (<Redirect to="/join"/>)
+                                    }}/>
+                                </Switch>
+                            </div>
                             <Footer/>
                         </div>)}
             </div>
