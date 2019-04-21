@@ -50,15 +50,30 @@ class Lottery extends Component {
 
     choseNumber(n) {
         let numbers = Object.assign([], this.state.chosenNumbers);
+        let table = Object.assign([], this.state.table);
+        //Avoid chosing twice the same number
         if (!numbers.includes(n)) {
+            let lastSelected = this.state.chosenNumbers[(this.state.counter) % 2];
             numbers[this.state.counter % 2] = n;
+
+            //update the numbers which are no longer selected
+            if (lastSelected > 0) {
+                table[lastSelected - 1] =
+                    (
+                        <Slot key={lastSelected - 1} number={lastSelected} chosenNumbers={numbers} callback={() => {
+                            this.choseNumber(lastSelected)
+                        }}/>);
+            }
+            //update the selected number
+            table[n - 1] = (
+                <Slot key={n - 1} number={n} chosenNumbers={numbers} callback={() => {
+                    this.choseNumber(n);
+                }}/>);
             this.setState({
+                table,
                 chosenNumbers: numbers,
                 counter: this.state.counter + 1
             });
-            setTimeout(() => {
-                this.createTable()
-            })
         }
     }
 
@@ -68,9 +83,6 @@ class Lottery extends Component {
             chosenNumbers: [-1, -1],
             counter: 0,
         }
-
-        this.state = {...this.state}
-
     }
 
     render() {
