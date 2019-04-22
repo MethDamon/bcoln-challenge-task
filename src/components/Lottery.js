@@ -96,8 +96,10 @@ class Lottery extends Component {
 
     joinLottery() {
         if (!this.state.chosenNumbers.includes(-1)) {
-            let sortedNumbers = Object.assign([],this.state.chosenNumbers);
-            sortedNumbers = sortedNumbers.sort((a,b)=>{return a-b});
+            let sortedNumbers = Object.assign([], this.state.chosenNumbers);
+            sortedNumbers = sortedNumbers.sort((a, b) => {
+                return a - b
+            });
             let toHash = sortedNumbers[0] + this.props.user + sortedNumbers[1];
             let hash = this.props.web3.utils.sha3(toHash);
             this.props.contract.methods
@@ -121,14 +123,29 @@ class Lottery extends Component {
         }
     }
 
-    joinButton(){
-        let tmp = Object.assign([],this.state.chosenNumbers);
-        tmp = tmp.sort((a,b)=>{return a-b});
-        if(tmp.includes(-1)){
+    joinButton() {
+        let tmp = Object.assign([], this.state.chosenNumbers);
+        tmp = tmp.sort((a, b) => {
+            return a - b
+        });
+        if (tmp.includes(-1)) {
             return "Select your numbers";
-        }else{
+        } else {
             return `Join with numbers: ${tmp[0]}, ${tmp[1]}`;
         }
+    }
+
+    abortCommitPhase() {
+        this.props.contract.methods
+            .abortCommitPhase()
+            .send({from: this.props.user}, (res) => {
+                    if (!res.message.includes('error')) {
+                        console.log("aborted commit phase");
+                    } else {
+                        console.log(res)
+                    }
+                }
+            )
     }
 
 
@@ -150,9 +167,18 @@ class Lottery extends Component {
                         onClick={() => {
                             this.joinLottery()
                         }
-                    }
+                        }
                 >
                     {this.joinButton()}
+                </Button>
+                <Button style={betButtonStyle}
+                        color="yellow"
+                        onClick={() => {
+                            this.abortCommitPhase()
+                        }
+                        }
+                >
+                    Abort Commit Phase
                 </Button>
             </Container>
         );
