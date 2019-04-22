@@ -23,14 +23,30 @@ width: 350px;
 `;
 
 const Container = styled.div`
-    height: 65vh;
+   
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   color: white;
   flex-wrap: wrap;
 `;
+
+const stylesCurrentGame = {
+    width: 500,
+    marginTop: 20,
+    marginBottom: 100,
+    borderRadius: 7,
+    fontSize: 30
+};
+
+const betButtonStyle = {
+    width: 250,
+    height: 50,
+    margin: 10,
+    fontSize: 20,
+    fontWeight: 800
+}
 
 
 class Lottery extends Component {
@@ -42,39 +58,59 @@ class Lottery extends Component {
         let table = [];
         for (let i = 0; i < 15; i++) {
             table.push(<Slot key={i} number={i + 1} chosenNumbers={this.state.chosenNumbers} callback={() => {
-                this.choseNumber(i + 1)
+                this.chooseNumber(i + 1)
             }}/>)
         }
         this.setState({table})
     }
 
-    choseNumber(n) {
+    chooseNumber(n) {
         let numbers = Object.assign([], this.state.chosenNumbers);
         let table = Object.assign([], this.state.table);
-        //Avoid chosing twice the same number
+        //Avoid choosing twice the same number
         if (!numbers.includes(n)) {
             let lastSelected = this.state.chosenNumbers[(this.state.counter) % 2];
             numbers[this.state.counter % 2] = n;
 
             //update the numbers which are no longer selected
             if (lastSelected > 0) {
-                table[lastSelected - 1] =
-                    (
-                        <Slot key={lastSelected - 1} number={lastSelected} chosenNumbers={numbers} callback={() => {
-                            this.choseNumber(lastSelected)
-                        }}/>);
+                table[lastSelected - 1] = (
+                    <Slot key={lastSelected - 1} number={lastSelected} chosenNumbers={numbers} callback={() => {
+                        this.chooseNumber(lastSelected)
+                    }}/>
+                );
             }
             //update the selected number
             table[n - 1] = (
                 <Slot key={n - 1} number={n} chosenNumbers={numbers} callback={() => {
-                    this.choseNumber(n);
-                }}/>);
+                    this.chooseNumber(n);
+                }}/>
+            );
             this.setState({
                 table,
                 chosenNumbers: numbers,
                 counter: this.state.counter + 1
             });
         }
+    }
+
+    joinLottery() {
+        if (!this.state.chosenNumbers.includes(-1)) {
+            let sortedNumbers = Object.assign([],this.state.chosenNumbers);
+            sortedNumbers = sortedNumbers.sort((a,b)=>{return a-b});
+            let toHash = sortedNumbers[0] + this.props.user + sortedNumbers[1];
+            let hash = this.props.web3.utils.sha3(toHash);
+            this.props.contract.methods
+                .commit(hash)
+                .send({from: this.props.user}, (res) => {
+                    if (!res.message.includes('error'))
+                        this.setState({redirectToLottery: true})
+                })
+        } else {
+            alert("NUMBERS NOT CHOSEN")
+        }
+
+
     }
 
     constructor() {
@@ -85,15 +121,42 @@ class Lottery extends Component {
         }
     }
 
+    joinButton(){
+        let tmp = Object.assign([],this.state.chosenNumbers);
+        tmp = tmp.sort((a,b)=>{return a-b});
+        if(tmp.includes(-1)){
+            return "Select your numbers";
+        }else{
+            return `Join with numbers: ${tmp[0]}, ${tmp[1]}`;
+        }
+    }
+
+
     render() {
 
         return (
             <Container>
+                < CurrentGame style={stylesCurrentGame}
+                              nrOfPlayers={this.props.committed}
+                              currentBet={200}
+                              gameStatus={GAME_STATUS[this.props.currentPhase]}
+                />
                 <Table>
                     {this.state.table}
                 </Table>
+                <Button style={betButtonStyle}
+                        color="yellow"
+                        disabled={this.state.chosenNumbers.includes(-1)}
+                        onClick={() => {
+                            this.joinLottery()
+                        }
+                        }
+                >
+                    {this.joinButton()}
+                </Button>
             </Container>
-        );
+        )
+            ;
     }
 }
 

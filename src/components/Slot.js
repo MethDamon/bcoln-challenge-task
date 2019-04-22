@@ -21,6 +21,7 @@ color: black !important;
 background: white;
 border-color: #f6b93b !important;
 transition: all 0.4s ease 0s;
+cursor: pointer;
 }`
 
 

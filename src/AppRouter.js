@@ -218,7 +218,14 @@ class AppRouter extends Component {
                                     <Route path="/lottery"
                                            exact
                                            render={(props) => (
-                                               <Lottery {...props}/>)
+                                               <Lottery {...props}
+                                                        user={this.state.user}
+                                                        committed={this.state.committed}
+                                                        currentPhase={this.state.currentPhase}
+                                                        fee={this.state.fee}
+                                                        contract={this.state.contract}
+                                                        web3={this.state.web3}
+                                                        cookies={this.props.cookies}/>)
                                            }/>
                                     <Route render={() => {
                                         console.log("Redirect to /join");
