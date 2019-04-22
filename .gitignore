@@ -23,3 +23,6 @@ yarn-error.log*
 backend/node_modules
 truffle/build/
 src/Environment.js
+
+# firebase
+.firebase/
