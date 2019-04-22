@@ -30,29 +30,6 @@ const contractConfig = {
         },
         {
             "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "uint8"
-                },
-                {
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "name": "revealed_numbers_to_addresses",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
             "inputs": [],
             "name": "getRevealed",
             "outputs": [
@@ -128,6 +105,33 @@ const contractConfig = {
         },
         {
             "constant": true,
+            "inputs": [
+                {
+                    "name": "",
+                    "type": "uint8"
+                },
+                {
+                    "name": "",
+                    "type": "uint8"
+                },
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "name": "revealed_numbers_to_addresses",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
             "inputs": [],
             "name": "current_phase",
             "outputs": [
@@ -151,7 +155,7 @@ const contractConfig = {
                 }
             ],
             "payable": false,
-            "stateMutability": "view",
+            "stateMutability": "pure",
             "type": "function"
         },
         {
@@ -181,7 +185,7 @@ const contractConfig = {
             "type": "function"
         },
         {
-            "constant": true,
+            "constant": false,
             "inputs": [
                 {
                     "name": "firstNumber",
@@ -195,7 +199,7 @@ const contractConfig = {
             "name": "reveal",
             "outputs": [],
             "payable": false,
-            "stateMutability": "view",
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
@@ -236,8 +240,8 @@ const contractConfig = {
             "type": "event"
         }
     ],
-    LOCALHOST_CONTRACT_ADDRESS: '0x14bffaae525ecc64a5df3a64d30e34b04384cc24',
-    METAMASK_CONTRACT_ADDRESS: '0x14bffaae525ecc64a5df3a64d30e34b04384cc24'
+    LOCALHOST_CONTRACT_ADDRESS: '0xfd17daded4381ea5b270ed3c64648815b621d5ff',
+    METAMASK_CONTRACT_ADDRESS: '0xfd17daded4381ea5b270ed3c64648815b621d5ff'
 };
 
 export default contractConfig;
