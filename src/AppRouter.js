@@ -104,7 +104,7 @@ class AppRouter extends Component {
             .getFee()
             .call({from: this.state.user})
             .then(res => {
-                return this.state.web3.utils.fromWei(this.hexToNumberString(res._hex))
+                return this.hexToNumberString(res._hex)
             })
     }
 

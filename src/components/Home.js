@@ -91,7 +91,7 @@ class Home extends Component {
                             < Container >
                                 < CurrentGame style={stylesCurrentGame}
                                               nrOfPlayers={this.props.committed}
-                                              currentBet={200}
+                                              currentBet={this.props.fee}
                                               gameStatus={GAME_STATUS[this.props.currentPhase]}
                                 />
                                 <InputGroup inside style={styles}>

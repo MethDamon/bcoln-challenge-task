@@ -102,7 +102,7 @@ class Lottery extends Component {
             let hash = this.props.web3.utils.sha3(toHash);
             this.props.contract.methods
                 .commit(hash)
-                .send({from: this.props.user}, (res) => {
+                .send({from: this.props.user, value: this.props.fee}, (res) => {
                     if (!res.message.includes('error'))
                         this.setState({redirectToLottery: true})
                 })
@@ -138,7 +138,7 @@ class Lottery extends Component {
             <Container>
                 < CurrentGame style={stylesCurrentGame}
                               nrOfPlayers={this.props.committed}
-                              currentBet={200}
+                              currentFee={this.props.fee}
                               gameStatus={GAME_STATUS[this.props.currentPhase]}
                 />
                 <Table>
@@ -150,13 +150,12 @@ class Lottery extends Component {
                         onClick={() => {
                             this.joinLottery()
                         }
-                        }
+                    }
                 >
                     {this.joinButton()}
                 </Button>
             </Container>
-        )
-            ;
+        );
     }
 }
 
