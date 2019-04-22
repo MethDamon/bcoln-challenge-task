@@ -69,6 +69,7 @@ class AppRouter extends Component {
         return this.state.web3.eth
             .getAccounts()
             .then(addresses => {
+                console.log(addresses)
                 return addresses[0];
             })
             .catch(err => {
@@ -156,6 +157,7 @@ class AppRouter extends Component {
             // MetaMask
             CONTRACT_ADDRESS = contractConfig.METAMASK_CONTRACT_ADDRESS;
             provider = Web3Providers.META_MASK
+            console.log(web3.currentProvider.publicConfigStore.getState())
         } else {
             this.web3Provider = new Web3.providers.HttpProvider(
                 'http://localhost:8545'
@@ -213,7 +215,8 @@ class AppRouter extends Component {
                                                      fee={this.state.fee}
                                                      contract={this.state.contract}
                                                      web3={this.state.web3}
-                                                     cookies={this.props.cookies}/>)
+                                                     cookies={this.props.cookies}
+                                                     timestamps = {this.state.timestamps}/>)
                                            }/>
                                     <Route path="/lottery"
                                            exact
@@ -225,7 +228,9 @@ class AppRouter extends Component {
                                                         fee={this.state.fee}
                                                         contract={this.state.contract}
                                                         web3={this.state.web3}
-                                                        cookies={this.props.cookies}/>)
+                                                        cookies={this.props.cookies}
+                                                        timestamps={this.state.timestamps}/>
+                                           )
                                            }/>
                                     <Route render={() => {
                                         console.log("Redirect to /join");

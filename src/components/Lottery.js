@@ -157,6 +157,7 @@ class Lottery extends Component {
                               nrOfPlayers={this.props.committed}
                               currentFee={this.props.fee}
                               gameStatus={GAME_STATUS[this.props.currentPhase]}
+                              timestamps={this.props.timestamps}
                 />
                 <Table>
                     {this.state.table}
@@ -189,7 +190,7 @@ class Lottery extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timestamps}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -198,7 +199,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         fee,
         web3,
         contract,
-        cookies
+        cookies,
+        timestamps
     };
 }
 

@@ -93,6 +93,7 @@ class Home extends Component {
                                               nrOfPlayers={this.props.committed}
                                               currentBet={this.props.fee}
                                               gameStatus={GAME_STATUS[this.props.currentPhase]}
+                                              timestamps={this.props.timestamps}
                                 />
                                 <InputGroup inside style={styles}>
                                     <InputGroup.Addon>
@@ -125,7 +126,7 @@ class Home extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timestamps}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -134,7 +135,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         fee,
         web3,
         contract,
-        cookies
+        cookies,
+        timestamps
     };
 }
 
