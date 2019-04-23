@@ -3,7 +3,7 @@ const contractConfig = {
         {
             "constant": false,
             "inputs": [],
-            "name": "abortCommitPhase",
+            "name": "abort",
             "outputs": [],
             "payable": false,
             "stateMutability": "nonpayable",
@@ -78,25 +78,6 @@ const contractConfig = {
                 {
                     "name": "",
                     "type": "address[]"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [
-                {
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "adresses_to_committed_numbers",
-            "outputs": [
-                {
-                    "name": "",
-                    "type": "bytes32"
                 }
             ],
             "payable": false,

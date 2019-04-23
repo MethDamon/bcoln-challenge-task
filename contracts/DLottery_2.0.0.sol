@@ -95,7 +95,7 @@ contract DLottery {
         current_timestamps.reveal = now;
     }
     
-    function reveal(uint8 firstNumber, uint8 secondNumber) public returns (bytes32) {
+    function reveal(uint8 firstNumber, uint8 secondNumber) public {
         require(adresses_to_committed_numbers[msg.sender] != '');
         require(current_phase == Phase.Reveal);
         require((now - current_timestamps.reveal) < TIME_TO_REVEAL);
@@ -103,7 +103,6 @@ contract DLottery {
         bytes32 hash = keccak256(input);
         require(adresses_to_committed_numbers[msg.sender] == hash);
         revealed_numbers_to_addresses[firstNumber][secondNumber].push(msg.sender);
-        return hash;
     }
     
     function mergeBytes(bytes memory param1, bytes memory param2, bytes memory param3) private pure returns (bytes memory) {
