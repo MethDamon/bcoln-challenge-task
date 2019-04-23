@@ -38,6 +38,44 @@ const Loader = styled.div`
 `;
 
 class AppRouter extends Component {
+
+    constructor() {
+        super();
+        let CONTRACT_ADDRESS;
+        let web3Instance = null;
+        let provider;
+
+
+        if (typeof  web3 !== 'undefined') {
+            this.web3Provider = web3.currentProvider;
+            web3Instance = new Web3(web3.currentProvider);
+
+            // MetaMask Ropsten
+            provider = Web3Providers.META_MASK;
+
+            // NetworkVersion = 3 (Ropsten) / 5777 (Ganache)
+            CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address
+        } else {
+            alert('Please install a Web3 Provider (Metamask)')
+        }
+
+        const dLotteryContract = new web3Instance.eth.Contract(
+            DLottery.abi,
+            CONTRACT_ADDRESS
+        );
+
+        this.state = {
+            isLoading: true,
+            web3: web3Instance,
+            contract: dLotteryContract,
+            user: '',
+            timestamps: {},
+            committed: 0,
+            currentPhase: '',
+            fee: 0,
+        }
+    }
+
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
@@ -143,50 +181,6 @@ class AppRouter extends Component {
                 return res.length
             })
     }
-
-    constructor() {
-        super();
-        let CONTRACT_ADDRESS;
-        let web3Instance = null;
-        let provider;
-
-        // TODO: refactoring
-        if (typeof  web3 !== 'undefined') {
-            this.web3Provider = web3.currentProvider;
-            web3Instance = new Web3(web3.currentProvider);
-
-            // MetaMask
-            //CONTRACT_ADDRESS = contractConfig.METAMASK_CONTRACT_ADDRESS;
-            provider = Web3Providers.META_MASK
-            console.log(web3.currentProvider.publicConfigStore.getState())
-        } else {
-            this.web3Provider = new Web3.providers.HttpProvider(
-                'http://localhost:8545'
-            );
-
-            web3Instance = new Web3(this.web3Provider);
-            CONTRACT_ADDRESS = DLottery.networks["5777"].address;
-            provider = Web3Providers.LOCALHOST;
-        }
-
-
-        const dLotteryContract = new web3Instance.eth.Contract(
-            DLottery.abi,
-            DLottery.networks["5777"].address
-        );
-
-        this.state = {
-            isLoading: true,
-            web3: web3Instance,
-            contract: dLotteryContract,
-            user: '',
-            timestamps: {},
-            committed: 0,
-            currentPhase: '',
-            fee: 0,
-        }
-    }
-
     stopLoading() {
 
     }
