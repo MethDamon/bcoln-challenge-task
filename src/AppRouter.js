@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
 import Web3 from "web3";
-import contractConfig from "./const/contractConfig";
 import Home from "./components/Home";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -12,6 +11,7 @@ import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
 import Lottery from "./components/Lottery";
+import DLottery from "./build/contracts/DLottery"
 
 
 // The Main component renders one of the three provided
@@ -29,11 +29,11 @@ const Web3Providers = {
 
 
 const Loader = styled.div`
-    height: 70vh
-        display: flex;
-      flex-direction: column;
-  justify-content: center;
-  align-items: center;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-color: red;
 `;
 
@@ -150,12 +150,13 @@ class AppRouter extends Component {
         let web3Instance = null;
         let provider;
 
+        // TODO: refactoring
         if (typeof  web3 !== 'undefined') {
             this.web3Provider = web3.currentProvider;
             web3Instance = new Web3(web3.currentProvider);
 
             // MetaMask
-            CONTRACT_ADDRESS = contractConfig.METAMASK_CONTRACT_ADDRESS;
+            //CONTRACT_ADDRESS = contractConfig.METAMASK_CONTRACT_ADDRESS;
             provider = Web3Providers.META_MASK
             console.log(web3.currentProvider.publicConfigStore.getState())
         } else {
@@ -164,14 +165,14 @@ class AppRouter extends Component {
             );
 
             web3Instance = new Web3(this.web3Provider);
-            CONTRACT_ADDRESS = contractConfig.LOCALHOST_CONTRACT_ADDRESS;
+            CONTRACT_ADDRESS = DLottery.networks["5777"].address;
             provider = Web3Providers.LOCALHOST;
         }
 
 
         const dLotteryContract = new web3Instance.eth.Contract(
-            contractConfig.CONTRACT_ABI,
-            CONTRACT_ADDRESS
+            DLottery.abi,
+            DLottery.networks["5777"].address
         );
 
         this.state = {

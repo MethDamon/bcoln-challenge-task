@@ -26,9 +26,11 @@ function getPhaseForTimestamp(status){
         case GAME_STATUS["0"]:
             return 'commit';
         case GAME_STATUS["1"]:
-            return 'ready to reveal';
-        default:
-            return 'asd';
+            return 'commit_and_ready_for_reveal';
+        case GAME_STATUS["2"]:
+            return 'reveal';
+        case GAME_STATUS["3"]:
+            return 'payout';
     }
 }
 
