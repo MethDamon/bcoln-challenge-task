@@ -137,7 +137,7 @@ class Lottery extends Component {
 
     abortCommitPhase() {
         this.props.contract.methods
-            .abortCommitPhase()
+            .abort()
             .send({from: this.props.user}, (res) => {
                     if (!res.message.includes('error')) {
                         console.log("aborted commit phase");
@@ -150,7 +150,6 @@ class Lottery extends Component {
 
 
     render() {
-
         return (
             <Container>
                 < CurrentGame style={stylesCurrentGame}

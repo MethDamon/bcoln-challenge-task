@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import GAME_STATUS from "../const/GameStatus";
+
 const Tab = styled.div`    
 background: linear-gradient(to right, #f7971e, #ffd200)
-`
-
+`;
 
 const CurrentGame = ({style, currentFee, nrOfPlayers, gameStatus, timestamps}) =>{
     return(
@@ -13,7 +13,6 @@ const CurrentGame = ({style, currentFee, nrOfPlayers, gameStatus, timestamps}) =
             <div>Current Fee: {currentFee} WEI</div>
             <div>Game Status: {gameStatus}</div>
             <div>Timestamps: {getTime(timestamps[getPhaseForTimestamp(gameStatus)])}</div>
-
         </Tab>
     );
 };
@@ -26,6 +25,8 @@ function getPhaseForTimestamp(status){
     switch(status){
         case GAME_STATUS["0"]:
             return 'commit';
+        case GAME_STATUS["1"]:
+            return 'ready to reveal';
         default:
             return 'asd';
     }
