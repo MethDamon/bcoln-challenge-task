@@ -43,18 +43,16 @@ class AppRouter extends Component {
         super();
         let CONTRACT_ADDRESS;
         let web3Instance = null;
-        let provider;
-
 
         if (typeof  web3 !== 'undefined') {
             this.web3Provider = web3.currentProvider;
             web3Instance = new Web3(web3.currentProvider);
 
-            // MetaMask Ropsten
-            provider = Web3Providers.META_MASK;
-
+            if(web3Instance.givenProvider.networkVersion)
+                CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
+            else
             // NetworkVersion = 3 (Ropsten) / 5777 (Ganache)
-            CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address
+                CONTRACT_ADDRESS = DLottery.networks["5777"].address
         } else {
             alert('Please install a Web3 Provider (Metamask)')
         }
