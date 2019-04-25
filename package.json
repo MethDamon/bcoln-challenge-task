@@ -22,7 +22,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean": "node clean-build.js",
+    "deploy-ropsten": "cd src/ && truffle deploy --network development",
+    "sc-ropsten": "yon clean && yon deploy-ropsten"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +35,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "yarn-or-npm": "^2.0.4"
+  }
 }
