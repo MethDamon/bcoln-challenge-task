@@ -9,7 +9,7 @@ import CurrentGame from './CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import RingLoader from 'react-spinners/RingLoader';
-import {withRouter} from 'react-router-dom'
+import {withRouter, Redirect} from 'react-router-dom'
 import Slot from "./Slot";
 
 const Table = styled.div`
@@ -149,6 +149,9 @@ class Reveal extends Component {
 
 
     render() {
+        if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[0]||GAME_STATUS[this.props.currentPhase] === GAME_STATUS[1]) {
+            return (<Redirect to="/lottery"/>)
+        }
         return (
             <Container>
                 < CurrentGame style={stylesCurrentGame}

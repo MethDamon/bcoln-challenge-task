@@ -13,7 +13,7 @@ contract DLottery {
     
     uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
     uint256 constant TIME_TO_ABORT =  10 * 60; // 10 minutes
-    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 60; // 30 seconds
+    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 10; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
@@ -115,7 +115,7 @@ contract DLottery {
     
     function mergeBytes(bytes memory param1, bytes memory param2, bytes memory param3) private pure returns (bytes memory) {
         bytes memory merged = new bytes(param1.length + param2.length + param3.length);
-    
+
         uint k = 0;
         for (uint i = 0; i < param1.length; i++) {
             merged[k] = param1[i];

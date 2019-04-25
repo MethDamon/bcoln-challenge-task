@@ -12,6 +12,8 @@ import RingLoader from 'react-spinners/RingLoader';
 import {Redirect, withRouter} from 'react-router-dom'
 import Slot from "./Slot";
 
+var Buffer = require('buffer/').Buffer
+
 
 const Table = styled.div`
 width: 350px;
@@ -101,7 +103,15 @@ class Lottery extends Component {
             sortedNumbers = sortedNumbers.sort((a, b) => {
                 return a - b
             });
-            let toHash = sortedNumbers[0] + this.props.user + sortedNumbers[1];
+            //TODO. fix the hash
+            let n1 =  new Buffer.alloc(1);
+            n1.writeInt8(sortedNumbers[0]);
+            let n2 = new Buffer.alloc(1);
+            n2.writeInt8(sortedNumbers[1]);
+            //let addressedHash = this.props.web3.utils.sha3(this.props.user);
+            //let toHash = Buffer.concat([n1, Buffer.from(addressedHash), n2]);
+            let toHash = Buffer.concat([n1, Buffer.from(this.props.user), n2]);
+            console.log('hash',toHash);
             let hash = this.props.web3.utils.sha3(toHash);
             this.props.contract.methods
                 .commit(hash)
@@ -114,11 +124,11 @@ class Lottery extends Component {
         }
     }
 
-    goToRevealPhase(){
+    goToRevealPhase() {
         this.props.contract.methods
             .goToRevealPhase()
-            .send({from: this.props.user, value: this.props.fee}).then((res)=>{
-                console.log(res)
+            .send({from: this.props.user, value: this.props.fee}).then((res) => {
+            console.log(res)
         });
     }
 
@@ -157,8 +167,8 @@ class Lottery extends Component {
 
 
     render() {
-        if(GAME_STATUS[this.props.currentPhase]===GAME_STATUS[1]){
-            //return (<Redirect to="/reveal"/>)
+        if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[2]) {
+            return (<Redirect to="/reveal"/>)
         }
         return (
             <Container>
@@ -171,17 +181,8 @@ class Lottery extends Component {
                 <Table>
                     {this.state.table}
                 </Table>
-                {this.props.currentPhase ===GAME_STATUS[0] ?(
-                <Button style={betButtonStyle}
-                        color="yellow"
-                        disabled={this.state.chosenNumbers.includes(-1)}
-                        onClick={() => {
-                            this.joinLottery()
-                        }
-                        }
-                >
-                    {this.joinButton()}
-                </Button>):(
+                {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
+                this.props.timeLeft === 0 ? (
                     <Button style={betButtonStyle}
                             color="yellow"
                             onClick={() => {
@@ -191,7 +192,17 @@ class Lottery extends Component {
                     >
                         {'Go to reveal phase'}
                     </Button>
-                    )}
+                ) : (
+                    <Button style={betButtonStyle}
+                            color="yellow"
+                            disabled={this.state.chosenNumbers.includes(-1)}
+                            onClick={() => {
+                                this.joinLottery()
+                            }
+                            }
+                    >
+                        {this.joinButton()}
+                    </Button>)}
 
                 <Button style={betButtonStyle}
                         color="yellow"
