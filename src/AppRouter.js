@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
 import Web3 from "web3";
 import Home from "./components/Home";
+import Reveal from "./components/Reveal";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import RingLoader from 'react-spinners/RingLoader';
@@ -12,6 +13,7 @@ import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
 import Lottery from "./components/Lottery";
 import DLottery from "./build/contracts/DLottery"
+import GAME_STATUS from "./const/GameStatus";
 
 
 // The Main component renders one of the three provided
@@ -43,6 +45,7 @@ class AppRouter extends Component {
         super();
         let CONTRACT_ADDRESS;
         let web3Instance = null;
+        let timer;
 
         if (typeof  web3 !== 'undefined') {
             this.web3Provider = web3.currentProvider;
@@ -71,13 +74,14 @@ class AppRouter extends Component {
             currentPhase: '',
             fee: 0,
             timers:{},
+            timeLeft:-1,
         }
     }
 
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
-
+        this.getRemainingTime()
         this.props.stopLoading();
         //this.setState({isLoading: false})
         const commitEvent = this.state.contract.events.NewCommit();
@@ -86,6 +90,9 @@ class AppRouter extends Component {
             //TODO: load only the new committed players?
             await this.loadDataFromSC();
         })
+        this.timer = setInterval(() => {
+            this.getRemainingTime()
+        }, 1000);
         //document.getElementById('root').style.height = "100vh";
         // await this.state.contract.methods
         //     .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
@@ -99,6 +106,22 @@ class AppRouter extends Component {
         //     .then(res => {
         //         console.log(res)
         //     })
+    }
+
+    componentWillUnmount(){
+        clearTimeout(this.timer)
+    }
+
+    getRemainingTime(){
+        let startPhase = new Date(this.state.timestamps[this.getPhaseForTimestamp(this.state.currentPhase)]);
+        let endPhase = startPhase.setSeconds(startPhase.getSeconds() + this.getTimerForPhase(this.state.currentPhase));
+        let remainingTime = endPhase - Date.now();
+        if(remainingTime<=0){
+            remainingTime = 0;
+        }
+        this.setState({
+            timeLeft: remainingTime
+        });
     }
 
     getUser() {
@@ -171,7 +194,6 @@ class AppRouter extends Component {
             fee: await this.getFee(),
             timers: await this.getTimers(),
         });
-        console.log(this.state.timers)
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -200,6 +222,35 @@ class AppRouter extends Component {
     stopLoading() {
 
     }
+    getTime(date){
+        return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    }
+
+    getTimerForPhase(phase){
+        switch(phase){
+            case 0:
+                return this.state.timers['LEFT_COMMIT_AND_REVEAL'];
+            case 1:
+                return this.state.timers['WAIT_TO_GO_TO_REVEAL_PHASE'];
+            case 2:
+                return this.state.timers['TO_REVEAL'];
+            case 3:
+                return 'payout';
+        }
+    }
+
+    getPhaseForTimestamp(status){
+        switch(status){
+            case 0:
+                return 'commit';
+            case 1:
+                return 'commit_and_ready_for_reveal';
+            case 2:
+                return 'reveal';
+            case 3:
+                return 'payout';
+        }
+    }
 
     render() {
         return (
@@ -227,7 +278,7 @@ class AppRouter extends Component {
                                                      contract={this.state.contract}
                                                      web3={this.state.web3}
                                                      cookies={this.props.cookies}
-                                                     timestamps = {this.state.timestamps}/>)
+                                                     timeLeft={this.state.timeLeft}/>)
                                            }/>
                                     <Route path="/lottery"
                                            exact
@@ -240,7 +291,21 @@ class AppRouter extends Component {
                                                         contract={this.state.contract}
                                                         web3={this.state.web3}
                                                         cookies={this.props.cookies}
-                                                        timestamps={this.state.timestamps}/>
+                                                        timeLeft={this.state.timeLeft}/>
+                                           )
+                                           }/>
+                                    <Route path="/reveal"
+                                           exact
+                                           render={(props) => (
+                                               <Reveal {...props}
+                                                        user={this.state.user}
+                                                        committed={this.state.committed}
+                                                        currentPhase={this.state.currentPhase}
+                                                        fee={this.state.fee}
+                                                        contract={this.state.contract}
+                                                        web3={this.state.web3}
+                                                        cookies={this.props.cookies}
+                                                        timeLeft={this.state.timeLeft}/>
                                            )
                                            }/>
                                     <Route render={() => {

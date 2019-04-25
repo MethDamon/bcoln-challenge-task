@@ -6,33 +6,23 @@ const Tab = styled.div`
 background: linear-gradient(to right, #f7971e, #ffd200)
 `;
 
-const CurrentGame = ({style, currentFee, nrOfPlayers, gameStatus, timestamps}) =>{
+const CurrentGame = ({style, currentFee, nrOfPlayers, gameStatus, timeLeft}) =>{
     return(
         <Tab style={style}>
             <div>Current Number Of Players: {nrOfPlayers}</div>
             <div>Current Fee: {currentFee} WEI</div>
             <div>Game Status: {gameStatus}</div>
-            <div>Timestamps: {getTime(timestamps[getPhaseForTimestamp(gameStatus)])}</div>
+            <div>Time left: {getTimeString(timeLeft)}</div>
         </Tab>
     );
 };
 
-function getTime(date){
-    return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+function getTimeString(t){
+    return `${Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}:${Math.floor((t % (1000 * 60 * 60)) / (1000 * 60))}:${Math.floor((t % (1000 * 60)) / 1000)}`
 }
 
-function getPhaseForTimestamp(status){
-    switch(status){
-        case GAME_STATUS["0"]:
-            return 'commit';
-        case GAME_STATUS["1"]:
-            return 'commit_and_ready_for_reveal';
-        case GAME_STATUS["2"]:
-            return 'reveal';
-        case GAME_STATUS["3"]:
-            return 'payout';
-    }
-}
+
+
 
 
 export default CurrentGame;

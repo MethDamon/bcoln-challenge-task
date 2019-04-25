@@ -9,9 +9,8 @@ import CurrentGame from './CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import RingLoader from 'react-spinners/RingLoader';
-import {Redirect, withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import Slot from "./Slot";
-
 
 const Table = styled.div`
 width: 350px;
@@ -50,7 +49,7 @@ const betButtonStyle = {
 }
 
 
-class Lottery extends Component {
+class Reveal extends Component {
     async componentDidMount() {
         this.createTable()
     }
@@ -95,31 +94,24 @@ class Lottery extends Component {
         }
     }
 
-    joinLottery() {
+    revealNumbers() {
         if (!this.state.chosenNumbers.includes(-1)) {
             let sortedNumbers = Object.assign([], this.state.chosenNumbers);
             sortedNumbers = sortedNumbers.sort((a, b) => {
                 return a - b
             });
-            let toHash = sortedNumbers[0] + this.props.user + sortedNumbers[1];
-            let hash = this.props.web3.utils.sha3(toHash);
             this.props.contract.methods
-                .commit(hash)
+                .reveal(sortedNumbers[0], sortedNumbers[1])
                 .send({from: this.props.user, value: this.props.fee}, (res) => {
-                    if (!res.message.includes('error'))
-                        this.setState({redirectToLottery: true})
+                    if (!res.message.includes('error')) {
+                        //TODO bo??
+                    }
                 })
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
-    }
 
-    goToRevealPhase(){
-        this.props.contract.methods
-            .goToRevealPhase()
-            .send({from: this.props.user, value: this.props.fee}).then((res)=>{
-                console.log(res)
-        });
+
     }
 
     constructor() {
@@ -130,15 +122,15 @@ class Lottery extends Component {
         }
     }
 
-    joinButton() {
+    revealButton() {
         let tmp = Object.assign([], this.state.chosenNumbers);
         tmp = tmp.sort((a, b) => {
             return a - b
         });
         if (tmp.includes(-1)) {
-            return "Select your numbers";
+            return "Re-select your numbers";
         } else {
-            return `Join with numbers: ${tmp[0]}, ${tmp[1]}`;
+            return `Reveal your numbers: ${tmp[0]}, ${tmp[1]}`;
         }
     }
 
@@ -157,9 +149,6 @@ class Lottery extends Component {
 
 
     render() {
-        if(GAME_STATUS[this.props.currentPhase]===GAME_STATUS[1]){
-            //return (<Redirect to="/reveal"/>)
-        }
         return (
             <Container>
                 < CurrentGame style={stylesCurrentGame}
@@ -171,28 +160,16 @@ class Lottery extends Component {
                 <Table>
                     {this.state.table}
                 </Table>
-                {this.props.currentPhase ===GAME_STATUS[0] ?(
                 <Button style={betButtonStyle}
                         color="yellow"
                         disabled={this.state.chosenNumbers.includes(-1)}
                         onClick={() => {
-                            this.joinLottery()
+                            this.revealNumbers()
                         }
                         }
                 >
-                    {this.joinButton()}
-                </Button>):(
-                    <Button style={betButtonStyle}
-                            color="yellow"
-                            onClick={() => {
-                                this.goToRevealPhase()
-                            }
-                            }
-                    >
-                        {'Go to reveal phase'}
-                    </Button>
-                    )}
-
+                    {this.revealButton()}
+                </Button>
                 <Button style={betButtonStyle}
                         color="yellow"
                         onClick={() => {
@@ -232,4 +209,4 @@ const mapActionsToProps = (dispatch) => {
     }
 };
 
-export default withRouter(connect(mapStateToProps, mapActionsToProps)(Lottery));
+export default withRouter(connect(mapStateToProps, mapActionsToProps)(Reveal));

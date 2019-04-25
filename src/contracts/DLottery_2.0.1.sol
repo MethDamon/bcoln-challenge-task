@@ -11,12 +11,12 @@ contract DLottery {
     mapping(address => bytes32) private adresses_to_committed_numbers;
     mapping(uint8 => mapping(uint8 => address[])) public revealed_numbers_to_addresses;
     
-    uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 30; // 30 seconds
+    uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
     uint256 constant TIME_TO_ABORT =  10 * 60; // 10 minutes
-    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 10; // 30 seconds
+    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 60; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     
-    uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 2;
+    uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
     
     enum Phase { Commit, CommitAndReadyForReveal, Reveal, Payout }
     Phase public current_phase;
@@ -93,15 +93,17 @@ contract DLottery {
 
     }
     
-    function goToRevealPhase() public {
+    function goToRevealPhase() payable public {
         require(current_phase == Phase.CommitAndReadyForReveal);
         require(adresses_to_committed_numbers[msg.sender] != '');
         require((now - current_timestamps.commit_and_ready_for_reveal) >= TIME_WAIT_TO_GO_TO_REVEAL_PHASE);
         current_phase = Phase.Reveal;
         current_timestamps.reveal = now;
+        emit NewCommit(keccak256("reset"));
+
     }
     
-    function reveal(uint8 firstNumber, uint8 secondNumber) public {
+    function reveal(uint8 firstNumber, uint8 secondNumber) payable public {
         require(adresses_to_committed_numbers[msg.sender] != '');
         require(current_phase == Phase.Reveal);
         require((now - current_timestamps.reveal) < TIME_TO_REVEAL);

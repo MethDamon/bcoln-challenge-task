@@ -79,7 +79,6 @@ class Home extends Component {
     }
 
     render() {
-        console.log(this.props);
         if (this.state.redirectToLottery) {
             return (
                 <Redirect to='/lottery'/>
@@ -93,7 +92,7 @@ class Home extends Component {
                                               nrOfPlayers={this.props.committed}
                                               currentBet={this.props.fee}
                                               gameStatus={GAME_STATUS[this.props.currentPhase]}
-                                              timestamps={this.props.timestamps}
+                                              timeLeft={this.props.timeLeft}
                                 />
                                 <InputGroup inside style={styles}>
                                     <InputGroup.Addon>
@@ -126,7 +125,7 @@ class Home extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timestamps}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -136,7 +135,7 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         web3,
         contract,
         cookies,
-        timestamps
+        timeLeft
     };
 }
 
