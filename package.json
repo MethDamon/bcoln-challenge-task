@@ -25,7 +25,7 @@
     "eject": "react-scripts eject",
     "clean": "node clean-build.js",
     "deploy-local": "cd src/ && truffle deploy --network development",
-    "sc-local": "yon clean && yon deploy-ropsten"
+    "sc-local": "yon clean && yon deploy-local"
   },
   "eslintConfig": {
     "extends": "react-app"
