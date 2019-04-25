@@ -47,7 +47,6 @@ class AppRouter extends Component {
         if (typeof  web3 !== 'undefined') {
             this.web3Provider = web3.currentProvider;
             web3Instance = new Web3(web3.currentProvider);
-
             if(web3Instance.givenProvider.networkVersion)
                 CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
             else
@@ -71,6 +70,7 @@ class AppRouter extends Component {
             committed: 0,
             currentPhase: '',
             fee: 0,
+            timers:{},
         }
     }
 
@@ -119,11 +119,26 @@ class AppRouter extends Component {
             .call({from: this.state.user})
             .then(res => {
                 return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
-                    commit = new Date(this.hexToNumber(commit._hex));
-                    commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex));
-                    payout = new Date(this.hexToNumber(payout._hex));
-                    reveal = new Date(this.hexToNumber(reveal._hex));
+                    commit = new Date(this.hexToNumber(commit._hex)*1000);
+                    commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex)*1000);
+                    payout = new Date(this.hexToNumber(payout._hex)*1000);
+                    reveal = new Date(this.hexToNumber(reveal._hex)*1000);
                     return {commit, commit_and_ready_for_reveal, payout, reveal}
+                })(res);
+            })
+    }
+
+    async getTimers(){
+        return await this.state.contract.methods
+            .getTimers()
+            .call({from: this.state.user})
+            .then(res => {
+                return (({LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}) => {
+                    LEFT_COMMIT_AND_REVEAL = this.hexToNumber(LEFT_COMMIT_AND_REVEAL._hex);
+                    TO_ABORT = this.hexToNumber(TO_ABORT._hex)*1000;
+                    WAIT_TO_GO_TO_REVEAL_PHASE = this.hexToNumber(WAIT_TO_GO_TO_REVEAL_PHASE._hex);
+                    TO_REVEAL = this.hexToNumber(TO_REVEAL._hex);
+                    return {LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}
                 })(res);
             })
     }
@@ -154,7 +169,9 @@ class AppRouter extends Component {
             currentPhase: await this.getCurrentPhase(),
             committed: await this.getCommitted(),
             fee: await this.getFee(),
+            timers: await this.getTimers(),
         });
+        console.log(this.state.timers)
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -167,6 +184,7 @@ class AppRouter extends Component {
             .current_phase()
             .call({from: this.state.user})
             .then(res => {
+                console.log("CURRENT PHASE", res)
                 return res
             })
     }

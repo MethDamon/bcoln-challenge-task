@@ -16,7 +16,7 @@ contract DLottery {
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 10; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     
-    uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
+    uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 2;
     
     enum Phase { Commit, CommitAndReadyForReveal, Reveal, Payout }
     Phase public current_phase;
@@ -48,6 +48,10 @@ contract DLottery {
     
     function getFee() pure public returns (uint256) {
         return ENTRY_FEE;
+    }
+
+    function getTimers() public view returns (uint256 LEFT_COMMIT_AND_REVEAL, uint256 TO_ABORT, uint256 WAIT_TO_GO_TO_REVEAL_PHASE, uint256 TO_REVEAL){
+        return (TIME_LEFT_COMMIT_AND_REVEAL,TIME_TO_ABORT,TIME_WAIT_TO_GO_TO_REVEAL_PHASE,TIME_TO_REVEAL);
     }
     
     event NewCommit(
@@ -84,7 +88,9 @@ contract DLottery {
                 delete revealed_numbers_to_addresses[i][j];
             }
         }
-        current_timestamps = TimeStamps(0, 0, 0, 0);
+        current_timestamps = TimeStamps(now, 0, 0, 0);
+        emit NewCommit(keccak256("reset"));
+
     }
     
     function goToRevealPhase() public {
