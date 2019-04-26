@@ -13,7 +13,7 @@ import {withRouter, Redirect} from 'react-router-dom'
 import Slot from "./Slot";
 
 const Table = styled.div`
-width: 350px;
+width: 550px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -23,7 +23,7 @@ width: 350px;
 `;
 
 const Container = styled.div`
-   
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -56,7 +56,7 @@ class Reveal extends Component {
 
     createTable() {
         let table = [];
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 16; i++) {
             table.push(<Slot key={i} number={i + 1} chosenNumbers={this.state.chosenNumbers} callback={() => {
                 this.chooseNumber(i + 1)
             }}/>)
@@ -102,11 +102,7 @@ class Reveal extends Component {
             });
             this.props.contract.methods
                 .reveal(sortedNumbers[0], sortedNumbers[1])
-                .send({from: this.props.user, value: this.props.fee}, (res) => {
-                    if (!res.message.includes('error')) {
-                        //TODO bo??
-                    }
-                })
+                .send({from: this.props.user, value: this.props.fee}                )
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
@@ -137,14 +133,7 @@ class Reveal extends Component {
     abortCommitPhase() {
         this.props.contract.methods
             .abort()
-            .send({from: this.props.user}, (res) => {
-                    if (!res.message.includes('error')) {
-                        console.log("aborted commit phase");
-                    } else {
-                        console.log(res)
-                    }
-                }
-            )
+            .send({from: this.props.user});
     }
 
 

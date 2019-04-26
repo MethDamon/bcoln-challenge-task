@@ -54,9 +54,6 @@ const stylesCurrentGame = {
 };
 
 class Home extends Component {
-    async componentDidMount() {
-
-    }
 
     constructor() {
        super();
@@ -66,16 +63,7 @@ class Home extends Component {
     }
 
     joinLottery(){
-        // let toHash = n1+this.props.user+n2;
-        // let hash = this.props.web3.utils.sha3(toHash);
-        // this.props.contract.methods
-        //     .commit(hash)
-        //     .send({from: this.props.user}, (res)=>{
-        //         if(!res.message.includes('error'))
-        //         this.setState({redirectToLottery: true})
-        //     })
         this.setState({redirectToLottery: true})
-
     }
 
     render() {
@@ -120,10 +108,6 @@ class Home extends Component {
         );
     }
 }
-
-// const props = ({user})=>{
-//     return {user}
-// }
 
 const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft}) => {
     return {

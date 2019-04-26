@@ -1,22 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import {Button} from 'rsuite';
-import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
+import 'rsuite/dist/styles/rsuite.min.css';
 import styled from 'styled-components';
-import {css} from '@emotion/core';
-import {Input, InputGroup, Icon} from 'rsuite';
 import CurrentGame from './CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
-import RingLoader from 'react-spinners/RingLoader';
 import {Redirect, withRouter} from 'react-router-dom'
 import Slot from "./Slot";
 
-var Buffer = require('buffer/').Buffer
+var Buffer = require('buffer/').Buffer;
 
 
 const Table = styled.div`
-width: 350px;
+width: 550px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -51,6 +48,14 @@ const betButtonStyle = {
     fontWeight: 800
 }
 
+const revealPhaseButtonStyle = {
+    width: 250,
+    height: 50,
+    margin: 10,
+    fontSize: 20,
+    fontWeight: 800,
+}
+
 
 class Lottery extends Component {
     async componentDidMount() {
@@ -59,7 +64,7 @@ class Lottery extends Component {
 
     createTable() {
         let table = [];
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 16; i++) {
             table.push(<Slot key={i} number={i + 1} chosenNumbers={this.state.chosenNumbers} callback={() => {
                 this.chooseNumber(i + 1)
             }}/>)
@@ -70,6 +75,7 @@ class Lottery extends Component {
     chooseNumber(n) {
         let numbers = Object.assign([], this.state.chosenNumbers);
         let table = Object.assign([], this.state.table);
+
         //Avoid choosing twice the same number
         if (!numbers.includes(n)) {
             let lastSelected = this.state.chosenNumbers[(this.state.counter) % 2];
@@ -104,21 +110,18 @@ class Lottery extends Component {
                 return a - b
             });
             //TODO. fix the hash
-            let n1 =  new Buffer.alloc(1);
+            let n1 = new Buffer.alloc(1);
             n1.writeInt8(sortedNumbers[0]);
             let n2 = new Buffer.alloc(1);
             n2.writeInt8(sortedNumbers[1]);
             //let addressedHash = this.props.web3.utils.sha3(this.props.user);
             //let toHash = Buffer.concat([n1, Buffer.from(addressedHash), n2]);
             let toHash = Buffer.concat([n1, Buffer.from(this.props.user), n2]);
-            console.log('hash',toHash);
+            console.log('hash', toHash);
             let hash = this.props.web3.utils.sha3(toHash);
             this.props.contract.methods
                 .commit(hash)
-                .send({from: this.props.user, value: this.props.fee}, (res) => {
-                    if (!res.message.includes('error'))
-                        this.setState({redirectToLottery: true})
-                })
+                .send({from: this.props.user, value: this.props.fee})
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
@@ -127,9 +130,7 @@ class Lottery extends Component {
     goToRevealPhase() {
         this.props.contract.methods
             .goToRevealPhase()
-            .send({from: this.props.user, value: this.props.fee}).then((res) => {
-            console.log(res)
-        });
+            .send({from: this.props.user, value: this.props.fee});
     }
 
     constructor() {
@@ -155,14 +156,7 @@ class Lottery extends Component {
     abortCommitPhase() {
         this.props.contract.methods
             .abort()
-            .send({from: this.props.user}, (res) => {
-                    if (!res.message.includes('error')) {
-                        console.log("aborted commit phase");
-                    } else {
-                        console.log(res)
-                    }
-                }
-            )
+            .send({from: this.props.user})
     }
 
 
@@ -183,13 +177,12 @@ class Lottery extends Component {
                 </Table>
                 {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
                 this.props.timeLeft === 0 ? (
-                    <Button style={betButtonStyle}
-                            color="yellow"
+                    <Button style={revealPhaseButtonStyle}
+                            color="red"
                             onClick={() => {
                                 this.goToRevealPhase()
-                            }
-                            }
-                    >
+                                }
+                            }>
                         {'Go to reveal phase'}
                     </Button>
                 ) : (
@@ -198,9 +191,8 @@ class Lottery extends Component {
                             disabled={this.state.chosenNumbers.includes(-1)}
                             onClick={() => {
                                 this.joinLottery()
-                            }
-                            }
-                    >
+                                }
+                            }>
                         {this.joinButton()}
                     </Button>)}
 
@@ -208,19 +200,14 @@ class Lottery extends Component {
                         color="yellow"
                         onClick={() => {
                             this.abortCommitPhase()
-                        }
-                        }
-                >
+                            }
+                        }>
                     Abort Commit Phase
                 </Button>
             </Container>
         );
     }
 }
-
-// const props = ({user})=>{
-//     return {user}
-// }
 
 const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft}) => {
     return {
