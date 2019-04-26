@@ -59,7 +59,22 @@ const revealPhaseButtonStyle = {
 
 class Lottery extends Component {
     async componentDidMount() {
+        let chosenNumbers = await this.props.cookies.get('chosenNumbers');
+        let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
+        if(!!chosenNumbers&&commitTimestamps.toString()===this.props.timestamps['commit'].toString()){
+            this.setState({
+                chosenNumbers
+            })
+        }else{
+            this.props.cookies.remove('chosenNumbers',{ path: '/' });
+            this.props.cookies.remove('commitTimestamp', { path: '/' });
+
+        }
         this.createTable()
+    }
+
+    wipeCookies(){
+
     }
 
     createTable() {
@@ -121,7 +136,13 @@ class Lottery extends Component {
             let hash = this.props.web3.utils.sha3(toHash);
             this.props.contract.methods
                 .commit(hash)
-                .send({from: this.props.user, value: this.props.fee})
+                .send({from: this.props.user, value: this.props.fee},()=>{
+                    this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, { path: '/' });
+                    //save the timestamp of the commit phase and used it as id for saving only the numbers
+                    //of the current lottery
+                    this.props.cookies.set('commitTimestamp', this.props.timestamps['commit'], { path: '/' });
+
+                })
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
@@ -156,7 +177,9 @@ class Lottery extends Component {
     abortCommitPhase() {
         this.props.contract.methods
             .abort()
-            .send({from: this.props.user})
+            .send({from: this.props.user},()=>{
+                window.location.reload();
+            })
     }
 
 
@@ -209,7 +232,7 @@ class Lottery extends Component {
     }
 }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -219,7 +242,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         web3,
         contract,
         cookies,
-        timeLeft
+        timeLeft,
+        timestamps
     };
 }
 

@@ -51,6 +51,17 @@ const betButtonStyle = {
 
 class Reveal extends Component {
     async componentDidMount() {
+        let chosenNumbers = await this.props.cookies.get('chosenNumbers');
+        let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
+        if(!!chosenNumbers&&commitTimestamps.toString()===this.props.timestamps['commit'].toString()){
+            this.setState({
+                chosenNumbers
+            })
+        }else{
+            this.props.cookies.remove('chosenNumbers',{ path: '/' });
+            this.props.cookies.remove('commitTimestamp', { path: '/' });
+
+        }
         this.createTable()
     }
 
@@ -133,7 +144,9 @@ class Reveal extends Component {
     abortCommitPhase() {
         this.props.contract.methods
             .abort()
-            .send({from: this.props.user});
+            .send({from: this.props.user},()=>{
+                window.location.reload();
+            });
     }
 
 
@@ -180,7 +193,7 @@ class Reveal extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -190,7 +203,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         web3,
         contract,
         cookies,
-        timeLeft
+        timeLeft,
+        timestamps
     };
 }
 

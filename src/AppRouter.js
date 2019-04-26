@@ -291,7 +291,8 @@ class AppRouter extends Component {
                                                         contract={this.state.contract}
                                                         web3={this.state.web3}
                                                         cookies={this.props.cookies}
-                                                        timeLeft={this.state.timeLeft}/>
+                                                        timeLeft={this.state.timeLeft}
+                                                        timestamps = {this.state.timestamps}/>
                                            )
                                            }/>
                                     <Route path="/reveal"
@@ -305,7 +306,8 @@ class AppRouter extends Component {
                                                         contract={this.state.contract}
                                                         web3={this.state.web3}
                                                         cookies={this.props.cookies}
-                                                        timeLeft={this.state.timeLeft}/>
+                                                        timeLeft={this.state.timeLeft}
+                                                       timestamps = {this.state.timestamps}/>
                                            )
                                            }/>
                                     <Route render={() => {
