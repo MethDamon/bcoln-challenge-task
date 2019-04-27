@@ -6,7 +6,7 @@ import Reveal from "../components/Reveal";
 
 const Routes = ({state, cookies}) => (
     <Switch>
-        <Route path="/join" exact render={(props) => (
+        <Route path="/join" render={(props) => (
             <Home {...props}
                   user={state.user}
                   committed={state.committed}

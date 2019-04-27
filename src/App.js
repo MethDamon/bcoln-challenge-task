@@ -11,7 +11,6 @@ import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
 import DLottery from "./build/contracts/DLottery"
 import Routes from './routes/index'
-import {Container, Content} from "rsuite";
 
 let web3 = window.web3;
 

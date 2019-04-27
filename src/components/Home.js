@@ -8,6 +8,8 @@ import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import { withRouter, Redirect } from 'react-router-dom'
 
+let web3 = window.web3;
+
 const styles = {
     HomeContainer: {
         marginTop: 150,
@@ -35,7 +37,8 @@ const styles = {
         fontSize: 20,
         fontWeight: 800,
         background: "#ff9f19",
-        color: "#FFFFFF"
+        color: "#FFFFFF",
+        boxShadow: "0 1px 3px 0 rgba(0,0,0,.29)"
     },
     CurrentGame: {
         width: 500,
@@ -83,9 +86,9 @@ class Home extends Component {
                     </InputGroup>
 
                     <InputGroup style={styles.Inputs}>
-                        <InputGroup.Addon>ETH</InputGroup.Addon>
+                        <InputGroup.Addon>ETH Fee</InputGroup.Addon>
                         <Input size={'lg'}
-                               defaultValue = {this.props.fee}
+                               defaultValue = {web3.fromWei(this.props.fee, 'ether')}
                                disabled = {true}
                         />
                     </InputGroup>
