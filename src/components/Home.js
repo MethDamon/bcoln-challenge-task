@@ -25,15 +25,16 @@ const styles = {
     Inputs: {
         width: 450,
         marginBottom: 10,
-        marginTop: 10,
+        marginTop: 20,
     },
     LoginButton: {
         width: 250,
         height: 50,
         marginBottom: 10,
+        marginTop: 10,
         fontSize: 20,
         fontWeight: 800,
-        background: "#ff771c",
+        background: "#ff9f19",
         color: "#FFFFFF"
     },
     CurrentGame: {

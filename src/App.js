@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
+import {BrowserRouter,withRouter} from 'react-router-dom'
 import Web3 from "web3";
-import Home from "./components/Home";
-import Reveal from "./components/Reveal";
 import Footer from "./views/Footer";
 import Header from "./views/Header";
 import RingLoader from 'react-spinners/RingLoader';
@@ -11,16 +9,9 @@ import './App.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import Lottery from "./components/Lottery";
 import DLottery from "./build/contracts/DLottery"
-import GAME_STATUS from "./const/GameStatus";
-
-
-// The Main component renders one of the three provided
-// Routes (provided that one matches). Both the /roster
-// and /schedule routes will match any pathname that starts
-// with /roster or /schedule. The / route will only match
-// when the pathname is exactly the string "/"
+import Routes from './routes/index'
+import {Container, Content} from "rsuite";
 
 let web3 = window.web3;
 const Web3Providers = {
@@ -263,61 +254,14 @@ class App extends Component {
                             color={'orange'}
                             loading={this.props.isLoading}/>
                     </Loader>) : (
-                        <div>
-                            <Header/>
-                            <div style = {{height: '65vh'}}>
-                                <Switch>
-                                    <Route path="/join"
-                                           exact
-                                           render={(props) => (
-                                               <Home {...props}
-                                                     user={this.state.user}
-                                                     committed={this.state.committed}
-                                                     currentPhase={this.state.currentPhase}
-                                                     fee={this.state.fee}
-                                                     contract={this.state.contract}
-                                                     web3={this.state.web3}
-                                                     cookies={this.props.cookies}
-                                                     timeLeft={this.state.timeLeft}/>)
-                                           }/>
-                                    <Route path="/lottery"
-                                           exact
-                                           render={(props) => (
-                                               <Lottery {...props}
-                                                        user={this.state.user}
-                                                        committed={this.state.committed}
-                                                        currentPhase={this.state.currentPhase}
-                                                        fee={this.state.fee}
-                                                        contract={this.state.contract}
-                                                        web3={this.state.web3}
-                                                        cookies={this.props.cookies}
-                                                        timeLeft={this.state.timeLeft}
-                                                        timestamps = {this.state.timestamps}/>
-                                           )
-                                           }/>
-                                    <Route path="/reveal"
-                                           exact
-                                           render={(props) => (
-                                               <Reveal {...props}
-                                                        user={this.state.user}
-                                                        committed={this.state.committed}
-                                                        currentPhase={this.state.currentPhase}
-                                                        fee={this.state.fee}
-                                                        contract={this.state.contract}
-                                                        web3={this.state.web3}
-                                                        cookies={this.props.cookies}
-                                                        timeLeft={this.state.timeLeft}
-                                                       timestamps = {this.state.timestamps}/>
-                                           )
-                                           }/>
-                                    <Route render={() => {
-                                        console.log("Redirect to /join");
-                                        return (<Redirect to="/join"/>)
-                                    }}/>
-                                </Switch>
-                            </div>
-                            <Footer/>
-                        </div>)}
+                        <BrowserRouter>
+                            <Container>
+                                <Header/>
+                                <Content><Routes state={this.state} cookies={this.props.cookies}/></Content>
+                                <Footer/>
+                            </Container>
+                        </BrowserRouter>
+                    )}
             </div>
         );
     }
