@@ -1,56 +1,48 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {Button} from 'rsuite';
-import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
-import styled from 'styled-components';
-import { css } from '@emotion/core';
+import {Button, Panel} from 'rsuite';
+import 'rsuite/dist/styles/rsuite.min.css';
 import {Input, InputGroup, Icon} from 'rsuite';
-import CurrentGame from './CurrentGame'
+import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
-import RingLoader from 'react-spinners/RingLoader';
 import { withRouter, Redirect } from 'react-router-dom'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-`;
-
-const HomeStyle = styled.div`
-    height: 65vh
-`;
-
-const Loader = styled.div`
-    height: 70vh
-        display: flex;
-      flex-direction: column;
-  justify-content: center;
-  align-items: center;
-    border-color: red;
-`;
-
-
 const styles = {
-    width: 450,
-    marginBottom: 10,
-};
-
-const loginButtonStyle = {
-    width: 250,
-    height: 50,
-    marginBottom: 10,
-    fontSize: 20,
-    fontWeight: 800
-}
-const stylesCurrentGame = {
-    width: 500,
-    marginTop: 20,
-    marginBottom: 100,
-    borderRadius: 7,
-    fontSize: 30
+    HomeContainer: {
+        marginTop: 200,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    Container: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        background: "white",
+        width: 600
+    },
+    Inputs: {
+        width: 450,
+        marginBottom: 10,
+        marginTop: 10,
+    },
+    LoginButton: {
+        width: 250,
+        height: 50,
+        marginBottom: 10,
+        fontSize: 20,
+        fontWeight: 800,
+        background: "#ff771c",
+        color: "#FFFFFF"
+    },
+    CurrentGame: {
+        width: 500,
+        marginTop: 20,
+        marginBottom: 100,
+        borderRadius: 7,
+        fontSize: 30
+    }
 };
 
 class Home extends Component {
@@ -72,39 +64,37 @@ class Home extends Component {
                 <Redirect to='/lottery'/>
             )
         }
-        return (
-            <HomeStyle>
-                        <div>
-                            < Container >
-                                < CurrentGame style={stylesCurrentGame}
-                                              nrOfPlayers={this.props.committed}
-                                              currentBet={this.props.fee}
-                                              gameStatus={GAME_STATUS[this.props.currentPhase]}
-                                              timeLeft={this.props.timeLeft}
-                                />
-                                <InputGroup inside style={styles}>
-                                    <InputGroup.Addon>
-                                        <Icon icon="avatar"/>
-                                    </InputGroup.Addon>
-                                    <Input  size = {'lg'} defaultValue = {this.props.user}
-                                    disabled = {true}/>
-                                </InputGroup>
+        return(
+            <Panel style={styles.HomeContainer}>
+                <Panel style={styles.Container}>
+                    < CurrentGame style={styles.CurrentGame}
+                                  nrOfPlayers={this.props.committed}
+                                  currentBet={this.props.fee}
+                                  gameStatus={GAME_STATUS[this.props.currentPhase]}
+                                  timeLeft={this.props.timeLeft}
+                    />
+                    <InputGroup inside style={styles.Inputs}>
+                        <InputGroup.Addon>
+                            <Icon icon="avatar"/>
+                        </InputGroup.Addon>
+                        <Input  size = {'lg'} defaultValue = {this.props.user}
+                                disabled = {true}/>
+                    </InputGroup>
 
-                                <InputGroup style={styles}>
-                                    <InputGroup.Addon>ETH</InputGroup.Addon>
-                                    <Input size={'lg'}
-                                           defaultValue = {this.props.fee}
-                                            disabled = {true}
-                                    />
-                                </InputGroup>
-                                <Button style={loginButtonStyle}
-                                        color="yellow"
-                                        onClick={this.joinLottery.bind(this)}>
-                                    Join the Lottery
-                                </Button>
-                            </Container>
-                        </div>
-            </HomeStyle>
+                    <InputGroup style={styles.Inputs}>
+                        <InputGroup.Addon>ETH</InputGroup.Addon>
+                        <Input size={'lg'}
+                               defaultValue = {this.props.fee}
+                               disabled = {true}
+                        />
+                    </InputGroup>
+                    <Button style={styles.LoginButton}
+                            onClick={this.joinLottery.bind(this)}>
+                        Join the Lottery
+                    </Button>
+                </Panel>
+            </Panel>
+
         );
     }
 }

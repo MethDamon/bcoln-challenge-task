@@ -3,11 +3,11 @@ import {connect} from 'react-redux'
 import {Button} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css';
 import styled from 'styled-components';
-import CurrentGame from './CurrentGame'
+import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import {Redirect, withRouter} from 'react-router-dom'
-import Slot from "./Slot";
+import Slot from "../views/Slot";
 
 var Buffer = require('buffer/').Buffer;
 

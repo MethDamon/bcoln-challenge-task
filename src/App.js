@@ -3,11 +3,11 @@ import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
 import Web3 from "web3";
 import Home from "./components/Home";
 import Reveal from "./components/Reveal";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
+import Footer from "./views/Footer";
+import Header from "./views/Header";
 import RingLoader from 'react-spinners/RingLoader';
 import styled from "styled-components";
-import './AppRouter.css';
+import './App.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
@@ -39,7 +39,7 @@ const Loader = styled.div`
     border-color: red;
 `;
 
-class AppRouter extends Component {
+class App extends Component {
 
     constructor() {
         super();
@@ -254,13 +254,13 @@ class AppRouter extends Component {
 
     render() {
         return (
-            <div className="AppRouter">
+            <div className="App">
                 {this.props.isLoading ?
                     (<Loader>
                         <RingLoader
                             sizeUnit={"px"}
-                            size={500}
-                            color={'red'}
+                            size={150}
+                            color={'orange'}
                             loading={this.props.isLoading}/>
                     </Loader>) : (
                         <div>
@@ -336,4 +336,4 @@ const mapActionsToProps = (dispatch) => {
     }
 };
 
-export default withCookies(withRouter(connect(mapStateToProps, mapActionsToProps)(AppRouter)));
+export default withCookies(withRouter(connect(mapStateToProps, mapActionsToProps)(App)));
