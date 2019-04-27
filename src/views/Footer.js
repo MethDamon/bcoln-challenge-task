@@ -1,26 +1,36 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
+import 'rsuite/dist/styles/rsuite.min.css';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
+import styled from 'styled-components'
+
+const Developer = styled.p`
+  margin-top: 5px;
+`;
+
+const Title = styled.p`
+  margin-bottom: 0;
+  margin-top: 5em;
+  font-size: 18px;
+  font-weight: bold
+`;
+
+const Container = styled.div`
+  color: white;
+  margin-top: 180px;
+`;
 
 const Footer = () => (
-    <div style = {{ 'color': 'white'}}>
-        <p
-            style={{
-                marginBottom: 0,
-                marginTop: '5em',
-                fontSize: 18,
-                fontWeight: 'bold'
-            }}
-        >
+    <Container>
+        <Title>
             Developed by:{' '}
-        </p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Ile Cepilov </p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Elfat Esati</p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Tim Strasser</p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Erion Sula</p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Ledri Thaqi</p>
-    </div>
+        </Title>
+        <Developer>Ile Cepilov </Developer>
+        <Developer>Elfat Esati</Developer>
+        <Developer>Tim Strasser</Developer>
+        <Developer>Erion Sula</Developer>
+        <Developer>Ledri Thaqi</Developer>
+    </Container>
 );
 
 const mapStateToProps = (state) => {

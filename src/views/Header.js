@@ -3,22 +3,22 @@ import {connect} from 'react-redux'
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import styled from 'styled-components'
+import {Icon} from "rsuite";
 
 const HeaderContainer = styled.div`
+  font-size: 18px;
+  padding: 16px;
   height: 50px;
-  background: #eeeeee;
+`;
+
+const GithubLink = styled.a`
+  color: white;
 `;
 const Header = () => (
     <HeaderContainer>
-        <span>Header Content --></span>
-        <button onClick={() => {
-            if (this.props.isLoading) {
-                this.props.stopLoading()
-            } else {
-                this.props.startLoading()
-            }
-        }}>TOGGLE LOADING
-        </button>
+        <GithubLink href="https://github.com/MethDamon/bcoln-challenge-task" target="_blank" >
+            <Icon style={{float: 'right'}} icon="github" size='lg'/>
+        </GithubLink>
     </HeaderContainer>
 );
 

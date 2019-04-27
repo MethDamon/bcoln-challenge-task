@@ -14,12 +14,6 @@ import Routes from './routes/index'
 import {Container, Content} from "rsuite";
 
 let web3 = window.web3;
-const Web3Providers = {
-    META_MASK: 'META MASK',
-    LOCALHOST: 'LOCAL HOST',
-    MIST: 'MIST'
-};
-
 
 const Loader = styled.div`
     height: 70vh;
@@ -36,10 +30,8 @@ class App extends Component {
         super();
         let CONTRACT_ADDRESS;
         let web3Instance = null;
-        let timer;
 
         if (typeof  web3 !== 'undefined') {
-            this.web3Provider = web3.currentProvider;
             web3Instance = new Web3(web3.currentProvider);
             if(web3Instance.givenProvider.networkVersion)
                 CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
@@ -72,7 +64,7 @@ class App extends Component {
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
-        this.getRemainingTime()
+        this.getRemainingTime();
         this.props.stopLoading();
         //this.setState({isLoading: false})
         const commitEvent = this.state.contract.events.NewCommit();
@@ -80,23 +72,10 @@ class App extends Component {
             console.log("new event");
             //TODO: load only the new committed players?
             await this.loadDataFromSC();
-        })
+        });
         this.timer = setInterval(() => {
             this.getRemainingTime()
         }, 1000);
-        //document.getElementById('root').style.height = "100vh";
-        // await this.state.contract.methods
-        //     .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
-        //     .send({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
-        //     .then(res => {
-        //         console.log(res)
-        //     })
-        // await this.state.contract.methods
-        //     .getCommitted()
-        //     .call({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
-        //     .then(res => {
-        //         console.log(res)
-        //     })
     }
 
     componentWillUnmount(){
@@ -210,12 +189,6 @@ class App extends Component {
                 return res.length
             })
     }
-    stopLoading() {
-
-    }
-    getTime(date){
-        return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-    }
 
     getTimerForPhase(phase){
         switch(phase){
@@ -254,13 +227,13 @@ class App extends Component {
                             color={'orange'}
                             loading={this.props.isLoading}/>
                     </Loader>) : (
-                        <BrowserRouter>
-                            <Container>
-                                <Header/>
-                                <Content><Routes state={this.state} cookies={this.props.cookies}/></Content>
-                                <Footer/>
-                            </Container>
-                        </BrowserRouter>
+                        <div style={{minHeight: '100%'}}>
+                            <BrowserRouter>
+                                    <Header/>
+                                    <Routes state={this.state} cookies={this.props.cookies}/>
+                                    <Footer/>
+                            </BrowserRouter>
+                        </div>
                     )}
             </div>
         );
@@ -271,7 +244,7 @@ const mapStateToProps = (state, props) => {
     return {
         isLoading: state.ui.isLoading,
     };
-}
+};
 
 const mapActionsToProps = (dispatch) => {
     return {

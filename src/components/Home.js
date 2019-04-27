@@ -10,7 +10,7 @@ import { withRouter, Redirect } from 'react-router-dom'
 
 const styles = {
     HomeContainer: {
-        marginTop: 200,
+        marginTop: 150,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
