@@ -36,7 +36,7 @@ const styles = {
         marginTop: 10,
         fontSize: 20,
         fontWeight: 800,
-        background: "#ff9f19",
+        background: "linear-gradient(0deg, #ffa726, #fb8c00)",
         color: "#FFFFFF",
         boxShadow: "0 1px 3px 0 rgba(0,0,0,.29)"
     },

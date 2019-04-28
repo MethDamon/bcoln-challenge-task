@@ -3,15 +3,15 @@ import {Tag} from "rsuite";
 
 const styles = {
     committed: {
-        background: "green",
+        background: "linear-gradient(60deg, #66bb6a, #43a047)",
         color: "white"
     },
     readyForReveal: {
-        background: 'orange',
+        background: 'linear-gradient(60deg, #ffa726, #fb8c00)',
         color: "white"
     },
     reveal: {
-        background: "red",
+        background: "linear-gradient(60deg, #ef5350, #e53935)",
         color: "white"
     }
 };

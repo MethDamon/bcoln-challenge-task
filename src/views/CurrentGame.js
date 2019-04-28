@@ -8,7 +8,8 @@ const styles = {
         marginTop: "5px",
         background: 'linear-gradient(0deg, #11cdef 0,#1171ef 100%)',
         color: "white",
-        boxShadow: "0 1px 3px 0 rgba(0,0,0,.5)"
+        boxShadow: "0 1px 3px 0 rgba(0,0,0,.5)",
+        width: 450,
     },
     PanelHeader: {
         color: "white"
@@ -27,7 +28,7 @@ const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft}) =>{
 
             <h4 style={styles.Info}>Current Number Of Players: {nrOfPlayers}</h4>
             {/*<div style={styles.Info}>Current Fee: {currentFee} WEI</div>*/}
-            <h4 style={styles.Info}>Game Status: <GameStatusBadge status={gameStatus}/></h4>
+            <h4 style={styles.Info}>Lottery Status: <GameStatusBadge status={gameStatus}/></h4>
             <h4 style={styles.Info}>Time left: {getTimeString(timeLeft)}</h4>
         </Panel>
     );
