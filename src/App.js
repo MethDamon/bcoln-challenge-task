@@ -1,34 +1,18 @@
 import React, {Component} from 'react';
-import {Redirect, Route, Switch, withRouter} from 'react-router-dom'
+import {BrowserRouter,withRouter} from 'react-router-dom'
 import Web3 from "web3";
-import Home from "./components/Home";
-import Reveal from "./components/Reveal";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
+import Footer from "./views/Footer";
+import Header from "./views/Header";
 import RingLoader from 'react-spinners/RingLoader';
 import styled from "styled-components";
-import './AppRouter.css';
+import './App.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import Lottery from "./components/Lottery";
 import DLottery from "./build/contracts/DLottery"
-import GAME_STATUS from "./const/GameStatus";
-
-
-// The Main component renders one of the three provided
-// Routes (provided that one matches). Both the /roster
-// and /schedule routes will match any pathname that starts
-// with /roster or /schedule. The / route will only match
-// when the pathname is exactly the string "/"
+import Routes from './routes/index'
 
 let web3 = window.web3;
-const Web3Providers = {
-    META_MASK: 'META MASK',
-    LOCALHOST: 'LOCAL HOST',
-    MIST: 'MIST'
-};
-
 
 const Loader = styled.div`
     height: 70vh;
@@ -39,16 +23,14 @@ const Loader = styled.div`
     border-color: red;
 `;
 
-class AppRouter extends Component {
+class App extends Component {
 
     constructor() {
         super();
         let CONTRACT_ADDRESS;
         let web3Instance = null;
-        let timer;
 
         if (typeof  web3 !== 'undefined') {
-            this.web3Provider = web3.currentProvider;
             web3Instance = new Web3(web3.currentProvider);
             if(web3Instance.givenProvider.networkVersion)
                 CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
@@ -81,7 +63,7 @@ class AppRouter extends Component {
     async componentDidMount() {
         //TODO: get the other variables required
         await this.loadDataFromSC();
-        this.getRemainingTime()
+        this.getRemainingTime();
         this.props.stopLoading();
         //this.setState({isLoading: false})
         const commitEvent = this.state.contract.events.NewCommit();
@@ -89,23 +71,10 @@ class AppRouter extends Component {
             console.log("new event");
             //TODO: load only the new committed players?
             await this.loadDataFromSC();
-        })
+        });
         this.timer = setInterval(() => {
             this.getRemainingTime()
         }, 1000);
-        //document.getElementById('root').style.height = "100vh";
-        // await this.state.contract.methods
-        //     .commit('0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef')
-        //     .send({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
-        //     .then(res => {
-        //         console.log(res)
-        //     })
-        // await this.state.contract.methods
-        //     .getCommitted()
-        //     .call({from: '0x15453360c1DF6125aC3CEEE936B32EEF1c7E83c2'})
-        //     .then(res => {
-        //         console.log(res)
-        //     })
     }
 
     componentWillUnmount(){
@@ -219,12 +188,6 @@ class AppRouter extends Component {
                 return res.length
             })
     }
-    stopLoading() {
-
-    }
-    getTime(date){
-        return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-    }
 
     getTimerForPhase(phase){
         switch(phase){
@@ -254,70 +217,23 @@ class AppRouter extends Component {
 
     render() {
         return (
-            <div className="AppRouter">
+            <div className="App">
                 {this.props.isLoading ?
                     (<Loader>
                         <RingLoader
                             sizeUnit={"px"}
-                            size={500}
-                            color={'red'}
+                            size={150}
+                            color={'orange'}
                             loading={this.props.isLoading}/>
                     </Loader>) : (
-                        <div>
-                            <Header/>
-                            <div style = {{height: '65vh'}}>
-                                <Switch>
-                                    <Route path="/join"
-                                           exact
-                                           render={(props) => (
-                                               <Home {...props}
-                                                     user={this.state.user}
-                                                     committed={this.state.committed}
-                                                     currentPhase={this.state.currentPhase}
-                                                     fee={this.state.fee}
-                                                     contract={this.state.contract}
-                                                     web3={this.state.web3}
-                                                     cookies={this.props.cookies}
-                                                     timeLeft={this.state.timeLeft}/>)
-                                           }/>
-                                    <Route path="/lottery"
-                                           exact
-                                           render={(props) => (
-                                               <Lottery {...props}
-                                                        user={this.state.user}
-                                                        committed={this.state.committed}
-                                                        currentPhase={this.state.currentPhase}
-                                                        fee={this.state.fee}
-                                                        contract={this.state.contract}
-                                                        web3={this.state.web3}
-                                                        cookies={this.props.cookies}
-                                                        timeLeft={this.state.timeLeft}
-                                                        timestamps = {this.state.timestamps}/>
-                                           )
-                                           }/>
-                                    <Route path="/reveal"
-                                           exact
-                                           render={(props) => (
-                                               <Reveal {...props}
-                                                        user={this.state.user}
-                                                        committed={this.state.committed}
-                                                        currentPhase={this.state.currentPhase}
-                                                        fee={this.state.fee}
-                                                        contract={this.state.contract}
-                                                        web3={this.state.web3}
-                                                        cookies={this.props.cookies}
-                                                        timeLeft={this.state.timeLeft}
-                                                       timestamps = {this.state.timestamps}/>
-                                           )
-                                           }/>
-                                    <Route render={() => {
-                                        console.log("Redirect to /join");
-                                        return (<Redirect to="/join"/>)
-                                    }}/>
-                                </Switch>
-                            </div>
-                            <Footer/>
-                        </div>)}
+                        <div style={{minHeight: '100%'}}>
+                            <BrowserRouter>
+                                    <Header/>
+                                    <Routes state={this.state} cookies={this.props.cookies}/>
+                                    <Footer/>
+                            </BrowserRouter>
+                        </div>
+                    )}
             </div>
         );
     }
@@ -327,7 +243,7 @@ const mapStateToProps = (state, props) => {
     return {
         isLoading: state.ui.isLoading,
     };
-}
+};
 
 const mapActionsToProps = (dispatch) => {
     return {
@@ -336,4 +252,4 @@ const mapActionsToProps = (dispatch) => {
     }
 };
 
-export default withCookies(withRouter(connect(mapStateToProps, mapActionsToProps)(AppRouter)));
+export default withCookies(withRouter(connect(mapStateToProps, mapActionsToProps)(App)));
