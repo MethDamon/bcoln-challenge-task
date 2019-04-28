@@ -20,8 +20,13 @@ const styles = {
     Container: {
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         background: "white",
         width: 600
+    },
+    CurrentGameContainer: {
+        display: "flex",
+        justifyContent: "center"
     },
     TicketNumbers: {
         width: 550,
@@ -38,7 +43,6 @@ const styles = {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        alignItems: "center",
         flexWrap: "wrap",
         borderColor: "#afafaf"
     },
@@ -49,7 +53,6 @@ const styles = {
         marginTop: 10,
         fontSize: 20,
         fontWeight: 800,
-        background: "linear-gradient(0deg, #66bb6a, #43a047)",
         color: "#FFFFFF",
         boxShadow: "0 1px 3px 0 rgba(0,0,0,.29)"
     },
@@ -80,6 +83,16 @@ const styles = {
 };
 
 class Lottery extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            chosenNumbers: [-1, -1],
+            counter: 0,
+        }
+    }
+
+
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
         let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
@@ -176,14 +189,6 @@ class Lottery extends Component {
             .send({from: this.props.user, value: this.props.fee});
     }
 
-    constructor() {
-        super();
-        this.state = {
-            chosenNumbers: [-1, -1],
-            counter: 0,
-        }
-    }
-
     abortCommitPhase() {
         this.props.contract.methods
             .abort()
@@ -200,18 +205,19 @@ class Lottery extends Component {
         return (
             <Panel style={styles.HomeContainer}>
                 <Panel style={styles.Container}>
-                    <div>
+                    <div style={styles.CurrentGameContainer}>
                         <CurrentGame
                             nrOfPlayers={this.props.committed}
                             currentBet={this.props.fee}
                             gameStatus={GAME_STATUS[this.props.currentPhase]}
                             timeLeft={this.props.timeLeft}
                         />
+                    </div>
+                    <div style={styles.CurrentGameContainer}>
                         <Panel style={styles.Ticket} header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>} bordered>
                             <div style={styles.TicketNumbers}>
                                 {this.state.table}
                             </div>
-                            <Icon style={styles.clearButton} icon="trash-o" size='lg'/>
                         </Panel>
                     </div>
                     <div style={styles.buttonGroup}>
@@ -232,7 +238,8 @@ class Lottery extends Component {
                                 {'Go to reveal phase'}
                             </Button>
                         ) : (
-                            <Button style={styles.betButton}
+                            <Button color="green"
+                                    style={styles.betButton}
                                     disabled={this.state.chosenNumbers.includes(-1)}
                                     onClick={() => {
                                         this.joinLottery()
