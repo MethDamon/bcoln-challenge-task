@@ -21,13 +21,13 @@
     "web3": "^1.0.0-beta.52"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "clean": "node clean-build.js",
-    "deploy-local": "cd src/ && truffle deploy --network development",
-    "deploy-ropsten": "cd src/ && truffle deploy --network ropsten",
+    "deploy-local": "truffle deploy --network development",
+    "deploy-ropsten": "truffle deploy --network ropsten",
     "sc-local": "yon clean && yon deploy-local",
     "sc-ropsten": "yon clean && yon deploy-ropsten"
   },
@@ -41,6 +41,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "react-app-rewired": "^2.1.3",
     "yarn-or-npm": "^2.0.4"
   }
 }

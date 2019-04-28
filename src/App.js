@@ -9,7 +9,7 @@ import './App.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "./build/contracts/DLottery"
+import DLottery from "../build/contracts/DLottery"
 import Routes from './routes/index'
 
 let web3 = window.web3;
