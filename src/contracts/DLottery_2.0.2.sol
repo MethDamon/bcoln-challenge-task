@@ -18,6 +18,10 @@ contract DLottery {
     
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
     
+    uint256[] private time_stamps;
+    uint256[] private block_numbers;
+    uint256[] block_difficulties;
+    
     enum Phase { Commit, CommitAndReadyForReveal, Reveal, Payout }
     Phase public current_phase;
     
@@ -50,13 +54,17 @@ contract DLottery {
         return ENTRY_FEE;
     }
 
-    function getTimers() public view returns (uint256 LEFT_COMMIT_AND_REVEAL, uint256 TO_ABORT, uint256 WAIT_TO_GO_TO_REVEAL_PHASE, uint256 TO_REVEAL){
+    function getTimers() public view returns (uint256 LEFT_COMMIT_AND_REVEAL, uint256 TO_ABORT, uint256 WAIT_TO_GO_TO_REVEAL_PHASE, uint256 TO_REVEAL) {
         return (TIME_LEFT_COMMIT_AND_REVEAL,TIME_TO_ABORT,TIME_WAIT_TO_GO_TO_REVEAL_PHASE,TIME_TO_REVEAL);
     }
     
     event NewCommit(
        bytes32 commitHash
     );
+    
+    function user_committed() public returns (bool) {
+        return !(adresses_to_committed_numbers[msg.sender] == '');
+    }
     
     function commit(bytes32 hash) payable public returns (bytes32) {
         require(adresses_to_committed_numbers[msg.sender] == '', 'Already committed');
@@ -73,6 +81,9 @@ contract DLottery {
             current_timestamps.commit_and_ready_for_reveal = now;
         }
         emit NewCommit(hash);
+        time_stamps.push(now);
+        block_numbers.push(block.number);
+        block_difficulties.push(block.difficulty);
         return hash;
     }
     
@@ -102,15 +113,18 @@ contract DLottery {
         emit NewCommit(keccak256("reset"));
 
     }
-    
+
     function reveal(uint8 firstNumber, uint8 secondNumber) payable public {
         require(adresses_to_committed_numbers[msg.sender] != '');
         require(current_phase == Phase.Reveal);
         require((now - current_timestamps.reveal) < TIME_TO_REVEAL);
-        bytes memory input = mergeBytes(toBytes(firstNumber), toBytes(msg.sender), toBytes(secondNumber));
-        bytes32 hash = keccak256(input);
-        require(adresses_to_committed_numbers[msg.sender] == hash);
+        bytes memory input = abi.encode(firstNumber, msg.sender, secondNumber);
+        bytes32 hashed = keccak256(input);
+        require(adresses_to_committed_numbers[msg.sender] == hashed);
         revealed_numbers_to_addresses[firstNumber][secondNumber].push(msg.sender);
+        time_stamps.push(now);
+        block_numbers.push(block.number);
+        block_difficulties.push(block.difficulty);
     }
     
     function mergeBytes(bytes memory param1, bytes memory param2, bytes memory param3) private pure returns (bytes memory) {
@@ -146,6 +160,13 @@ contract DLottery {
         for (uint i = 0; i < 20; i++)
             b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
         return b;
+    }
+    
+    function toString(address x) private pure returns (string memory) {
+        bytes memory b = new bytes(20);
+        for (uint i = 0; i < 20; i++)
+            b[i] = byte(uint8(uint(x) / (2**(8*(19 - i)))));
+        return string(b);
     }
 }
     

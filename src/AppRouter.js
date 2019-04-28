@@ -54,7 +54,7 @@ class AppRouter extends Component {
                 CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
             else
             // NetworkVersion = 3 (Ropsten) / 5777 (Ganache)
-                CONTRACT_ADDRESS = DLottery.networks["5777"].address
+                CONTRACT_ADDRESS = DLottery.networks["3"].address
         } else {
             alert('Please install a Web3 Provider (Metamask)')
         }

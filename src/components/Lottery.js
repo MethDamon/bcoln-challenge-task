@@ -70,7 +70,7 @@ class Lottery extends Component {
             this.props.cookies.remove('commitTimestamp', { path: '/' });
 
         }
-        this.createTable()
+        this.createTable();
     }
 
     wipeCookies(){
@@ -131,9 +131,12 @@ class Lottery extends Component {
             n2.writeInt8(sortedNumbers[1]);
             //let addressedHash = this.props.web3.utils.sha3(this.props.user);
             //let toHash = Buffer.concat([n1, Buffer.from(addressedHash), n2]);
-            let toHash = Buffer.concat([n1, Buffer.from(this.props.user), n2]);
-            console.log('hash', toHash);
-            let hash = this.props.web3.utils.sha3(toHash);
+            let first_number = sortedNumbers[0];
+            let second_number = sortedNumbers[1];
+            let toHash = this.props.web3.eth.abi.encodeParameters(['uint8', 'address', 'uint8'], [first_number, this.props.user, second_number]);
+            console.log('hash input', toHash);
+            let hash = this.props.web3.utils.soliditySha3(toHash);
+            console.log('hash output', hash);
             this.props.contract.methods
                 .commit(hash)
                 .send({from: this.props.user, value: this.props.fee},()=>{
@@ -142,7 +145,7 @@ class Lottery extends Component {
                     //of the current lottery
                     this.props.cookies.set('commitTimestamp', this.props.timestamps['commit'], { path: '/' });
 
-                })
+                });
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
