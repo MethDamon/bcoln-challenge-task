@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import configureStore from './store/configureStore';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from "react-router-dom";
-import AppRouter from "./AppRouter";
+import App from "./App";
 import {CookiesProvider} from "react-cookie";
 
 
@@ -15,7 +15,7 @@ ReactDOM.render(
     <CookiesProvider>
         <Provider store={store}>
             <BrowserRouter>
-                <AppRouter/>
+                <App/>
             </BrowserRouter>
         </Provider>
     </CookiesProvider>, document.getElementById('root'));

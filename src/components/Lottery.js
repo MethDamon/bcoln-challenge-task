@@ -1,63 +1,98 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {Button} from 'rsuite';
+import {Button, Icon, Panel} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css';
-import styled from 'styled-components';
-import CurrentGame from './CurrentGame'
+import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import {Redirect, withRouter} from 'react-router-dom'
-import Slot from "./Slot";
+import Slot from "../views/Slot";
 
-var Buffer = require('buffer/').Buffer;
+const Buffer = require('buffer/').Buffer;
 
-
-const Table = styled.div`
-width: 550px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  flex-wrap: wrap;
-`;
-
-const Container = styled.div`
-   
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  flex-wrap: wrap;
-`;
-
-const stylesCurrentGame = {
-    width: 500,
-    marginTop: 20,
-    marginBottom: 100,
-    borderRadius: 7,
-    fontSize: 30
+const styles = {
+    HomeContainer: {
+        marginTop: 150,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    Container: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        background: "white",
+        width: 600
+    },
+    CurrentGameContainer: {
+        display: "flex",
+        justifyContent: "center"
+    },
+    TicketNumbers: {
+        width: 550,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        flexWrap: "wrap"
+    },
+    Ticket: {
+        marginTop: 20,
+        width: 550,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        borderColor: "#afafaf"
+    },
+    betButton: {
+        width: 250,
+        height: 50,
+        marginBottom: 10,
+        marginTop: 10,
+        fontSize: 20,
+        fontWeight: 800,
+        color: "#FFFFFF",
+        boxShadow: "0 1px 3px 0 rgba(0,0,0,.29)"
+    },
+    abortRevealButton: {
+        width: 250,
+        height: 50,
+        marginBottom: 10,
+        marginTop: 10,
+        fontSize: 20,
+        fontWeight: 800,
+        background: "linear-gradient(0deg, #ef5350, #e53935)",
+        color: "#FFFFFF",
+        boxShadow: "0 1px 3px 0 rgba(0,0,0,.29)"
+    },
+    clearButton: {
+        float: "right",
+        marginRight: 15,
+        marginTop: 15,
+        marginBottom: -15,
+        fontSize: 20,
+        fontWeight: 800,
+    },
+    buttonGroup: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: 15
+    },
 };
 
-const betButtonStyle = {
-    width: 250,
-    height: 50,
-    margin: 10,
-    fontSize: 20,
-    fontWeight: 800
-}
-
-const revealPhaseButtonStyle = {
-    width: 250,
-    height: 50,
-    margin: 10,
-    fontSize: 20,
-    fontWeight: 800,
-}
-
-
 class Lottery extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            chosenNumbers: [-1, -1],
+            counter: 0,
+        }
+    }
+
+
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
         let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
@@ -157,26 +192,6 @@ class Lottery extends Component {
             .send({from: this.props.user, value: this.props.fee});
     }
 
-    constructor() {
-        super();
-        this.state = {
-            chosenNumbers: [-1, -1],
-            counter: 0,
-        }
-    }
-
-    joinButton() {
-        let tmp = Object.assign([], this.state.chosenNumbers);
-        tmp = tmp.sort((a, b) => {
-            return a - b
-        });
-        if (tmp.includes(-1)) {
-            return "Select your numbers";
-        } else {
-            return `Join with numbers: ${tmp[0]}, ${tmp[1]}`;
-        }
-    }
-
     abortCommitPhase() {
         this.props.contract.methods
             .abort()
@@ -191,46 +206,53 @@ class Lottery extends Component {
             return (<Redirect to="/reveal"/>)
         }
         return (
-            <Container>
-                < CurrentGame style={stylesCurrentGame}
-                              nrOfPlayers={this.props.committed}
-                              currentBet={this.props.fee}
-                              gameStatus={GAME_STATUS[this.props.currentPhase]}
-                              timeLeft={this.props.timeLeft}
-                />
-                <Table>
-                    {this.state.table}
-                </Table>
-                {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
-                this.props.timeLeft === 0 ? (
-                    <Button style={revealPhaseButtonStyle}
-                            color="red"
-                            onClick={() => {
-                                this.goToRevealPhase()
+            <Panel style={styles.HomeContainer}>
+                <Panel style={styles.Container}>
+                    <div style={styles.CurrentGameContainer}>
+                        <CurrentGame
+                            nrOfPlayers={this.props.committed}
+                            currentBet={this.props.fee}
+                            gameStatus={GAME_STATUS[this.props.currentPhase]}
+                            timeLeft={this.props.timeLeft}
+                        />
+                    </div>
+                    <div style={styles.CurrentGameContainer}>
+                        <Panel style={styles.Ticket} header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>} bordered>
+                            <div style={styles.TicketNumbers}>
+                                {this.state.table}
+                            </div>
+                        </Panel>
+                    </div>
+                    <div style={styles.buttonGroup}>
+                        <Button style={styles.abortRevealButton}
+                                onClick={() => {
+                                    this.abortCommitPhase()
                                 }
-                            }>
-                        {'Go to reveal phase'}
-                    </Button>
-                ) : (
-                    <Button style={betButtonStyle}
-                            color="yellow"
-                            disabled={this.state.chosenNumbers.includes(-1)}
-                            onClick={() => {
-                                this.joinLottery()
-                                }
-                            }>
-                        {this.joinButton()}
-                    </Button>)}
-
-                <Button style={betButtonStyle}
-                        color="yellow"
-                        onClick={() => {
-                            this.abortCommitPhase()
-                            }
-                        }>
-                    Abort Commit Phase
-                </Button>
-            </Container>
+                                }>
+                            Abort Commit Phase
+                        </Button>
+                        {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
+                        this.props.timeLeft === 0 ? (
+                            <Button style={styles.abortRevealButton}
+                                    onClick={() => {
+                                        this.goToRevealPhase()
+                                    }
+                                    }>
+                                {'Go to reveal phase'}
+                            </Button>
+                        ) : (
+                            <Button color="green"
+                                    style={styles.betButton}
+                                    disabled={this.state.chosenNumbers.includes(-1)}
+                                    onClick={() => {
+                                        this.joinLottery()
+                                    }
+                                    }>
+                                Buy
+                            </Button>)}
+                    </div>
+                </Panel>
+            </Panel>
         );
     }
 }

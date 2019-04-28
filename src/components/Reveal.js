@@ -5,12 +5,12 @@ import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min
 import styled from 'styled-components';
 import {css} from '@emotion/core';
 import {Input, InputGroup, Icon} from 'rsuite';
-import CurrentGame from './CurrentGame'
+import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import RingLoader from 'react-spinners/RingLoader';
 import {withRouter, Redirect} from 'react-router-dom'
-import Slot from "./Slot";
+import Slot from "../views/Slot";
 
 const Table = styled.div`
 width: 550px;
