@@ -112,9 +112,19 @@ class Reveal extends Component {
             sortedNumbers = sortedNumbers.sort((a, b) => {
                 return a - b
             });
+            let tx = Math.random()*10000;
             this.props.contract.methods
                 .reveal(sortedNumbers[0], sortedNumbers[1])
-                .send({from: this.props.user, value: this.props.fee}                )
+                .send({from: this.props.user, value: this.props.fee})
+                .on('transactionHash',()=>{
+                    this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+                })
+                .on('confirmation',(confirmationNumber)=>{
+                    if(confirmationNumber===1){
+                        this.props.transactionNotification('close',tx);
+                        this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                    }
+                });
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
@@ -143,10 +153,18 @@ class Reveal extends Component {
     }
 
     abortCommitPhase() {
+        let tx = Math.random()*10000;
         this.props.contract.methods
             .abort()
-            .send({from: this.props.user},()=>{
-                window.location.reload();
+            .send({from: this.props.user})
+            .on('transactionHash',()=>{
+                this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+            })
+            .on('confirmation',(confirmationNumber)=>{
+                if(confirmationNumber===1){
+                    this.props.transactionNotification('close',tx);
+                    this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                }
             });
     }
 

@@ -169,14 +169,22 @@ class Lottery extends Component {
             console.log('hash input', toHash);
             let hash = this.props.web3.utils.soliditySha3(toHash);
             console.log('hash output', hash);
+            let tx = Math.random()*10000;
             this.props.contract.methods
                 .commit(hash)
-                .send({from: this.props.user, value: this.props.fee}, () => {
-                    this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
-                    //save the timestamp of the commit phase and used it as id for saving only the numbers
-                    //of the current lottery
-                    this.props.cookies.set('commitTimestamp', this.props.timestamps['commit'], {path: '/'});
-
+                .send({from: this.props.user, value: this.props.fee}, )
+                .on('transactionHash',()=>{
+                    this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+                })
+                .on('confirmation',(confirmationNumber)=>{
+                    if(confirmationNumber===1){
+                        this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
+                        //save the timestamp of the commit phase and used it as id for saving only the numbers
+                        //of the current lottery
+                        this.props.cookies.set('commitTimestamp', this.props.timestamps['commit'], {path: '/'});
+                        this.props.transactionNotification('close',tx);
+                        this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                    }
                 });
         } else {
             alert("NUMBERS NOT CHOSEN")
@@ -184,17 +192,46 @@ class Lottery extends Component {
     }
 
     goToRevealPhase() {
+        let tx = Math.random()*10000;
         this.props.contract.methods
             .goToRevealPhase()
-            .send({from: this.props.user, value: this.props.fee});
+            .send({from: this.props.user, value: this.props.fee})
+            .on('transactionHash',()=>{
+                this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+            })
+            .on('confirmation',(confirmationNumber)=>{
+                if(confirmationNumber===1){
+                    this.props.transactionNotification('close',tx);
+                    this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                }
+            });
     }
 
     abortCommitPhase() {
+        // type Config{
+        //     title:string,
+        //         description:React.ElementType,
+        //         duration?:number,
+        //         placement?:string,
+        //         top?:number,
+        //         bottom?:number,
+        //         onClose?:()=>void,
+        //         style?:Object,
+        //         key?:string
+        // }
+        let tx = Math.random()*10000;
         this.props.contract.methods
             .abort()
-            .send({from: this.props.user}, () => {
-                window.location.reload();
+            .send({from: this.props.user})
+            .on('transactionHash',()=>{
+                this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
             })
+            .on('confirmation',(confirmationNumber)=>{
+                if(confirmationNumber===1){
+                    this.props.transactionNotification('close',tx);
+                    this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                }
+            });
     }
 
 
@@ -255,7 +292,7 @@ class Lottery extends Component {
     }
 }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, hasCommitted}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, hasCommitted,transactionNotification}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -267,7 +304,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         cookies,
         timeLeft,
         timestamps,
-        hasCommitted
+        hasCommitted,
+        transactionNotification
     };
 }
 

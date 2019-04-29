@@ -10,8 +10,9 @@ import './App.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "./build/contracts/DLottery"
+import DLottery from "../build/contracts/DLottery"
 import Routes from './routes/index'
+import {Notification} from "rsuite";
 
 let web3 = window.web3;
 
@@ -28,6 +29,7 @@ class App extends Component {
 
     constructor() {
         super();
+        this.transactionNotification = this.transactionNotification.bind(this);
         let CONTRACT_ADDRESS;
         let web3Instance = null;
 
@@ -183,6 +185,38 @@ class App extends Component {
             })
     }
 
+    transactionNotification(type,key, title, description){
+        setTimeout(()=>{
+            if(type==='open'){
+                Notification.open({
+                    title,
+                    description,
+                    key,
+                    duration:20000,
+                });
+            }
+            else if(type==='success'){
+                Notification.success({
+                    title,
+                    description,
+                    key,
+                    duration:5000,
+                });
+            }
+            else if(type==='error'){
+                Notification.error({
+                    title,
+                    description,
+                    key,
+                    duration:5000,
+                });
+            }
+            else if(type==='close'){
+                Notification.remove(key)
+            }
+        })
+}
+
     getCommitted() {
         return this.state.contract.methods
             .getCommitted()
@@ -241,7 +275,7 @@ class App extends Component {
                         <div style={{minHeight: '100%'}}>
                             <BrowserRouter>
                                     <Header/>
-                                    <Routes state={this.state} cookies={this.props.cookies}/>
+                                    <Routes state={this.state} cookies={this.props.cookies} transactionNotification = {(type, key, title, message)=>this.transactionNotification(type, key, title, message)}/>
                                     <Footer/>
                             </BrowserRouter>
                         </div>
