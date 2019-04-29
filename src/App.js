@@ -192,7 +192,7 @@ class App extends Component {
                     title,
                     description,
                     key,
-                    duration:20000,
+                    duration:60000,
                 });
             }
             else if(type==='success'){
