@@ -19,12 +19,12 @@ const SlotStyle = styled.div`
   
 :hover {
     transition: all 0.4s ease 0s;
-    cursor: pointer;
+    cursor: ${({hasCommitted}) => (hasCommitted ? "default" : "pointer")};
 }`;
 
-const Slot = ({number, chosenNumbers, callback}) => {
+const Slot = ({number, chosenNumbers, callback, hasCommitted}) => {
     return (
-        <SlotStyle onClick={callback} chosenNumbers={chosenNumbers} number={number}>
+        <SlotStyle onClick={callback} chosenNumbers={chosenNumbers} number={number} hasCommitted = {hasCommitted}>
             {number}
         </SlotStyle>
     );

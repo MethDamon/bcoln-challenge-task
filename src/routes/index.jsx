@@ -1,4 +1,5 @@
-import {Redirect, Route, Switch} from "react-router";
+import {Route, Switch, Redirect} from "react-router-dom";
+
 import React from "react";
 import Home from "../components/Home";
 import Lottery from "../components/Lottery";
@@ -15,7 +16,8 @@ const Routes = ({state, cookies}) => (
                   contract={state.contract}
                   web3={state.web3}
                   cookies={cookies}
-                  timeLeft={state.timeLeft}/>)
+                  timeLeft={state.timeLeft}
+                  hasCommitted={state.hasCommitted}/>)
         }/>
         <Route path="/lottery" render={(props) => (
             <Lottery {...props}
@@ -27,7 +29,8 @@ const Routes = ({state, cookies}) => (
                      web3={state.web3}
                      cookies={cookies}
                      timeLeft={state.timeLeft}
-                     timestamps = {state.timestamps}/>
+                     timestamps = {state.timestamps}
+                     hasCommitted={state.hasCommitted}/>
         )
         }/>
         <Route path="/reveal" render={(props) => (
@@ -40,7 +43,8 @@ const Routes = ({state, cookies}) => (
                     web3={state.web3}
                     cookies={cookies}
                     timeLeft={state.timeLeft}
-                    timestamps = {state.timestamps}/>
+                    timestamps = {state.timestamps}
+                    hasCommitted={state.hasCommitted}/>
         )
         }/>
         <Redirect from='/*' to='/join' />

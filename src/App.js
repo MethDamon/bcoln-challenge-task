@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {BrowserRouter,withRouter} from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom'
 import Web3 from "web3";
 import Footer from "./views/Footer";
 import Header from "./views/Header";
@@ -9,7 +10,7 @@ import './App.css';
 import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "../build/contracts/DLottery"
+import DLottery from "./build/contracts/DLottery"
 import Routes from './routes/index'
 
 let web3 = window.web3;
@@ -57,6 +58,7 @@ class App extends Component {
             fee: 0,
             timers:{},
             timeLeft:-1,
+            hasCommitted: false,
         }
     }
 
@@ -162,7 +164,8 @@ class App extends Component {
             committed: await this.getCommitted(),
             fee: await this.getFee(),
             timers: await this.getTimers(),
-        });
+            hasCommitted: await this.hasCommitted(),
+    });
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -186,6 +189,15 @@ class App extends Component {
             .call({from: this.state.user})
             .then(res => {
                 return res.length
+            })
+    }
+
+    hasCommitted(){
+        return this.state.contract.methods
+            .user_committed()
+            .call({from: this.state.user})
+            .then(res => {
+                return res
             })
     }
 

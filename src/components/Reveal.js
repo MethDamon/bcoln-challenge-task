@@ -9,7 +9,8 @@ import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import RingLoader from 'react-spinners/RingLoader';
-import {withRouter, Redirect} from 'react-router-dom'
+import {withRouter, Redirect} from 'react-router-dom';
+
 import Slot from "../views/Slot";
 
 const Table = styled.div`
