@@ -87,7 +87,7 @@ contract DLottery {
         return !(addresses_to_committed_numbers[msg.sender] == '');
     }
     
-    function commit(bytes32 hash) payable public returns (bytes32) {
+    function commit(bytes32 hash) payable public {
         require(addresses_to_committed_numbers[msg.sender] == '', 'Already committed');
         require(msg.value == ENTRY_FEE);
         require(current_phase == Phase.Commit || current_phase == Phase.CommitAndReadyForReveal);
@@ -102,12 +102,10 @@ contract DLottery {
             current_phase = Phase.CommitAndReadyForReveal;
             current_timestamps.commit_and_ready_for_reveal = now;
         }
-        committed.push(msg.sender);
         emit NewCommit(msg.sender, hash);
         time_stamps.push(now);
         block_numbers.push(block.number);
         block_difficulties.push(block.difficulty);
-        return hash;
     }
     
     function reset() public {
@@ -143,13 +141,13 @@ contract DLottery {
     }
     
     function reveal(uint8 firstNumber, uint8 secondNumber) payable public {
-        require(addresses_to_committed_numbers[msg.sender] != '', 'User did not commit anything');
-        require(addresses_to_revealed_numbers[msg.sender].length == 0, 'User already revealed numbers.');
-        require(current_phase == Phase.Reveal);
-        require((now - current_timestamps.reveal) < TIME_TO_REVEAL);
+        //require(addresses_to_committed_numbers[msg.sender] != '', 'User did not commit anything');
+        //require(addresses_to_revealed_numbers[msg.sender].length == 0, 'User already revealed numbers.');
+        //require(current_phase == Phase.Reveal);
+        //require((now - current_timestamps.reveal) < TIME_TO_REVEAL);
         bytes memory input = abi.encode(firstNumber, msg.sender, secondNumber);
         bytes32 hashed = keccak256(input);
-        require(addresses_to_committed_numbers[msg.sender] == hashed);
+        //require(addresses_to_committed_numbers[msg.sender] == hashed);
         revealed_numbers_to_addresses[firstNumber][secondNumber].push(msg.sender);
         revealed.push(msg.sender);
         emit NewReveal(msg.sender, firstNumber, secondNumber);
@@ -161,6 +159,7 @@ contract DLottery {
         // Go to payout phase if yes
         if (committed.length == revealed.length) {
             emit PhaseChange(current_phase, Phase.Payout);
+            current_phase = Phase.Payout;
             payout();
         }
     }
@@ -201,4 +200,3 @@ contract DLottery {
         return x;
     }
 }
-    
