@@ -10,7 +10,7 @@ import './App.css';
 import {uiStartLoading, uiStartValidating, uiStopLoading, uiStopValidating} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "./build/contracts/DLottery"
+import DLottery from "../build/contracts/DLottery"
 import Routes from './routes/index'
 import {Notification} from "rsuite";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
