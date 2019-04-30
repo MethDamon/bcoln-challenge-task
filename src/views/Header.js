@@ -9,6 +9,7 @@ const HeaderContainer = styled.div`
   font-size: 18px;
   padding: 16px;
   height: 50px;
+  margin: 0 0 90px 0;
 `;
 
 const GithubLink = styled.a`
@@ -17,7 +18,7 @@ const GithubLink = styled.a`
 const Header = () => (
     <HeaderContainer>
         <GithubLink href="https://github.com/MethDamon/bcoln-challenge-task" target="_blank" >
-            <Icon style={{float: 'right'}} icon="github" size='lg'/>
+            <Icon style={{float: 'left'}} icon="github" size='lg'/>
         </GithubLink>
     </HeaderContainer>
 );

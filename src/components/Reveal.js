@@ -24,7 +24,7 @@ width: 550px;
 `;
 
 const Container = styled.div`
-  
+  height: 70vh
   display: flex;
   flex-direction: column;
   justify-content: center;

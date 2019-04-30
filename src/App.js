@@ -277,7 +277,7 @@ class App extends Component {
                             loading={this.props.isLoading}/>
                     </Loader>) : (
                         <div>
-                            {this.props.isValidating?(<LinearProgress />):(<div/>)}
+                            {this.props.isValidating?(<LinearProgress style={{height:'5px'}}/>):(<div style={{height:'5px'}}/>)}
                             <div style={{minHeight: '100%'}}>
                                 <BrowserRouter>
                                         <Header/>
