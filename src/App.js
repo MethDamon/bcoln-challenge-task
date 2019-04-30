@@ -1,16 +1,19 @@
 import React, {Component} from 'react';
-import {BrowserRouter,withRouter} from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom'
 import Web3 from "web3";
 import Footer from "./views/Footer";
 import Header from "./views/Header";
 import RingLoader from 'react-spinners/RingLoader';
 import styled from "styled-components";
 import './App.css';
-import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
+import {uiStartLoading, uiStartValidating, uiStopLoading, uiStopValidating} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "../build/contracts/DLottery"
+import DLottery from "./build/contracts/DLottery"
 import Routes from './routes/index'
+import {Notification} from "rsuite";
+import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 
 let web3 = window.web3;
 
@@ -27,6 +30,7 @@ class App extends Component {
 
     constructor() {
         super();
+        this.transactionNotification = this.transactionNotification.bind(this);
         let CONTRACT_ADDRESS;
         let web3Instance = null;
 
@@ -57,6 +61,7 @@ class App extends Component {
             fee: 0,
             timers:{},
             timeLeft:-1,
+            hasCommitted: false,
         }
     }
 
@@ -162,7 +167,8 @@ class App extends Component {
             committed: await this.getCommitted(),
             fee: await this.getFee(),
             timers: await this.getTimers(),
-        });
+            hasCommitted: await this.hasCommitted(),
+    });
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -180,12 +186,56 @@ class App extends Component {
             })
     }
 
+    transactionNotification(type,key, title, description){
+        setTimeout(()=>{
+            if(type==='open'){
+                this.props.startValidating();
+                Notification.open({
+                    title,
+                    description,
+                    key,
+                    duration:60000,
+                });
+            }
+            else if(type==='success'){
+                this.props.stopValidating();
+                Notification.success({
+                    title,
+                    description,
+                    key,
+                    duration:5000,
+                });
+            }
+            else if(type==='error'){
+                this.props.stopValidating();
+                Notification.error({
+                    title,
+                    description,
+                    key,
+                    duration:5000,
+                });
+            }
+            else if(type==='close'){
+                Notification.remove(key)
+            }
+        })
+}
+
     getCommitted() {
         return this.state.contract.methods
             .getCommitted()
             .call({from: this.state.user})
             .then(res => {
                 return res.length
+            })
+    }
+
+    hasCommitted(){
+        return this.state.contract.methods
+            .user_committed()
+            .call({from: this.state.user})
+            .then(res => {
+                return res
             })
     }
 
@@ -226,12 +276,15 @@ class App extends Component {
                             color={'orange'}
                             loading={this.props.isLoading}/>
                     </Loader>) : (
-                        <div style={{minHeight: '100%'}}>
-                            <BrowserRouter>
-                                    <Header/>
-                                    <Routes state={this.state} cookies={this.props.cookies}/>
-                                    <Footer/>
-                            </BrowserRouter>
+                        <div>
+                            {this.props.isValidating?(<LinearProgress />):(<div/>)}
+                            <div style={{minHeight: '100%'}}>
+                                <BrowserRouter>
+                                        <Header/>
+                                        <Routes state={this.state} cookies={this.props.cookies} transactionNotification = {(type, key, title, message)=>this.transactionNotification(type, key, title, message)}/>
+                                        <Footer/>
+                                </BrowserRouter>
+                            </div>
                         </div>
                     )}
             </div>
@@ -242,6 +295,7 @@ class App extends Component {
 const mapStateToProps = (state, props) => {
     return {
         isLoading: state.ui.isLoading,
+        isValidating: state.ui.isValidating,
     };
 };
 
@@ -249,6 +303,8 @@ const mapActionsToProps = (dispatch) => {
     return {
         startLoading: () => dispatch(uiStartLoading()),
         stopLoading: () => dispatch(uiStopLoading()),
+        startValidating: () => dispatch(uiStartValidating()),
+        stopValidating: () => dispatch(uiStopValidating()),
     }
 };
 

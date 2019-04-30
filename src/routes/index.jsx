@@ -1,10 +1,11 @@
-import {Redirect, Route, Switch} from "react-router";
+import {Route, Switch, Redirect} from "react-router-dom";
+
 import React from "react";
 import Home from "../components/Home";
 import Lottery from "../components/Lottery";
 import Reveal from "../components/Reveal";
 
-const Routes = ({state, cookies}) => (
+const Routes = ({state, cookies, transactionNotification}) => (
     <Switch>
         <Route path="/join" render={(props) => (
             <Home {...props}
@@ -15,7 +16,9 @@ const Routes = ({state, cookies}) => (
                   contract={state.contract}
                   web3={state.web3}
                   cookies={cookies}
-                  timeLeft={state.timeLeft}/>)
+                  timeLeft={state.timeLeft}
+                  hasCommitted={state.hasCommitted}
+                  transactionNotification={transactionNotification}/>)
         }/>
         <Route path="/lottery" render={(props) => (
             <Lottery {...props}
@@ -27,7 +30,9 @@ const Routes = ({state, cookies}) => (
                      web3={state.web3}
                      cookies={cookies}
                      timeLeft={state.timeLeft}
-                     timestamps = {state.timestamps}/>
+                     timestamps = {state.timestamps}
+                     hasCommitted={state.hasCommitted}
+                     transactionNotification={transactionNotification}/>
         )
         }/>
         <Route path="/reveal" render={(props) => (
@@ -40,7 +45,9 @@ const Routes = ({state, cookies}) => (
                     web3={state.web3}
                     cookies={cookies}
                     timeLeft={state.timeLeft}
-                    timestamps = {state.timestamps}/>
+                    timestamps = {state.timestamps}
+                    hasCommitted={state.hasCommitted}
+                    transactionNotification={transactionNotification}/>
         )
         }/>
         <Redirect from='/*' to='/join' />
