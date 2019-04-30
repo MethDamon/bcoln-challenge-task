@@ -155,7 +155,7 @@ class Reveal extends Component {
     abortCommitPhase() {
         let tx = Math.random()*10000;
         this.props.contract.methods
-            .abort()
+            .reset()
             .send({from: this.props.user})
             .on('transactionHash',()=>{
                 this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
