@@ -206,33 +206,37 @@ class Lottery extends Component {
             });
     }
 
-    abortCommitPhase() {
-        // type Config{
-        //     title:string,
-        //         description:React.ElementType,
-        //         duration?:number,
-        //         placement?:string,
-        //         top?:number,
-        //         bottom?:number,
-        //         onClose?:()=>void,
-        //         style?:Object,
-        //         key?:string
-        // }
-        let tx = Math.random()*10000;
+    reset() {
         this.props.contract.methods
-            .abort()
-            .send({from: this.props.user})
-            .on('transactionHash',()=>{
-                this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
-            })
-            .on('confirmation',(confirmationNumber)=>{
-                if(confirmationNumber===1){
-                    this.props.transactionNotification('close',tx);
-                    this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
-                }
+            .reset()
+            .send({ from: this.props.user }, () => {
+                window.location.reload();
+                // type Config{
+                //     title:string,
+                //         description:React.ElementType,
+                //         duration?:number,
+                //         placement?:string,
+                //         top?:number,
+                //         bottom?:number,
+                //         onClose?:()=>void,
+                //         style?:Object,
+                //         key?:string
+                // }
+                let tx = Math.random() * 10000;
+                this.props.contract.methods
+                    .reset()
+                    .send({ from: this.props.user })
+                    .on('transactionHash', () => {
+                        this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
+                    })
+                    .on('confirmation', (confirmationNumber) => {
+                        if (confirmationNumber === 1) {
+                            this.props.transactionNotification('close', tx);
+                            this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
+                        }
+                    });
             });
     }
-
 
     render() {
         if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[2]) {
@@ -261,7 +265,7 @@ class Lottery extends Component {
                     <div style={styles.buttonGroup}>
                         <Button style={styles.abortRevealButton}
                                 onClick={() => {
-                                    this.abortCommitPhase()
+                                    this.reset()
                                 }
                                 }>
                             Abort Commit Phase
