@@ -1,10 +1,13 @@
 import {
     UI_START_LOADING_ACTION,
-    UI_STOP_LOADING_ACTION
+    UI_STOP_LOADING_ACTION,
+    UI_START_VALIDATING_ACTION,
+    UI_STOP_VALIDATING_ACTION
 } from "../actions/actionTypes";
 
 const initialState = {
     isLoading: true,
+    isValidating: false,
 };
 
 
@@ -19,6 +22,16 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false
+            };
+        case UI_START_VALIDATING_ACTION:
+            return {
+                ...state,
+                isValidating: true
+            };
+        case UI_STOP_VALIDATING_ACTION:
+            return {
+                ...state,
+                isValidating: false
             };
         default:
             return state;

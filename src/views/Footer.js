@@ -3,9 +3,12 @@ import {connect} from 'react-redux'
 import 'rsuite/dist/styles/rsuite.min.css';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import styled from 'styled-components'
+import {Icon} from "rsuite";
 
 const Developer = styled.p`
   margin-top: 5px;
+  display: flex;
+  justify-content: center
 `;
 
 const Title = styled.p`
@@ -19,16 +22,26 @@ const Container = styled.div`
   color: white;
   margin-top: 180px;
 `;
-
+const GithubLink = styled.a`
+  color: white;
+  margin 0 5px 0 0;
+`;
 const Footer = () => (
     <Container>
         <Title>
             Developed by:{' '}
         </Title>
-        <Developer>Ile Cepilov </Developer>
+        <Developer >
+            <GithubLink href="https://github.com/ilecipi" target="_blank" >
+                <Icon style={{float: 'right'}} icon="github" size='lg'/>
+            </GithubLink>Ile Cepilov
+        </Developer>
         <Developer>Elfat Esati</Developer>
         <Developer>Tim Strasser</Developer>
-        <Developer>Erion Sula</Developer>
+        <Developer>
+            <GithubLink href="https://github.com/sulasdeli" target="_blank" >
+                <Icon style={{float: 'right'}} icon="github" size='lg'/>
+            </GithubLink>Erion Sula</Developer>
         <Developer>Ledri Thaqi</Developer>
     </Container>
 );

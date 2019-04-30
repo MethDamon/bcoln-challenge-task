@@ -7,12 +7,13 @@ import Header from "./views/Header";
 import RingLoader from 'react-spinners/RingLoader';
 import styled from "styled-components";
 import './App.css';
-import {uiStartLoading, uiStopLoading} from "./store/actions/uiActionCreators";
+import {uiStartLoading, uiStartValidating, uiStopLoading, uiStopValidating} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "../build/contracts/DLottery"
+import DLottery from "./build/contracts/DLottery"
 import Routes from './routes/index'
 import {Notification} from "rsuite";
+import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 
 let web3 = window.web3;
 
@@ -188,6 +189,7 @@ class App extends Component {
     transactionNotification(type,key, title, description){
         setTimeout(()=>{
             if(type==='open'){
+                this.props.startValidating();
                 Notification.open({
                     title,
                     description,
@@ -196,6 +198,7 @@ class App extends Component {
                 });
             }
             else if(type==='success'){
+                this.props.stopValidating();
                 Notification.success({
                     title,
                     description,
@@ -204,6 +207,7 @@ class App extends Component {
                 });
             }
             else if(type==='error'){
+                this.props.stopValidating();
                 Notification.error({
                     title,
                     description,
@@ -272,12 +276,15 @@ class App extends Component {
                             color={'orange'}
                             loading={this.props.isLoading}/>
                     </Loader>) : (
-                        <div style={{minHeight: '100%'}}>
-                            <BrowserRouter>
-                                    <Header/>
-                                    <Routes state={this.state} cookies={this.props.cookies} transactionNotification = {(type, key, title, message)=>this.transactionNotification(type, key, title, message)}/>
-                                    <Footer/>
-                            </BrowserRouter>
+                        <div>
+                            {this.props.isValidating?(<LinearProgress />):(<div/>)}
+                            <div style={{minHeight: '100%'}}>
+                                <BrowserRouter>
+                                        <Header/>
+                                        <Routes state={this.state} cookies={this.props.cookies} transactionNotification = {(type, key, title, message)=>this.transactionNotification(type, key, title, message)}/>
+                                        <Footer/>
+                                </BrowserRouter>
+                            </div>
                         </div>
                     )}
             </div>
@@ -288,6 +295,7 @@ class App extends Component {
 const mapStateToProps = (state, props) => {
     return {
         isLoading: state.ui.isLoading,
+        isValidating: state.ui.isValidating,
     };
 };
 
@@ -295,6 +303,8 @@ const mapActionsToProps = (dispatch) => {
     return {
         startLoading: () => dispatch(uiStartLoading()),
         stopLoading: () => dispatch(uiStopLoading()),
+        startValidating: () => dispatch(uiStartValidating()),
+        stopValidating: () => dispatch(uiStopValidating()),
     }
 };
 
