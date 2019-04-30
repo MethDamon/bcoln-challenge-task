@@ -192,9 +192,9 @@ class Lottery extends Component {
             .send({from: this.props.user, value: this.props.fee});
     }
 
-    abortCommitPhase() {
+    reset() {
         this.props.contract.methods
-            .abort()
+            .reset()
             .send({from: this.props.user},()=>{
                 window.location.reload();
             })
@@ -226,7 +226,7 @@ class Lottery extends Component {
                     <div style={styles.buttonGroup}>
                         <Button style={styles.abortRevealButton}
                                 onClick={() => {
-                                    this.abortCommitPhase()
+                                    this.reset()
                                 }
                                 }>
                             Abort Commit Phase
