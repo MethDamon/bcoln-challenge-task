@@ -12,7 +12,6 @@ let web3 = window.web3;
 
 const styles = {
     HomeContainer: {
-        marginTop: 150,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -60,15 +59,13 @@ class Home extends Component {
 
     joinLottery(){
         this.setState({redirectToLottery: true})
+        this.props.history.push('/lottery')
+
     }
 
     render() {
-        if (this.state.redirectToLottery) {
-            return (
-                <Redirect to='/lottery'/>
-            )
-        }
         return(
+            <div style={{height:'70vh'}}>
             <Panel style={styles.HomeContainer}>
                 <Panel style={styles.Container}>
                     < CurrentGame style={styles.CurrentGame}
@@ -98,7 +95,7 @@ class Home extends Component {
                     </Button>
                 </Panel>
             </Panel>
-
+            </div>
         );
     }
 }

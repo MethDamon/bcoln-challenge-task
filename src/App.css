@@ -5,7 +5,9 @@
 #root{
   height: 100vh
 }
-
+html, body {
+  overflow: hidden;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

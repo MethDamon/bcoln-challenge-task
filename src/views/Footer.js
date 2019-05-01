@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import {Icon} from "rsuite";
 
 const Developer = styled.p`
+    position: fixed,
   margin-top: 5px;
   display: flex;
   justify-content: center
@@ -13,35 +14,35 @@ const Developer = styled.p`
 
 const Title = styled.p`
   margin-bottom: 0;
-  margin-top: 5em;
   font-size: 18px;
-  font-weight: bold
+  font-weight: bolds
 `;
 
 const Container = styled.div`
   color: white;
-  margin-top: 180px;
 `;
 const GithubLink = styled.a`
   color: white;
-  margin 0 5px 0 0;
+  margin 0 0 0 5px;
 `;
 const Footer = () => (
     <Container>
         <Title>
             Developed by:{' '}
         </Title>
-        <Developer >
+        <Developer >Ile Cepilov
             <GithubLink href="https://github.com/ilecipi" target="_blank" >
                 <Icon style={{float: 'right'}} icon="github" size='lg'/>
-            </GithubLink>Ile Cepilov
-        </Developer>
+            </GithubLink></Developer>
         <Developer>Elfat Esati</Developer>
-        <Developer>Tim Strasser</Developer>
-        <Developer>
+        <Developer>Tim Strasser
+            <GithubLink href="https://github.com/MethDamon" target="_blank" >
+                <Icon style={{float: 'right'}} icon="github" size='lg'/>
+            </GithubLink></Developer>
+        <Developer>Erion Sula
             <GithubLink href="https://github.com/sulasdeli" target="_blank" >
                 <Icon style={{float: 'right'}} icon="github" size='lg'/>
-            </GithubLink>Erion Sula</Developer>
+            </GithubLink></Developer>
         <Developer>Ledri Thaqi</Developer>
     </Container>
 );

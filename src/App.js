@@ -77,6 +77,36 @@ class App extends Component {
             //TODO: load only the new committed players?
             await this.loadDataFromSC();
         });
+        //TEST TODO: reload only necessary data
+        const revealEvent = this.state.contract.events.NewReveal();
+        revealEvent.on('data', async () => {
+            console.log("new event");
+            //TODO: load only the new committed players?
+            await this.loadDataFromSC();
+        });
+
+        const resetEvent = this.state.contract.events.Reset();
+        resetEvent.on('data', async () => {
+            console.log("new event");
+            //TODO: load only the new committed players?
+            await this.loadDataFromSC();
+        });
+
+        const phaseChangeEvent = this.state.contract.events.PhaseChange();
+        phaseChangeEvent.on('data', async () => {
+            console.log("new event");
+            //TODO: load only the new committed players?
+            await this.loadDataFromSC();
+        });
+
+        const lotteryEndedEvent = this.state.contract.events.LotteryEnded();
+        lotteryEndedEvent.on('data', async () => {
+            console.log("new event");
+            //TODO: load only the new committed players?
+            await this.loadDataFromSC();
+        });
+
+
         this.timer = setInterval(() => {
             this.getRemainingTime()
         }, 1000);
@@ -277,7 +307,7 @@ class App extends Component {
                             loading={this.props.isLoading}/>
                     </Loader>) : (
                         <div>
-                            {this.props.isValidating?(<LinearProgress />):(<div/>)}
+                            {this.props.isValidating?(<LinearProgress style={{height:'5px'}}/>):(<div style={{height:'5px'}}/>)}
                             <div style={{minHeight: '100%'}}>
                                 <BrowserRouter>
                                         <Header/>

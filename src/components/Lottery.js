@@ -12,7 +12,6 @@ const Buffer = require('buffer/').Buffer;
 
 const styles = {
     HomeContainer: {
-        marginTop: 150,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -244,6 +243,7 @@ class Lottery extends Component {
             return (<Redirect to="/reveal"/>)
         }
         return (
+            <div style={{height:'70vh'}}>
             <Panel style={styles.HomeContainer}>
                 <Panel style={styles.Container}>
                     <div style={styles.CurrentGameContainer}>
@@ -292,6 +292,7 @@ class Lottery extends Component {
                     </div>
                 </Panel>
             </Panel>
+            </div>
         );
     }
 }
