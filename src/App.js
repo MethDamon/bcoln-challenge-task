@@ -308,7 +308,7 @@ class App extends Component {
                     </Loader>) : (
                         <div>
                             {this.props.isValidating?(<LinearProgress style={{height:'5px'}}/>):(<div style={{height:'5px'}}/>)}
-                            <div style={{minHeight: '100%'}}>
+                            <div>
                                 <BrowserRouter>
                                         <Header/>
                                         <Routes state={this.state} cookies={this.props.cookies} transactionNotification = {(type, key, title, message)=>this.transactionNotification(type, key, title, message)}/>
