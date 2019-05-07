@@ -146,29 +146,26 @@ contract DLottery {
             current_phase = Phase.Payout;
         }
     }
-
+    
     event Log (
-        string message
+        uint256 number
     );
-
-    event Log (
-        uint256 message
-    );
-
-    function payout() public {
-        require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
-        require(addresses_to_revealed_numbers[msg.sender].length != 0, 'User must have aready revealed numbers.');
-        require(current_phase == Phase.Payout, 'Current phase needs to be Payout.');
-        bytes memory input = abi.encode(time_stamps, block_numbers, block_difficulties);
-        bytes memory hashed_information = abi.encode(keccak256(input));
-        bytes memory first_winning_number_bytes = hashed_information.slice(0, 1);
-        bytes memory second_winning_number_bytes = hashed_information.slice(1, 2);
-        uint256 first_winning_number = first_winning_number_bytes.toUint(0);
-        uint256 second_winning_number = second_winning_number_bytes.toUint(0);
-        address[] memory winners = revealed_numbers_to_addresses[first_winning_number][second_winning_number];
-        emit Log(hashed_information.length);
+    
+    event Log2 (bytes b);
+    
+    function payout() public returns (uint256) {
+        //require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
+        //require(addresses_to_revealed_numbers[msg.sender].length != 0, 'User must have aready revealed numbers.');
+        //require(current_phase == Phase.Payout, 'Current phase needs to be Payout.');
+        bytes memory input = abi.encode(keccak256(abi.encode(block_difficulties, block_numbers, time_stamps)));
+        bytes memory padding = hex"00000000000000000000000000000000000000000000000000000000000000";
+        bytes memory b1 = padding.concat(input.slice(0, 1));
+        bytes memory b2 = padding.concat(input.slice(1, 2));
+        uint256 first_winning_number = b1.toUint(0);
+        uint256 second_winning_number = b2.toUint(0);
         emit Log(first_winning_number);
         emit Log(second_winning_number);
+        address[] memory winners = revealed_numbers_to_addresses[first_winning_number][second_winning_number];
         // Check if there are any winners
         if (winners.length != 0) {
             // Get half of this contracts balance
@@ -183,5 +180,13 @@ contract DLottery {
                 winners_address.transfer(price_per_winner);
             }
         }
+    }
+    
+    function returns31bytes() private pure returns (bytes memory) {
+        bytes memory r;
+        for (uint i = 0; i < 31; i++) {
+            r[i] = 0;
+        }
+        return r;
     }
 }
