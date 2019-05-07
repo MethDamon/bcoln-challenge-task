@@ -181,12 +181,4 @@ contract DLottery {
             }
         }
     }
-    
-    function returns31bytes() private pure returns (bytes memory) {
-        bytes memory r;
-        for (uint i = 0; i < 31; i++) {
-            r[i] = 0;
-        }
-        return r;
-    }
 }
