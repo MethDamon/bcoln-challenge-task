@@ -168,6 +168,18 @@ class Reveal extends Component {
             });
     }
 
+    payout() {
+        this.props.contract.methods
+            .payout()
+            .send({from: this.props.user})
+            .on('transactionHash',(ss)=>{
+                console.log("-------------->" + ss)
+            })
+            .on('confirmation',(confirmationNumber)=>{
+                console.log("---->" + confirmationNumber)
+            });
+    }
+
 
     render() {
         if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[0]||GAME_STATUS[this.props.currentPhase] === GAME_STATUS[1]) {
@@ -202,6 +214,15 @@ class Reveal extends Component {
                         }
                 >
                     Abort Commit Phase
+                </Button>
+                <Button style={betButtonStyle}
+                        color="green"
+                        onClick={() => {
+                            this.payout()
+                        }
+                        }
+                >
+                    REVEAL
                 </Button>
             </Container>
         );

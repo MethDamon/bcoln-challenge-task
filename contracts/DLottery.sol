@@ -1,6 +1,6 @@
 pragma solidity ^0.5.7;
 
-import "bytes/BytesLib.sol";
+import "solidity-bytes-utils/contracts/BytesLib.sol";
 
 contract DLottery {
     using BytesLib for bytes;
@@ -146,7 +146,7 @@ contract DLottery {
             current_phase = Phase.Payout;
         }
     }
-    function payout() public {
+    function payout() payable public {
         require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
         require(addresses_to_revealed_numbers[msg.sender].length != 0, 'User must have aready revealed numbers.');
         require(current_phase == Phase.Payout, 'Current phase needs to be Payout.');
