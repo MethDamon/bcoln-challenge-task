@@ -146,17 +146,29 @@ contract DLottery {
             current_phase = Phase.Payout;
         }
     }
-    function payout() payable public {
+
+    event Log (
+        string message
+    );
+
+    event Log (
+        uint256 message
+    );
+
+    function payout() public {
         require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
         require(addresses_to_revealed_numbers[msg.sender].length != 0, 'User must have aready revealed numbers.');
         require(current_phase == Phase.Payout, 'Current phase needs to be Payout.');
         bytes memory input = abi.encode(time_stamps, block_numbers, block_difficulties);
         bytes memory hashed_information = abi.encode(keccak256(input));
-        bytes memory first_winning_number_bytes = hashed_information.slice(0, 8);
-        bytes memory second_winning_number_bytes = hashed_information.slice(8, 16);
+        bytes memory first_winning_number_bytes = hashed_information.slice(0, 1);
+        bytes memory second_winning_number_bytes = hashed_information.slice(1, 2);
         uint256 first_winning_number = first_winning_number_bytes.toUint(0);
         uint256 second_winning_number = second_winning_number_bytes.toUint(0);
         address[] memory winners = revealed_numbers_to_addresses[first_winning_number][second_winning_number];
+        emit Log(hashed_information.length);
+        emit Log(first_winning_number);
+        emit Log(second_winning_number);
         // Check if there are any winners
         if (winners.length != 0) {
             // Get half of this contracts balance
