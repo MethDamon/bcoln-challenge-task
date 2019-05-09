@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {Button} from 'rsuite';
+import {Button, Panel} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
 import styled from 'styled-components';
 import {css} from '@emotion/core';
@@ -13,41 +13,76 @@ import {withRouter, Redirect} from 'react-router-dom';
 
 import Slot from "../views/Slot";
 
-const Table = styled.div`
-width: 550px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  flex-wrap: wrap;
-`;
-
-const Container = styled.div`
-  height: 70vh
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  flex-wrap: wrap;
-`;
-
-const stylesCurrentGame = {
-    width: 500,
-    marginTop: 20,
-    marginBottom: 100,
-    borderRadius: 7,
-    fontSize: 30
+const styles = {
+    HomeContainer: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    Container: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        background: "white",
+        width: 600
+    },
+    CurrentGameContainer: {
+        display: "flex",
+        justifyContent: "center"
+    },
+    TicketNumbers: {
+        width: 550,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "white",
+        flexWrap: "wrap"
+    },
+    Ticket: {
+        marginTop: 20,
+        width: 550,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        borderColor: "#afafaf"
+    },
+    betButton: {
+        width: 250,
+        height: 50,
+        marginBottom: 10,
+        marginTop: 10,
+        fontSize: 20,
+        fontWeight: 800,
+        color: "#FFFFFF",
+        boxShadow: "0 1px 3px 0 rgba(0,0,0,.29)"
+    },
+    abortRevealButton: {
+        width: 250,
+        height: 50,
+        marginBottom: 10,
+        marginTop: 10,
+        fontSize: 20,
+        fontWeight: 800,
+        background: "linear-gradient(0deg, #ef5350, #e53935)",
+        color: "#FFFFFF",
+        boxShadow: "0 1px 3px 0 rgba(0,0,0,.29)"
+    },
+    clearButton: {
+        float: "right",
+        marginRight: 15,
+        marginTop: 15,
+        marginBottom: -15,
+        fontSize: 20,
+        fontWeight: 800,
+    },
+    buttonGroup: {
+        display: "flex",
+        justifyContent: "space-between",
+        marginTop: 15
+    },
 };
-
-const betButtonStyle = {
-    width: 250,
-    height: 50,
-    margin: 10,
-    fontSize: 20,
-    fontWeight: 800
-}
 
 
 class Reveal extends Component {
@@ -180,51 +215,61 @@ class Reveal extends Component {
             });
     }
 
-
     render() {
         if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[0]||GAME_STATUS[this.props.currentPhase] === GAME_STATUS[1]) {
             return (<Redirect to="/lottery"/>)
         }
         return (
-            <Container>
-                < CurrentGame style={stylesCurrentGame}
-                              nrOfPlayers={this.props.committed}
-                              currentBet={this.props.fee}
-                              gameStatus={GAME_STATUS[this.props.currentPhase]}
-                              timeLeft={this.props.timeLeft}
-                />
-                <Table>
-                    {this.state.table}
-                </Table>
-                <Button style={betButtonStyle}
-                        color="yellow"
-                        disabled={this.state.chosenNumbers.includes(-1)}
-                        onClick={() => {
-                            this.revealNumbers()
-                        }
-                        }
-                >
-                    {this.revealButton()}
-                </Button>
-                <Button style={betButtonStyle}
-                        color="yellow"
-                        onClick={() => {
-                            this.abortCommitPhase()
-                        }
-                        }
-                >
-                    Abort Commit Phase
-                </Button>
-                <Button style={betButtonStyle}
-                        color="green"
-                        onClick={() => {
-                            this.payout()
-                        }
-                        }
-                >
-                    REVEAL
-                </Button>
-            </Container>
+            <div style={{height:'70vh'}}>
+                <Panel style={styles.HomeContainer}>
+                    <Panel style={styles.Container}>
+                        <div style={styles.CurrentGameContainer}>
+                            < CurrentGame nrOfPlayers={this.props.committed}
+                                          currentBet={this.props.fee}
+                                          gameStatus={GAME_STATUS[this.props.currentPhase]}
+                                          timeLeft={this.props.timeLeft}
+                            />
+                        </div>
+                        <div style={styles.CurrentGameContainer}>
+                            <Panel style={styles.Ticket}
+                                   header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>} bordered>
+                                <div style={styles.TicketNumbers}>
+                                    {this.state.table}
+                                </div>
+                            </Panel>
+                        </div>
+                        <div style={styles.buttonGroup}>
+                            <Button style={styles.abortRevealButton}
+                                    onClick={() => {
+                                        this.abortCommitPhase()
+                                    }
+                                    }
+                            >
+                                Abort Commit Phase
+                            </Button>
+                            <Button style={styles.betButton}
+                                    color="green"
+                                    disabled={this.state.chosenNumbers.includes(-1)}
+                                    onClick={() => {
+                                        this.revealNumbers()
+                                    }
+                                    }
+                            >
+                                {this.revealButton()}
+                            </Button>
+                            <Button style={styles.betButton}
+                                    color="green"
+                                    onClick={() => {
+                                        this.payout()
+                                    }
+                                    }
+                            >
+                                REVEAL
+                            </Button>
+                        </div>
+                    </Panel>
+                </Panel>
+            </div>
         );
     }
 }

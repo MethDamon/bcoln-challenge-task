@@ -36,7 +36,7 @@ class App extends Component {
 
         if (typeof  web3 !== 'undefined') {
             web3Instance = new Web3(web3.currentProvider);
-            if(web3Instance.givenProvider.networkVersion)
+            if (web3Instance.givenProvider.networkVersion)
                 CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
             else
             // NetworkVersion = 3 (Ropsten) / 5777 (Ganache)
@@ -59,8 +59,8 @@ class App extends Component {
             committed: 0,
             currentPhase: '',
             fee: 0,
-            timers:{},
-            timeLeft:-1,
+            timers: {},
+            timeLeft: -1,
             hasCommitted: false,
         }
     }
@@ -112,15 +112,15 @@ class App extends Component {
         }, 1000);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         clearTimeout(this.timer)
     }
 
-    getRemainingTime(){
+    getRemainingTime() {
         let startPhase = new Date(this.state.timestamps[this.getPhaseForTimestamp(this.state.currentPhase)]);
         let endPhase = startPhase.setSeconds(startPhase.getSeconds() + this.getTimerForPhase(this.state.currentPhase));
         let remainingTime = endPhase - Date.now();
-        if(remainingTime<=0){
+        if (remainingTime <= 0) {
             remainingTime = 0;
         }
         this.setState({
@@ -146,23 +146,23 @@ class App extends Component {
             .call({from: this.state.user})
             .then(res => {
                 return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
-                    commit = new Date(this.hexToNumber(commit._hex)*1000);
-                    commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex)*1000);
-                    payout = new Date(this.hexToNumber(payout._hex)*1000);
-                    reveal = new Date(this.hexToNumber(reveal._hex)*1000);
+                    commit = new Date(this.hexToNumber(commit._hex) * 1000);
+                    commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex) * 1000);
+                    payout = new Date(this.hexToNumber(payout._hex) * 1000);
+                    reveal = new Date(this.hexToNumber(reveal._hex) * 1000);
                     return {commit, commit_and_ready_for_reveal, payout, reveal}
                 })(res);
             })
     }
 
-    async getTimers(){
+    async getTimers() {
         return await this.state.contract.methods
             .getTimers()
             .call({from: this.state.user})
             .then(res => {
                 return (({LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}) => {
                     LEFT_COMMIT_AND_REVEAL = this.hexToNumber(LEFT_COMMIT_AND_REVEAL._hex);
-                    TO_ABORT = this.hexToNumber(TO_ABORT._hex)*1000;
+                    TO_ABORT = this.hexToNumber(TO_ABORT._hex) * 1000;
                     WAIT_TO_GO_TO_REVEAL_PHASE = this.hexToNumber(WAIT_TO_GO_TO_REVEAL_PHASE._hex);
                     TO_REVEAL = this.hexToNumber(TO_REVEAL._hex);
                     return {LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}
@@ -198,7 +198,7 @@ class App extends Component {
             fee: await this.getFee(),
             timers: await this.getTimers(),
             hasCommitted: await this.hasCommitted(),
-    });
+        });
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -216,40 +216,40 @@ class App extends Component {
             })
     }
 
-    transactionNotification(type,key, title, description){
-        setTimeout(()=>{
-            if(type==='open'){
+    transactionNotification(type, key, title, description) {
+        setTimeout(() => {
+            if (type === 'open') {
                 this.props.startValidating();
                 Notification.open({
                     title,
                     description,
                     key,
-                    duration:60000,
+                    duration: 60000,
                 });
             }
-            else if(type==='success'){
+            else if (type === 'success') {
                 this.props.stopValidating();
                 Notification.success({
                     title,
                     description,
                     key,
-                    duration:5000,
+                    duration: 5000,
                 });
             }
-            else if(type==='error'){
+            else if (type === 'error') {
                 this.props.stopValidating();
                 Notification.error({
                     title,
                     description,
                     key,
-                    duration:5000,
+                    duration: 5000,
                 });
             }
-            else if(type==='close'){
+            else if (type === 'close') {
                 Notification.remove(key)
             }
         })
-}
+    }
 
     getCommitted() {
         return this.state.contract.methods
@@ -260,7 +260,7 @@ class App extends Component {
             })
     }
 
-    hasCommitted(){
+    hasCommitted() {
         return this.state.contract.methods
             .user_committed()
             .call({from: this.state.user})
@@ -269,8 +269,8 @@ class App extends Component {
             })
     }
 
-    getTimerForPhase(phase){
-        switch(phase){
+    getTimerForPhase(phase) {
+        switch (phase) {
             case 0:
                 return this.state.timers['LEFT_COMMIT_AND_REVEAL'];
             case 1:
@@ -282,8 +282,8 @@ class App extends Component {
         }
     }
 
-    getPhaseForTimestamp(status){
-        switch(status){
+    getPhaseForTimestamp(status) {
+        switch (status) {
             case 0:
                 return 'commit';
             case 1:
@@ -307,12 +307,16 @@ class App extends Component {
                             loading={this.props.isLoading}/>
                     </Loader>) : (
                         <div>
-                            {this.props.isValidating?(<LinearProgress style={{height:'5px'}}/>):(<div style={{height:'5px'}}/>)}
+                            {this.props.isValidating ? (<LinearProgress style={{height: '5px'}}/>) : (
+                                <div style={{height: '5px'}}/>)}
                             <div>
                                 <BrowserRouter>
-                                        <Header/>
-                                        <Routes state={this.state} cookies={this.props.cookies} transactionNotification = {(type, key, title, message)=>this.transactionNotification(type, key, title, message)}/>
-                                        <Footer/>
+                                    <Header/>
+                                    <div id="style-7" style={{overflowY: 'auto'}}>
+                                        <Routes state={this.state} cookies={this.props.cookies}
+                                                transactionNotification={(type, key, title, message) => this.transactionNotification(type, key, title, message)}/>
+                                    </div>
+                                    <Footer/>
                                 </BrowserRouter>
                             </div>
                         </div>
