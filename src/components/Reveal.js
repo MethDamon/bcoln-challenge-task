@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {Button, Panel} from 'rsuite';
+import {Button, Panel, Modal} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
 import styled from 'styled-components';
 import {css} from '@emotion/core';
@@ -150,12 +150,12 @@ class Reveal extends Component {
             let tx = Math.random()*10000;
             this.props.contract.methods
                 .reveal(sortedNumbers[0], sortedNumbers[1])
-                .send({from: this.props.user, value: this.props.fee})
+                .send({from: this.props.user})
                 .on('transactionHash',()=>{
                     this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
                 })
                 .on('confirmation',(confirmationNumber)=>{
-                    if(confirmationNumber===1){
+                    if(confirmationNumber<=3){
                         this.props.transactionNotification('close',tx);
                         this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
                     }
@@ -196,7 +196,7 @@ class Reveal extends Component {
                 this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
             })
             .on('confirmation',(confirmationNumber)=>{
-                if(confirmationNumber===1){
+                if(confirmationNumber<=3){
                     this.props.transactionNotification('close',tx);
                     this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
                 }
@@ -269,6 +269,22 @@ class Reveal extends Component {
                         </div>
                     </Panel>
                 </Panel>
+                <Modal full show={this.props.winners.length >0} onHide={this.close}>
+                    <Modal.Header>
+                        <Modal.Title>Modal Title</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {this.props.winners}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.close} appearance="primary">
+                            Ok
+                        </Button>
+                        <Button onClick={this.close} appearance="subtle">
+                            Cancel
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }
@@ -278,7 +294,7 @@ class Reveal extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, winners}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -289,7 +305,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         contract,
         cookies,
         timeLeft,
-        timestamps
+        timestamps,
+        winners
     };
 }
 

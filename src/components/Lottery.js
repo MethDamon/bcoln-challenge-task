@@ -176,7 +176,7 @@ class Lottery extends Component {
                     this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
                 })
                 .on('confirmation',(confirmationNumber)=>{
-                    if(confirmationNumber===1){
+                    if(confirmationNumber<=3){
                         this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
                         //save the timestamp of the commit phase and used it as id for saving only the numbers
                         //of the current lottery
@@ -194,12 +194,12 @@ class Lottery extends Component {
         let tx = Math.random()*10000;
         this.props.contract.methods
             .goToRevealPhase()
-            .send({from: this.props.user, value: this.props.fee})
+            .send({from: this.props.user})
             .on('transactionHash',()=>{
                 this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
             })
             .on('confirmation',(confirmationNumber)=>{
-                if(confirmationNumber===1){
+                if(confirmationNumber<=3){
                     this.props.transactionNotification('close',tx);
                     this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
                 }

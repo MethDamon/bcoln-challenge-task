@@ -9717,6 +9717,11 @@ react-cookie@^3.1.2:
     hoist-non-react-statics "^3.0.0"
     universal-cookie "^3.1.0"
 
+react-custom-scroll@^4.0.1:
+  version "4.0.1"
+  resolved "https://nexus.jls.digital/repository/npm-group/react-custom-scroll/-/react-custom-scroll-4.0.1.tgz#495bb99143dc0efd09bbb59d62be0677956efeea"
+  integrity sha512-l9LcoUYYW4FLESt3+KthFBM5pcxbGqr4zpUuQkwy097UtI6e+v1o5+DJDCi01PKOidj9kHvtpyxalEuGkpz98g==
+
 react-dev-utils@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.0.0.tgz#356d95db442441c5d4748e0e49f4fd1e71aecbbd"

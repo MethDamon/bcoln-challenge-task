@@ -14,6 +14,7 @@ import DLottery from "../build/contracts/DLottery"
 import Routes from './routes/index'
 import {Notification} from "rsuite";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import GAME_STATUS from "./const/GameStatus";
 
 let web3 = window.web3;
 
@@ -62,6 +63,8 @@ class App extends Component {
             timers: {},
             timeLeft: -1,
             hasCommitted: false,
+            transactionHashes: [],
+            winners: [],
         }
     }
 
@@ -72,60 +75,131 @@ class App extends Component {
         this.props.stopLoading();
         //this.setState({isLoading: false})
         const commitEvent = this.state.contract.events.NewCommit();
-        commitEvent.on('data', async () => {
-            console.log("new event");
+        commitEvent.on('data', async ({transactionHash}) => {
+            if (!this.state.transactionHashes.includes(transactionHash)) {
+                console.log("commitEvent");
+                this.setState({
+                    transactionHashes: [...this.state.transactionHashes, transactionHash]
+                });
+                await this.loadDataFromSC();
+            }
             //TODO: load only the new committed players?
-            await this.loadDataFromSC();
         });
         //TEST TODO: reload only necessary data
         const revealEvent = this.state.contract.events.NewReveal();
-        revealEvent.on('data', async () => {
-            console.log("new event");
+        revealEvent.on('data', async ({transactionHash}) => {
+            if (!this.state.transactionHashes.includes(transactionHash)) {
+                console.log("revealEvent");
+                this.setState({
+                    transactionHashes: [...this.state.transactionHashes, transactionHash]
+                });
+                await this.loadDataFromSC();
+            }
             //TODO: load only the new committed players?
-            await this.loadDataFromSC();
         });
 
         const resetEvent = this.state.contract.events.Reset();
-        resetEvent.on('data', async () => {
-            console.log("new event");
+        resetEvent.on('data', async ({transactionHash}) => {
+            if (!this.state.transactionHashes.includes(transactionHash)) {
+                console.log("commitEvent");
+                this.setState({
+                    transactionHashes: [...this.state.transactionHashes, transactionHash]
+                });
+                await this.loadDataFromSC();
+            }
             //TODO: load only the new committed players?
-            await this.loadDataFromSC();
         });
 
         const phaseChangeEvent = this.state.contract.events.PhaseChange();
-        phaseChangeEvent.on('data', async () => {
-            console.log("new event");
+        phaseChangeEvent.on('data', async ({transactionHash}) => {
+            if (!this.state.transactionHashes.includes(transactionHash)) {
+                console.log("commitEvent");
+                this.setState({
+                    transactionHashes: [...this.state.transactionHashes, transactionHash]
+                });
+                await this.loadDataFromSC();
+            }
             //TODO: load only the new committed players?
-            await this.loadDataFromSC();
         });
 
         const lotteryEndedEvent = this.state.contract.events.LotteryEnded();
-        lotteryEndedEvent.on('data', async () => {
-            console.log("new event");
-            //TODO: load only the new committed players?
-            await this.loadDataFromSC();
+        lotteryEndedEvent.on('data', async ({id, returnValues}) => {
+                console.log("ENDED , ", id);
+                if (!this.state.transactionHashes.includes(id)) {
+                    console.log("lotterEndedEvent");
+                    this.setState({
+                        transactionHashes: [...this.state.transactionHashes, id],
+                        winners: returnValues.winners
+                    });
+
+                    console.log("FROTEND WINNERS ",this.state.winners)
+                    setTimeout(async () => {
+                        await this.loadDataFromSC();
+                        this.setState({
+                            winners: []
+                        })
+                    }, 60000)
+                }
+            }
+        )
+        ;
+
+        const winningNumberEvent = this.state.contract.events.Log();
+
+        winningNumberEvent.on('data', async ({id, returnValues}) => {
+            console.log("WInning hash", id)
+            if (!this.state.transactionHashes.includes(id)) {
+                console.log("commitEvent");
+                this.setState({
+                    transactionHashes: [...this.state.transactionHashes, id]
+                });
+                console.log('Winning Numbers -->', this.state.web3.utils.hexToNumber(returnValues.number._hex));
+                //TODO: load only the new committed players?
+                //await this.loadDataFromSC();
+            }
         });
 
 
         this.timer = setInterval(() => {
             this.getRemainingTime()
         }, 1000);
+
+        this.timer2 = setInterval(() => {
+            this.getBalance();
+        }, 5000);
+
     }
 
     componentWillUnmount() {
         clearTimeout(this.timer)
+        clearTimeout(this.timer2)
+
     }
 
     getRemainingTime() {
         let startPhase = new Date(this.state.timestamps[this.getPhaseForTimestamp(this.state.currentPhase)]);
         let endPhase = startPhase.setSeconds(startPhase.getSeconds() + this.getTimerForPhase(this.state.currentPhase));
         let remainingTime = endPhase - Date.now();
-        if (remainingTime <= 0) {
+        //If payout phase then just show 0
+        if (remainingTime <= 0 || this.state.currentPhase === 3) {
             remainingTime = 0;
         }
         this.setState({
             timeLeft: remainingTime
         });
+    }
+
+    async getBalance() {
+        if (this.state.user) {
+            let balance = await this.state.contract.methods
+                .getBalance()
+                .call({from: this.state.user})
+                .then(res => {
+                    return this.hexToNumberString(res._hex)
+                })
+
+            console.log(this.state.web3.utils.fromWei(balance))
+        }
     }
 
     getUser() {
@@ -278,7 +352,7 @@ class App extends Component {
             case 2:
                 return this.state.timers['TO_REVEAL'];
             case 3:
-                return 'payout';
+                return 'PAYOUT';
         }
     }
 

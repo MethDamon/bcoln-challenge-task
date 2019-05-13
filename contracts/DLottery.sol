@@ -4,7 +4,8 @@ import "solidity-bytes-utils/contracts/BytesLib.sol";
 
 contract DLottery {
     using BytesLib for bytes;
-    uint256 constant ENTRY_FEE = 581273793610390;
+    //uint256 constant ENTRY_FEE = 581273793610390;
+    uint256 constant ENTRY_FEE = (1 ether)/2;
     address owner;
     address[] public committed;
     address[] public revealed;
@@ -64,6 +65,11 @@ contract DLottery {
     function getFee() public pure returns (uint256) {
         return ENTRY_FEE;
     }
+
+    function getBalance() public view returns (uint256) {
+            return address(this).balance;
+        }
+
     function getTimers() public pure
     returns (uint256 LEFT_COMMIT_AND_REVEAL, uint256 TO_ABORT, uint256 WAIT_TO_GO_TO_REVEAL_PHASE, uint256 TO_REVEAL) {
         return (TIME_LEFT_COMMIT_AND_REVEAL,TIME_TO_ABORT,TIME_WAIT_TO_GO_TO_REVEAL_PHASE,TIME_TO_REVEAL);
@@ -73,7 +79,7 @@ contract DLottery {
     }
     function commit(bytes32 hash) public payable {
         require(addresses_to_committed_numbers[msg.sender] == '', 'User must not have already committed.');
-        require(msg.value == ENTRY_FEE, 'Message has to have exactly the value for entrying the lottery.');
+        require(msg.value >= ENTRY_FEE, 'Message has to have exactly the value for entrying the lottery.');
         require(current_phase == Phase.Commit || current_phase == Phase.CommitAndReadyForReveal,
         'Current phase needs to be Commit or CommitAndReadyForReveal.');
         if (current_phase == Phase.CommitAndReadyForReveal) {
@@ -144,6 +150,7 @@ contract DLottery {
         if (committed.length == revealed.length) {
             emit PhaseChange(current_phase, Phase.Payout);
             current_phase = Phase.Payout;
+            payout();
         }
     }
     
@@ -161,8 +168,20 @@ contract DLottery {
         bytes memory padding = hex"00000000000000000000000000000000000000000000000000000000000000";
         bytes memory b1 = padding.concat(input.slice(0, 1));
         bytes memory b2 = padding.concat(input.slice(1, 2));
-        uint256 first_winning_number = b1.toUint(0);
-        uint256 second_winning_number = b2.toUint(0);
+
+        uint8 first_winning_number = uint8(b1.toUint(0));
+        uint8 second_winning_number = uint8(b2.toUint(0));
+        first_winning_number = first_winning_number %16 +1;
+        second_winning_number = second_winning_number %16 +1;
+        if(first_winning_number == second_winning_number){
+            if(second_winning_number== 16){
+                second_winning_number = 1;
+            }else{
+                second_winning_number = second_winning_number +1;
+            }
+        }
+        first_winning_number = 1;
+        second_winning_number = 2;
         emit Log(first_winning_number);
         emit Log(second_winning_number);
         address[] memory winners = revealed_numbers_to_addresses[first_winning_number][second_winning_number];
@@ -179,6 +198,7 @@ contract DLottery {
                 address payable winners_address = address(uint160(winners[i]));
                 winners_address.transfer(price_per_winner);
             }
+            reset();
         }
     }
 }

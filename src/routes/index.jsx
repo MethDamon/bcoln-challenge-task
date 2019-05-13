@@ -47,7 +47,8 @@ const Routes = ({state, cookies, transactionNotification}) => (
                     timeLeft={state.timeLeft}
                     timestamps = {state.timestamps}
                     hasCommitted={state.hasCommitted}
-                    transactionNotification={transactionNotification}/>
+                    transactionNotification={transactionNotification}
+                        winners = {state.winners}/>
         )
         }/>
         <Redirect from='/*' to='/join' />
