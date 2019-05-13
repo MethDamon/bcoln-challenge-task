@@ -5,7 +5,7 @@ import Home from "../components/Home";
 import Lottery from "../components/Lottery";
 import Reveal from "../components/Reveal";
 
-const Routes = ({state, cookies, transactionNotification}) => (
+const Routes = ({state, cookies, transactionNotification, refreshOnModalClose}) => (
     <Switch>
         <Route path="/join" render={(props) => (
             <Home {...props}
@@ -30,7 +30,7 @@ const Routes = ({state, cookies, transactionNotification}) => (
                      web3={state.web3}
                      cookies={cookies}
                      timeLeft={state.timeLeft}
-                     timestamps = {state.timestamps}
+                     timestamps={state.timestamps}
                      hasCommitted={state.hasCommitted}
                      transactionNotification={transactionNotification}/>
         )
@@ -45,13 +45,15 @@ const Routes = ({state, cookies, transactionNotification}) => (
                     web3={state.web3}
                     cookies={cookies}
                     timeLeft={state.timeLeft}
-                    timestamps = {state.timestamps}
+                    timestamps={state.timestamps}
                     hasCommitted={state.hasCommitted}
                     transactionNotification={transactionNotification}
-                        winners = {state.winners}/>
+                    winners={state.winners}
+                    refreshOnModalClose={refreshOnModalClose}
+                    winningNumbers={state.winningNumbers}/>
         )
         }/>
-        <Redirect from='/*' to='/join' />
+        <Redirect from='/*' to='/join'/>
     </Switch>
 );
 

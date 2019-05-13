@@ -32,6 +32,7 @@ class App extends Component {
     constructor() {
         super();
         this.transactionNotification = this.transactionNotification.bind(this);
+        this.refreshOnModalClose = this.refreshOnModalClose.bind(this);
         let CONTRACT_ADDRESS;
         let web3Instance = null;
 
@@ -65,6 +66,7 @@ class App extends Component {
             hasCommitted: false,
             transactionHashes: [],
             winners: [],
+            winningNumbers: [],
         }
     }
 
@@ -81,7 +83,7 @@ class App extends Component {
                 this.setState({
                     transactionHashes: [...this.state.transactionHashes, transactionHash]
                 });
-                await this.loadDataFromSC();
+                this.loadDataFromSC();
             }
             //TODO: load only the new committed players?
         });
@@ -93,7 +95,8 @@ class App extends Component {
                 this.setState({
                     transactionHashes: [...this.state.transactionHashes, transactionHash]
                 });
-                await this.loadDataFromSC();
+                //TODO: do not reaload everything!
+                //this.loadDataFromSC();
             }
             //TODO: load only the new committed players?
         });
@@ -105,19 +108,23 @@ class App extends Component {
                 this.setState({
                     transactionHashes: [...this.state.transactionHashes, transactionHash]
                 });
-                await this.loadDataFromSC();
+                //await this.loadDataFromSC();
             }
             //TODO: load only the new committed players?
         });
 
         const phaseChangeEvent = this.state.contract.events.PhaseChange();
-        phaseChangeEvent.on('data', async ({transactionHash}) => {
+        phaseChangeEvent.on('data', async ({transactionHash, returnValues}) => {
             if (!this.state.transactionHashes.includes(transactionHash)) {
-                console.log("commitEvent");
+                console.log("phaseChangeEvent", returnValues);
                 this.setState({
                     transactionHashes: [...this.state.transactionHashes, transactionHash]
                 });
-                await this.loadDataFromSC();
+                if(returnValues.old_phase!==2&&returnValues.old_phase!==3){
+                    //Avoid reloading data if the winning modal at the end is open
+                    //It reloads anyway when the modal is closed
+                    this.loadDataFromSC();
+                }
             }
             //TODO: load only the new committed players?
         });
@@ -131,30 +138,20 @@ class App extends Component {
                         transactionHashes: [...this.state.transactionHashes, id],
                         winners: returnValues.winners
                     });
-
-                    console.log("FROTEND WINNERS ",this.state.winners)
-                    setTimeout(async () => {
-                        await this.loadDataFromSC();
-                        this.setState({
-                            winners: []
-                        })
-                    }, 60000)
                 }
             }
-        )
-        ;
+        );
 
         const winningNumberEvent = this.state.contract.events.Log();
 
         winningNumberEvent.on('data', async ({id, returnValues}) => {
-            console.log("WInning hash", id)
             if (!this.state.transactionHashes.includes(id)) {
-                console.log("commitEvent");
+                let wNumber= this.state.web3.utils.hexToNumber(returnValues.number._hex)
                 this.setState({
-                    transactionHashes: [...this.state.transactionHashes, id]
+                    transactionHashes: [...this.state.transactionHashes, id],
+                    winningNumbers: [...this.state.winningNumbers, wNumber]
                 });
-                console.log('Winning Numbers -->', this.state.web3.utils.hexToNumber(returnValues.number._hex));
-                //TODO: load only the new committed players?
+                console.log('Winning Numbers -->', this.state.winningNumbers);
                 //await this.loadDataFromSC();
             }
         });
@@ -164,15 +161,24 @@ class App extends Component {
             this.getRemainingTime()
         }, 1000);
 
-        this.timer2 = setInterval(() => {
+        //TODO remove after testing
+        this.timerBalance = setInterval(() => {
             this.getBalance();
         }, 5000);
 
     }
 
+    refreshOnModalClose(){
+            this.loadDataFromSC();
+            this.setState({
+                winners: [],
+                winningNumbers: []
+            })
+    }
+
     componentWillUnmount() {
-        clearTimeout(this.timer)
-        clearTimeout(this.timer2)
+        clearTimeout(this.timer);
+        clearTimeout(this.timerBalance);
 
     }
 
@@ -196,7 +202,7 @@ class App extends Component {
                 .call({from: this.state.user})
                 .then(res => {
                     return this.hexToNumberString(res._hex)
-                })
+                });
 
             console.log(this.state.web3.utils.fromWei(balance))
         }
@@ -388,7 +394,8 @@ class App extends Component {
                                     <Header/>
                                     <div id="style-7" style={{overflowY: 'auto'}}>
                                         <Routes state={this.state} cookies={this.props.cookies}
-                                                transactionNotification={(type, key, title, message) => this.transactionNotification(type, key, title, message)}/>
+                                                transactionNotification={(type, key, title, message) => this.transactionNotification(type, key, title, message)}
+                                                refreshOnModalClose = {()=> this.refreshOnModalClose()}/>
                                     </div>
                                     <Footer/>
                                 </BrowserRouter>

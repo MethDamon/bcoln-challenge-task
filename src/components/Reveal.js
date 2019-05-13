@@ -89,13 +89,13 @@ class Reveal extends Component {
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
         let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
-        if(!!chosenNumbers&&commitTimestamps.toString()===this.props.timestamps['commit'].toString()){
+        if (!!chosenNumbers && commitTimestamps.toString() === this.props.timestamps['commit'].toString()) {
             this.setState({
                 chosenNumbers
             })
-        }else{
-            this.props.cookies.remove('chosenNumbers',{ path: '/' });
-            this.props.cookies.remove('commitTimestamp', { path: '/' });
+        } else {
+            this.props.cookies.remove('chosenNumbers', {path: '/'});
+            this.props.cookies.remove('commitTimestamp', {path: '/'});
 
         }
         this.createTable()
@@ -147,17 +147,17 @@ class Reveal extends Component {
             sortedNumbers = sortedNumbers.sort((a, b) => {
                 return a - b
             });
-            let tx = Math.random()*10000;
+            let tx = Math.random() * 10000;
             this.props.contract.methods
                 .reveal(sortedNumbers[0], sortedNumbers[1])
                 .send({from: this.props.user})
-                .on('transactionHash',()=>{
-                    this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+                .on('transactionHash', () => {
+                    this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
                 })
-                .on('confirmation',(confirmationNumber)=>{
-                    if(confirmationNumber<=3){
-                        this.props.transactionNotification('close',tx);
-                        this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                .on('confirmation', (confirmationNumber) => {
+                    if (confirmationNumber <= 3) {
+                        this.props.transactionNotification('close', tx);
+                        this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
                     }
                 });
         } else {
@@ -187,18 +187,35 @@ class Reveal extends Component {
         }
     }
 
+    winningModal(){
+        let modalText = [];
+        if(this.props.winners.includes(this.props.user)){
+            modalText[0] ='Congratulations! You won the lottery!';
+        }else{
+            modalText[0] = 'You lost!\n'
+        }
+        if(this.props.winners.length>0){
+            modalText[1] = `${this.props.winners.length} participant won the lottery`;
+        }else{
+            modalText[1] = 'Nobody won the jackpot\n'
+        }
+        modalText[2] = `Extracted numbers: ${this.props.winningNumbers[0]} - ${this.props.winningNumbers[1]}`;
+
+        return modalText
+    }
+
     abortCommitPhase() {
-        let tx = Math.random()*10000;
+        let tx = Math.random() * 10000;
         this.props.contract.methods
             .reset()
             .send({from: this.props.user})
-            .on('transactionHash',()=>{
-                this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+            .on('transactionHash', () => {
+                this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
             })
-            .on('confirmation',(confirmationNumber)=>{
-                if(confirmationNumber<=3){
-                    this.props.transactionNotification('close',tx);
-                    this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+            .on('confirmation', (confirmationNumber) => {
+                if (confirmationNumber <= 3) {
+                    this.props.transactionNotification('close', tx);
+                    this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
                 }
             });
     }
@@ -207,20 +224,20 @@ class Reveal extends Component {
         this.props.contract.methods
             .payout()
             .send({from: this.props.user})
-            .on('transactionHash',(ss)=>{
+            .on('transactionHash', (ss) => {
                 console.log("-------------->" + ss)
             })
-            .on('confirmation',(confirmationNumber)=>{
+            .on('confirmation', (confirmationNumber) => {
                 console.log("---->" + confirmationNumber)
             });
     }
 
     render() {
-        if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[0]||GAME_STATUS[this.props.currentPhase] === GAME_STATUS[1]) {
+        if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[0] || GAME_STATUS[this.props.currentPhase] === GAME_STATUS[1]) {
             return (<Redirect to="/lottery"/>)
         }
         return (
-            <div style={{height:'70vh'}}>
+            <div style={{height: '70vh'}}>
                 <Panel style={styles.HomeContainer}>
                     <Panel style={styles.Container}>
                         <div style={styles.CurrentGameContainer}>
@@ -232,7 +249,8 @@ class Reveal extends Component {
                         </div>
                         <div style={styles.CurrentGameContainer}>
                             <Panel style={styles.Ticket}
-                                   header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>} bordered>
+                                   header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>}
+                                   bordered>
                                 <div style={styles.TicketNumbers}>
                                     {this.state.table}
                                 </div>
@@ -269,18 +287,19 @@ class Reveal extends Component {
                         </div>
                     </Panel>
                 </Panel>
-                <Modal full show={this.props.winners.length >0} onHide={this.close}>
+                <Modal full show={this.props.winningNumbers.length > 0} onHide={this.close}>
                     <Modal.Header>
-                        <Modal.Title>Modal Title</Modal.Title>
+                        <Modal.Title>{this.winningModal()[0]}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {this.props.winners}
+                        <div>{this.winningModal()[1]}</div>
+                        <div>{this.winningModal()[2]}</div>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.close} appearance="primary">
+                        <Button onClick={this.props.refreshOnModalClose} appearance="primary">
                             Ok
                         </Button>
-                        <Button onClick={this.close} appearance="subtle">
+                        <Button onClick={this.props.refreshOnModalClose} appearance="subtle">
                             Cancel
                         </Button>
                     </Modal.Footer>
@@ -294,7 +313,7 @@ class Reveal extends Component {
 //     return {user}
 // }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, winners}) => {
+const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, winners, refreshOnModalClose, winningNumbers}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -306,7 +325,9 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         cookies,
         timeLeft,
         timestamps,
-        winners
+        winners,
+        refreshOnModalClose,
+        winningNumbers
     };
 }
 

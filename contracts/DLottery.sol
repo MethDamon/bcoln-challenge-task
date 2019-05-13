@@ -190,7 +190,6 @@ contract DLottery {
             // Get half of this contracts balance
             uint256 balance = address(this).balance;
             require(balance > 0, 'Contract needs to have balance.');
-            emit LotteryEnded(winners);
             uint256 price = balance / 2;
             uint256 price_per_winner = price / winners.length;
             // Payout the prices
@@ -198,7 +197,9 @@ contract DLottery {
                 address payable winners_address = address(uint160(winners[i]));
                 winners_address.transfer(price_per_winner);
             }
-            reset();
         }
+        emit LotteryEnded(winners);
+        reset();
+
     }
 }
