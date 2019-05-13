@@ -155,7 +155,7 @@ class Reveal extends Component {
                     this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
                 })
                 .on('confirmation', (confirmationNumber) => {
-                    if (confirmationNumber <= 3) {
+                    if (confirmationNumber === 1) {
                         this.props.transactionNotification('close', tx);
                         this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
                     }
@@ -213,7 +213,7 @@ class Reveal extends Component {
                 this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
             })
             .on('confirmation', (confirmationNumber) => {
-                if (confirmationNumber <= 3) {
+                if (confirmationNumber === 1) {
                     this.props.transactionNotification('close', tx);
                     this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
                 }
