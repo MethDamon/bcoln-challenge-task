@@ -12,7 +12,7 @@ import { Web3Provider } from 'react-web3';
 const store = configureStore();
 
 ReactDOM.render(
-    <Web3Provider>
+    <Web3Provider onChangeAccount={()=>{window.location.reload()}}>
         <CookiesProvider>
             <Provider store={store}>
                 <BrowserRouter>
