@@ -82,6 +82,13 @@ const styles = {
         justifyContent: "space-between",
         marginTop: 15
     },
+
+    endModal : {
+    position: "relative",
+        top: "25vh",
+        width: "50%",
+        fontSize: '30px'
+    }
 };
 
 
@@ -287,9 +294,9 @@ class Reveal extends Component {
                         </div>
                     </Panel>
                 </Panel>
-                <Modal full show={this.props.winningNumbers.length > 0} onHide={this.close}>
-                    <Modal.Header>
-                        <Modal.Title>{this.winningModal()[0]}</Modal.Title>
+                <Modal  style = {styles.endModal} show={this.props.winningNumbers.length > 0} onHide={this.props.refreshOnModalClose}>
+                    <Modal.Header >
+                        <Modal.Title style={{fontWeight: "bold", fontSize:"40px"}}>{this.winningModal()[0]}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div>{this.winningModal()[1]}</div>
@@ -297,10 +304,7 @@ class Reveal extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.props.refreshOnModalClose} appearance="primary">
-                            Ok
-                        </Button>
-                        <Button onClick={this.props.refreshOnModalClose} appearance="subtle">
-                            Cancel
+                            Close
                         </Button>
                     </Modal.Footer>
                 </Modal>

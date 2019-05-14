@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c6a0b94a.chunk.css",
+    "main.js": "/static/js/main.4b01625f.chunk.js",
+    "main.js.map": "/static/js/main.4b01625f.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.c5541365.js",
+    "runtime~main.js.map": "/static/js/runtime~main.c5541365.js.map",
+    "static/css/2.451c0ef4.chunk.css": "/static/css/2.451c0ef4.chunk.css",
+    "static/js/2.72bb5946.chunk.js": "/static/js/2.72bb5946.chunk.js",
+    "static/js/2.72bb5946.chunk.js.map": "/static/js/2.72bb5946.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.8a9e111b3ee86c4c469636940fc499db.js": "/precache-manifest.8a9e111b3ee86c4c469636940fc499db.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.451c0ef4.chunk.css.map": "/static/css/2.451c0ef4.chunk.css.map",
+    "static/css/main.c6a0b94a.chunk.css.map": "/static/css/main.c6a0b94a.chunk.css.map",
+    "static/media/index.css": "/static/media/back.dc4558b3.jpeg",
+    "static/media/lotto.png": "/static/media/lotto.000a671d.png"
+  }
+}

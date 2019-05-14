@@ -10,7 +10,7 @@ import './App.css';
 import {uiStartLoading, uiStartValidating, uiStopLoading, uiStopValidating} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "../build/contracts/DLottery"
+import DLottery from "./abis/DLottery"
 import Routes from './routes/index'
 import {Notification} from "rsuite";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
@@ -38,6 +38,7 @@ class App extends Component {
 
         if (typeof  web3 !== 'undefined') {
             web3Instance = new Web3(web3.currentProvider);
+            console.log(DLottery.networks[web3Instance.givenProvider.networkVersion])
             if (web3Instance.givenProvider.networkVersion)
                 CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
             else
