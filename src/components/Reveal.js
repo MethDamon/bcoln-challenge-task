@@ -83,8 +83,8 @@ const styles = {
         marginTop: 15
     },
 
-    endModal : {
-    position: "relative",
+    endModal: {
+        position: "relative",
         top: "25vh",
         width: "50%",
         fontSize: '30px'
@@ -96,7 +96,9 @@ class Reveal extends Component {
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
         let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
-        if (!!chosenNumbers && commitTimestamps.toString() === this.props.timestamps['commit'].toString()) {
+        //&& commitTimestamps.toString() === this.props.timestamps['commit'].toString()
+
+        if (!!chosenNumbers && this.props.timestamps['commit'].toString() === commitTimestamps.toString()) {
             this.setState({
                 chosenNumbers
             })
@@ -194,16 +196,16 @@ class Reveal extends Component {
         }
     }
 
-    winningModal(){
+    winningModal() {
         let modalText = [];
-        if(this.props.winners.includes(this.props.user)){
-            modalText[0] ='Congratulations! You won the lottery!';
-        }else{
+        if (this.props.winners.includes(this.props.user)) {
+            modalText[0] = 'Congratulations! You won the lottery!';
+        } else {
             modalText[0] = 'You lost!\n'
         }
-        if(this.props.winners.length>0){
+        if (this.props.winners.length > 0) {
             modalText[1] = `${this.props.winners.length} participant won the lottery`;
-        }else{
+        } else {
             modalText[1] = 'Nobody won the jackpot\n'
         }
         modalText[2] = `Extracted numbers: ${this.props.winningNumbers[0]} - ${this.props.winningNumbers[1]}`;
@@ -228,14 +230,18 @@ class Reveal extends Component {
     }
 
     payout() {
+        let tx = Math.random() * 10000;
         this.props.contract.methods
             .payout()
             .send({from: this.props.user})
             .on('transactionHash', (ss) => {
-                console.log("-------------->" + ss)
+                this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
             })
             .on('confirmation', (confirmationNumber) => {
-                console.log("---->" + confirmationNumber)
+                if (confirmationNumber === 1) {
+                    this.props.transactionNotification('close', tx);
+                    this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
+                }
             });
     }
 
@@ -294,9 +300,11 @@ class Reveal extends Component {
                         </div>
                     </Panel>
                 </Panel>
-                <Modal  style = {styles.endModal} show={this.props.winningNumbers.length > 0} onHide={this.props.refreshOnModalClose}>
-                    <Modal.Header >
-                        <Modal.Title style={{fontWeight: "bold", fontSize:"40px"}}>{this.winningModal()[0]}</Modal.Title>
+                <Modal style={styles.endModal} show={this.props.winningNumbers.length > 0}
+                       onHide={this.props.refreshOnModalClose}>
+                    <Modal.Header>
+                        <Modal.Title
+                            style={{fontWeight: "bold", fontSize: "40px"}}>{this.winningModal()[0]}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div>{this.winningModal()[1]}</div>

@@ -1,9 +1,11 @@
 pragma solidity ^0.5.7;
 
-import "solidity-bytes-utils/contracts/BytesLib.sol";
+// Interface of the random number generator
+contract WinningNumbersGeneratorInterface {
+    function generateWinningNumbers(bytes memory input) public view returns (uint8[2] memory){}
+}
 
 contract DLottery {
-    using BytesLib for bytes;
     enum Phase { Commit, CommitAndReadyForReveal, Reveal, Payout }
 
     struct Lottery {
@@ -20,6 +22,7 @@ contract DLottery {
     Lottery[] lotteries;
     uint256 currentLotteryIndex = 0;
 
+    WinningNumbersGeneratorInterface private winningNumbersGenerator;
     //uint256 constant ENTRY_FEE = 581273793610390;
     uint256 constant ENTRY_FEE = (1 ether)/2;
     address owner;
@@ -60,7 +63,10 @@ contract DLottery {
         address[] winners
     );
 
-    constructor() public {
+    constructor(address _winningNumbersGeneratorAddress) public {
+        // Make sure we have a valid address for the random number generator
+        require(_winningNumbersGeneratorAddress != address(0));
+        winningNumbersGenerator = WinningNumbersGeneratorInterface(_winningNumbersGeneratorAddress);
         owner = msg.sender;
         Lottery memory initialLottery;
         initialLottery.current_phase = Phase.Commit;
@@ -133,28 +139,8 @@ contract DLottery {
         lotteries.push(newLottery);
         currentLotteryIndex = currentLotteryIndex + 1;
         emit Reset(msg.sender);
-
-        //        //change currentLotteryIndex
-//       current_phase = Phase.Commit;
-//        for(uint i = 0; i < committed.length; i++) {
-//            delete addresses_to_committed_numbers[committed[i]];
-//        }
-//        for(uint i = 8; i < lotteries[currentLotteryIndex].revealed.length; i++) {
-//            delete addresses_to_revealed_numbers[revealed[i]];
-//        }
-//        delete committed;
-//        delete revealed;
-//        for(uint8 i = 0; i < 16; i++) {
-//            for(uint8 j = 0; i < 16; i++) {
-//                delete revealed_numbers_to_addresses[i][j];
-//            }
-//        }
-//        delete time_stamps;
-//        delete block_difficulties;
-//        delete block_numbers;
-//        current_timestamps = TimeStamps(now, 0, 0, 0);
-//        emit Reset(msg.sender);
     }
+
     function goToRevealPhase() payable public {
         require(lotteries[currentLotteryIndex].current_phase == Phase.CommitAndReadyForReveal, 'Current phase needs to be CommitAndReadyForReveal');
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'Sender of the message must have committed numbers.');
@@ -194,29 +180,15 @@ contract DLottery {
     );
 
     event Log2 (bytes b);
-
+    
     function payout() public returns (uint256) {
         //require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
         //require(addresses_to_revealed_numbers[msg.sender].length != 0, 'User must have aready revealed numbers.');
         //require(current_phase == Phase.Payout, 'Current phase needs to be Payout.');
         bytes memory input = abi.encode(keccak256(abi.encode(block_difficulties, block_numbers, time_stamps)));
-        bytes memory padding = hex"00000000000000000000000000000000000000000000000000000000000000";
-        bytes memory b1 = padding.concat(input.slice(0, 1));
-        bytes memory b2 = padding.concat(input.slice(1, 2));
-
-        uint8 first_winning_number = uint8(b1.toUint(0));
-        uint8 second_winning_number = uint8(b2.toUint(0));
-        first_winning_number = first_winning_number %16 +1;
-        second_winning_number = second_winning_number %16 +1;
-        if(first_winning_number == second_winning_number){
-            if(second_winning_number== 16){
-                second_winning_number = 1;
-            }else{
-                second_winning_number = second_winning_number +1;
-            }
-        }
-        first_winning_number = 1;
-        second_winning_number = 2;
+        uint8[2] memory winning_numbers = winningNumbersGenerator.generateWinningNumbers(input);
+        uint8 first_winning_number = winning_numbers[0];
+        uint8 second_winning_number = winning_numbers[1];
         emit Log(first_winning_number);
         emit Log(second_winning_number);
         address[] memory winners = lotteries[currentLotteryIndex].revealed_numbers_to_addresses[first_winning_number][second_winning_number];
@@ -235,6 +207,5 @@ contract DLottery {
         }
         emit LotteryEnded(winners);
         reset();
-
     }
 }

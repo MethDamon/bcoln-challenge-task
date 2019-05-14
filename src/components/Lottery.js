@@ -211,17 +211,6 @@ class Lottery extends Component {
             .reset()
             .send({ from: this.props.user }, () => {
                 window.location.reload();
-                // type Config{
-                //     title:string,
-                //         description:React.ElementType,
-                //         duration?:number,
-                //         placement?:string,
-                //         top?:number,
-                //         bottom?:number,
-                //         onClose?:()=>void,
-                //         style?:Object,
-                //         key?:string
-                // }
                 let tx = Math.random() * 10000;
                 this.props.contract.methods
                     .reset()
