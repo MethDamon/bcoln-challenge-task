@@ -10,7 +10,7 @@ import './App.css';
 import {uiStartLoading, uiStartValidating, uiStopLoading, uiStopValidating} from "./store/actions/uiActionCreators";
 import connect from "react-redux/es/connect/connect";
 import {withCookies} from "react-cookie"
-import DLottery from "../build/contracts/DLottery"
+import DLottery from "./abis/DLottery"
 import Routes from './routes/index'
 import {Notification} from "rsuite";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
@@ -222,9 +222,11 @@ class App extends Component {
 
     async getCurrentTimestamp() {
         return await this.state.contract.methods
-            .current_timestamps()
+            .getCurrentTimestamp()
             .call({from: this.state.user})
             .then(res => {
+                console.log("TIMESTAMPS: ", res.commit._hex)
+                console.log("TIMESTAMPS: ", res[0]._hex)
                 return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
                     commit = new Date(this.hexToNumber(commit._hex) * 1000);
                     commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex) * 1000);
@@ -288,7 +290,7 @@ class App extends Component {
 
     getCurrentPhase() {
         return this.state.contract.methods
-            .current_phase()
+            .getCurrentPhase()
             .call({from: this.state.user})
             .then(res => {
                 console.log("CURRENT PHASE", res)

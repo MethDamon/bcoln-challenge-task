@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import {Icon} from "rsuite";
 
 const Developer = styled.p`
-    position: fixed,
   margin-top: 5px;
   display: flex;
   justify-content: center
@@ -15,15 +14,18 @@ const Developer = styled.p`
 const Title = styled.p`
   margin-bottom: 0;
   font-size: 18px;
-  font-weight: bolds
+  font-weight: bold;
 `;
 
 const Container = styled.div`
   color: white;
+  position: absolute;
+  width:100%;
+  bottom:10px;
 `;
 const GithubLink = styled.a`
   color: white;
-  margin 0 0 0 5px;
+  margin: 0 0 0 5px;
 `;
 const Footer = () => (
     <Container>

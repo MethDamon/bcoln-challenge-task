@@ -16,7 +16,7 @@ const GithubLink = styled.a`
 `;
 const Header = () => (
     <HeaderContainer>
-        <GithubLink href="https://github.com/MethDamon/bcoln-challenge-task" target="_blank" >
+        <GithubLink href="https://github.com/MethDamon/bcoln-challenge-task" target="_blank">
             <Icon style={{float: 'left'}} icon="github" size='lg'/>
         </GithubLink>
     </HeaderContainer>
@@ -30,8 +30,8 @@ const mapStateToProps = (state) => {
 
 const mapActionsToProps = (dispatch) => {
     return {
-        startLoading: ()=>dispatch(uiStartLoading()),
-        stopLoading: ()=>dispatch(uiStopLoading()),
+        startLoading: () => dispatch(uiStartLoading()),
+        stopLoading: () => dispatch(uiStopLoading()),
     }
 };
 
