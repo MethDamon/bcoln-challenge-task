@@ -241,6 +241,7 @@ class Lottery extends Component {
                             currentBet={this.props.fee}
                             gameStatus={GAME_STATUS[this.props.currentPhase]}
                             timeLeft={this.props.timeLeft}
+                            jackpot={this.props.jackpot}
                         />
                     </div>
                     <div style={styles.CurrentGameContainer}>

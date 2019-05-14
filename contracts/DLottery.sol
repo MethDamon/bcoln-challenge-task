@@ -10,7 +10,6 @@ contract DLottery {
 
     struct Lottery {
         Phase current_phase;
-        uint256 jackpot;
         address[] committed;
         address[] revealed;
         mapping(address => bytes32) addresses_to_committed_numbers;
@@ -70,7 +69,6 @@ contract DLottery {
         owner = msg.sender;
         Lottery memory initialLottery;
         initialLottery.current_phase = Phase.Commit;
-        initialLottery.jackpot = address(this).balance/2;
         initialLottery.current_timestamps = TimeStamps(block.timestamp, 0, 0, 0);
         lotteries.push(initialLottery);
     }

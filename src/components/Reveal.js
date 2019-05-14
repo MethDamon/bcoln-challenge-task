@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {Button, Panel, Modal} from 'rsuite';
+import {Button, Panel,} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
-import styled from 'styled-components';
-import {css} from '@emotion/core';
-import {Input, InputGroup, Icon} from 'rsuite';
 import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
-import RingLoader from 'react-spinners/RingLoader';
 import {withRouter, Redirect} from 'react-router-dom';
 
 import Slot from "../views/Slot";
+import WinnerModal from "../views/WinnerModal";
 
 const styles = {
     HomeContainer: {
@@ -82,13 +79,6 @@ const styles = {
         justifyContent: "space-between",
         marginTop: 15
     },
-
-    endModal: {
-        position: "relative",
-        top: "25vh",
-        width: "50%",
-        fontSize: '30px'
-    }
 };
 
 
@@ -196,23 +186,6 @@ class Reveal extends Component {
         }
     }
 
-    winningModal() {
-        let modalText = [];
-        if (this.props.winners.includes(this.props.user)) {
-            modalText[0] = 'Congratulations! You won the lottery!';
-        } else {
-            modalText[0] = 'You lost!\n'
-        }
-        if (this.props.winners.length > 0) {
-            modalText[1] = `${this.props.winners.length} participant won the lottery`;
-        } else {
-            modalText[1] = 'Nobody won the jackpot\n'
-        }
-        modalText[2] = `Extracted numbers: ${this.props.winningNumbers[0]} - ${this.props.winningNumbers[1]}`;
-
-        return modalText
-    }
-
     abortCommitPhase() {
         let tx = Math.random() * 10000;
         this.props.contract.methods
@@ -258,6 +231,7 @@ class Reveal extends Component {
                                           currentBet={this.props.fee}
                                           gameStatus={GAME_STATUS[this.props.currentPhase]}
                                           timeLeft={this.props.timeLeft}
+                                          jackpot={this.props.jackpot}
                             />
                         </div>
                         <div style={styles.CurrentGameContainer}>
@@ -300,22 +274,7 @@ class Reveal extends Component {
                         </div>
                     </Panel>
                 </Panel>
-                <Modal style={styles.endModal} show={this.props.winningNumbers.length > 0}
-                       onHide={this.props.refreshOnModalClose}>
-                    <Modal.Header>
-                        <Modal.Title
-                            style={{fontWeight: "bold", fontSize: "40px"}}>{this.winningModal()[0]}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div>{this.winningModal()[1]}</div>
-                        <div>{this.winningModal()[2]}</div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.props.refreshOnModalClose} appearance="primary">
-                            Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                <WinnerModal {...this.props}/>
             </div>
         );
     }
