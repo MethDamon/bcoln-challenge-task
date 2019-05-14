@@ -203,7 +203,6 @@ class App extends Component {
                 .then(res => {
                     return this.hexToNumberString(res._hex)
                 });
-            console.log(this.state.web3.utils.fromWei(balance))
             return this.state.web3.utils.fromWei(balance)
 
         }

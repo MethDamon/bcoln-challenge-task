@@ -68,8 +68,6 @@ class Home extends Component {
         console.log(this.props.jackpot)
         return(
             <div style={{height:'70vh'}}>
-                <WinnerModal {...this.props}/>
-
                 <Panel style={styles.HomeContainer}>
                 <Panel style={styles.Container}>
                     < CurrentGame style={styles.CurrentGame}

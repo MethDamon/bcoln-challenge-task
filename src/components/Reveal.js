@@ -222,6 +222,7 @@ class Reveal extends Component {
         if (GAME_STATUS[this.props.currentPhase] === GAME_STATUS[0] || GAME_STATUS[this.props.currentPhase] === GAME_STATUS[1]) {
             return (<Redirect to="/lottery"/>)
         }
+        console.log("WINNING NUMBERS: ", this.props.winningNumbers)
         return (
             <div style={{height: '70vh'}}>
                 <Panel style={styles.HomeContainer}>
