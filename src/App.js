@@ -38,7 +38,6 @@ class App extends Component {
 
         if (typeof  web3 !== 'undefined') {
             web3Instance = new Web3(web3.currentProvider);
-            console.log(DLottery.networks[web3Instance.givenProvider.networkVersion])
             if (web3Instance.givenProvider.networkVersion)
                 CONTRACT_ADDRESS = DLottery.networks[web3Instance.givenProvider.networkVersion].address;
             else

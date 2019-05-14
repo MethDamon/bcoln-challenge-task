@@ -23423,15 +23423,15 @@
     "version": "0.5.7+commit.6da8b019.Emscripten.clang"
   },
   "networks": {
-    "5777": {
+    "3": {
       "events": {},
       "links": {},
-      "address": "0xD6E3202FEc56e377c509949D6CA01d153463CA1F",
-      "transactionHash": "0xee08794b1fad0e84f734bb7fee05ab87f07a172cdd28557d62e3d369336b274d"
+      "address": "0x26ce680b1f4E2A4ee2E023354BD034951EF464e8",
+      "transactionHash": "0xc86850994daa111fae72acf53017151d4b6a7627adf2d9175f9afd2f32bf5d90"
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-05-14T08:40:47.720Z",
+  "updatedAt": "2019-05-14T10:28:42.477Z",
   "devdoc": {
     "methods": {}
   },
