@@ -72,7 +72,7 @@ const styles = {
         float: "right",
         marginRight: 15,
         marginTop: 15,
-        marginBottom: -15,
+        marginBottom: 0,
         fontSize: 20,
         fontWeight: 800,
     },
