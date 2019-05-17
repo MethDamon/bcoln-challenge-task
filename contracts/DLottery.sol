@@ -184,9 +184,9 @@ contract DLottery {
     event Log2 (bytes b);
     
     function payout() public  {
-        require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
+        require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
         //require(addresses_to_revealed_numbers[msg.sender].length != 0, 'User must have aready revealed numbers.');
-        require(current_phase == Phase.Reveal, 'Current phase needs to be Reveal.');
+        require(lotteries[currentLotteryIndex].current_phase == Phase.Reveal, 'Current phase needs to be Reveal.');
         if(lotteries[currentLotteryIndex].committed.length != lotteries[currentLotteryIndex].revealed.length){
             require((now - lotteries[currentLotteryIndex].current_timestamps.reveal) >=
                 TIME_TO_REVEAL, 'Time to reveal needs to be over.');

@@ -33,7 +33,7 @@ const WinnerModal = (props) => (
                 {props.winners.includes(props.user) ? (
                     <div>
                         {"Congratulations!"}
-                        <ModalTitle>{"You won the lottery"}</ModalTitle>
+                        <ModalTitle>{`You won ${props.jackpot/props.winningNumbers.length} ETH`}</ModalTitle>
                     </div>
                 ) : (
                     <div style={{color: "red"}}>
