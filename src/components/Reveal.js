@@ -194,12 +194,12 @@ class Reveal extends Component {
             });
     }
 
-    payout() {
+    goToPayoutPhase() {
         let tx = Math.random() * 10000;
         this.props.contract.methods
             .payout()
             .send({from: this.props.user})
-            .on('transactionHash', (ss) => {
+            .on('transactionHash', () => {
                 this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
             })
             .on('confirmation', (confirmationNumber) => {
@@ -235,7 +235,9 @@ class Reveal extends Component {
                             </div>
                         </div>
                         <div style={styles.buttonGroup}>
-                            <Button style={styles.abortRevealButton}
+                            <Button color="red"
+                                style={styles.abortRevealButton}
+                                    disabled={this.props.remainingTimeAbort>0}
                                     onClick={() => {
                                         this.abortCommitPhase()
                                     }
@@ -243,15 +245,27 @@ class Reveal extends Component {
                             >
                                 Abort
                             </Button>
-                            <Button style={styles.betButton}
-                                    color="green"
-                                    disabled={this.state.chosenNumbers.includes(-1)}
-                                    onClick={() => {
-                                        this.revealNumbers()
-                                    }}
-                            >
-                                Reveal
-                            </Button>
+                            {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[2] &&
+                            this.props.timeLeft === 0 ? (
+                                <Button color="red"
+                                        style={styles.abortRevealButton}
+                                        disabled={this.props.remainingTimeAbort==0}
+                                        onClick={() => {
+                                            this.goToPayoutPhase()
+                                        }
+                                        }>
+                                    {'Go to payout phase'}
+                                </Button>
+                            ) : (
+                                <Button style={styles.betButton}
+                                        color="green"
+                                        disabled={this.state.chosenNumbers.includes(-1)||this.props.remainingTimeAbort==0}
+                                        onClick={() => {
+                                            this.revealNumbers()
+                                        }}
+                                >
+                                    Reveal
+                                </Button>)}
                         </div>
                     </Panel>
                 </Panel>
@@ -261,7 +275,7 @@ class Reveal extends Component {
     }
 }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, winners, refreshOnModalClose, winningNumbers}) => {
+const mapStateToProps = (state, {user, committed, remainingTimeAbort, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, winners, refreshOnModalClose, winningNumbers}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -275,7 +289,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         timestamps,
         winners,
         refreshOnModalClose,
-        winningNumbers
+        winningNumbers,
+        remainingTimeAbort
     };
 }
 

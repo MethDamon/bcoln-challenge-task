@@ -24,12 +24,12 @@ contract DLottery {
 
     WinningNumbersGeneratorInterface private winningNumbersGenerator;
     //uint256 constant ENTRY_FEE = 581273793610390;
-    uint256 constant ENTRY_FEE = (1 ether)/2;
+    uint256 constant ENTRY_FEE = (1 ether)/10;
     address owner;
     //uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
-    uint256 constant TIME_LEFT_START_PHASE = 60; // 30 seconds
-    uint256 constant TIME_TO_ABORT =  10 * 60; // 10 minutes
-    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 10; // 30 seconds
+    uint256 constant TIME_LEFT_START_PHASE = 5*60; // 30 seconds
+    uint256 constant TIME_TO_ABORT =  20 * 60; // 10 minutes
+    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 2*60; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
     uint256[] private time_stamps;
@@ -173,8 +173,6 @@ contract DLottery {
         // Check if everyone that committed also revealed
         // Go to payout phase if yes
         if (lotteries[currentLotteryIndex].committed.length == lotteries[currentLotteryIndex].revealed.length) {
-            emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Payout);
-            lotteries[currentLotteryIndex].current_phase = Phase.Payout;
             payout();
         }
     }
@@ -185,10 +183,16 @@ contract DLottery {
 
     event Log2 (bytes b);
     
-    function payout() public returns (uint256) {
-        //require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
+    function payout() public  {
+        require(addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
         //require(addresses_to_revealed_numbers[msg.sender].length != 0, 'User must have aready revealed numbers.');
-        //require(current_phase == Phase.Payout, 'Current phase needs to be Payout.');
+        require(current_phase == Phase.Reveal, 'Current phase needs to be Reveal.');
+        if(lotteries[currentLotteryIndex].committed.length != lotteries[currentLotteryIndex].revealed.length){
+            require((now - lotteries[currentLotteryIndex].current_timestamps.reveal) >=
+                TIME_TO_REVEAL, 'Time to reveal needs to be over.');
+        }
+        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Payout);
+        lotteries[currentLotteryIndex].current_phase = Phase.Payout;
         bytes memory input = abi.encode(keccak256(abi.encode(block_difficulties, block_numbers, time_stamps)));
         uint8[2] memory winning_numbers = winningNumbersGenerator.generateWinningNumbers(input);
         uint8 first_winning_number = winning_numbers[0];

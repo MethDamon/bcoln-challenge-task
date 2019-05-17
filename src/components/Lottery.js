@@ -96,9 +96,6 @@ class Lottery extends Component {
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
         let lotteryIndex = await this.props.cookies.get('lotteryIndex');
-
-        console.log("MOUNTED")
-
         if (!!chosenNumbers && lotteryIndex.toString() === this.props.lotteryIndex.toString()) {
             this.setState({
                 chosenNumbers
@@ -122,7 +119,10 @@ class Lottery extends Component {
     }
 
     chooseNumber(n) {
-        if(this.props.hasCommitted) return;
+        if(this.props.hasCommitted) {
+            console.log("COMMITED")
+            return
+        };
         let numbers = Object.assign([], this.state.chosenNumbers);
         let table = Object.assign([], this.state.table);
 
@@ -169,9 +169,7 @@ class Lottery extends Component {
             let first_number = sortedNumbers[0];
             let second_number = sortedNumbers[1];
             let toHash = this.props.web3.eth.abi.encodeParameters(['uint8', 'address', 'uint8'], [first_number, this.props.user, second_number]);
-            console.log('hash input', toHash);
             let hash = this.props.web3.utils.soliditySha3(toHash);
-            console.log('hash output', hash);
             let tx = Math.random()*10000;
             this.props.contract.methods
                 .commit(hash)
@@ -181,15 +179,14 @@ class Lottery extends Component {
                 })
                 .on('confirmation',(confirmationNumber)=>{
                     if(confirmationNumber===1){
-                        console.log(this.state.chosenNumbers)
-                        this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
-                        //save the timestamp of the commit phase and used it as id for saving only the numbers
-                        //of the current lottery
-                        this.props.cookies.set('lotteryIndex', this.props.lotteryIndex, {path: '/'});
                         this.props.transactionNotification('close',tx);
                         this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
                     }
                 });
+            this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
+            //save the timestamp of the commit phase and used it as id for saving only the numbers
+            //of the current lottery
+            this.props.cookies.set('lotteryIndex', this.props.lotteryIndex, {path: '/'});
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
@@ -258,7 +255,9 @@ class Lottery extends Component {
                         </div>
                     </div>
                     <div style={styles.buttonGroup}>
-                        <Button style={styles.abortRevealButton}
+                        <Button color="red"
+                            style={styles.abortRevealButton}
+                                disabled={this.props.remainingTimeAbort>0||GAME_STATUS[this.props.currentPhase] == GAME_STATUS[0]}
                                 onClick={() => {
                                     this.reset()
                                 }
@@ -267,7 +266,9 @@ class Lottery extends Component {
                         </Button>
                         {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
                         this.props.timeLeft === 0 ? (
-                            <Button style={styles.abortRevealButton}
+                            <Button color="red"
+                                    style={styles.abortRevealButton}
+                                    disabled={this.props.remainingTimeAbort==0}
                                     onClick={() => {
                                         this.goToRevealPhase()
                                     }
@@ -277,7 +278,7 @@ class Lottery extends Component {
                         ) : (
                             <Button color="green"
                                     style={styles.betButton}
-                                    disabled={this.state.chosenNumbers.includes(-1)||this.props.hasCommitted}
+                                    disabled={this.state.chosenNumbers.includes(-1)||this.props.hasCommitted||this.props.remainingTimeAbort==0}
                                     onClick={() => {
                                         this.joinLottery()
                                     }
@@ -292,7 +293,7 @@ class Lottery extends Component {
     }
 }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, hasCommitted,transactionNotification}) => {
+const mapStateToProps = (state, {user, remainingTimeAbort,committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, hasCommitted,transactionNotification}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -305,7 +306,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         timeLeft,
         timestamps,
         hasCommitted,
-        transactionNotification
+        transactionNotification,
+        remainingTimeAbort
     };
 }
 

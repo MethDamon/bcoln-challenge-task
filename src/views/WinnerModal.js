@@ -25,23 +25,6 @@ const ModalTitle = styled.h3`
    color: #3a9c6c
 `;
 
-const modalTitle = (props) => {
-    let modalText = [];
-    if (props.winners.includes(this.props.user)) {
-        modalText[0] = 'Congratulations! You won the lottery!';
-    } else {
-        modalText[0] = 'You lost!\n'
-    }
-    if (props.winners.length > 0) {
-        modalText[1] = `${props.winners.length} participant won the lottery`;
-    } else {
-        modalText[1] = 'Nobody won the jackpot\n'
-    }
-    modalText[2] = `Extracted numbers: ${props.winningNumbers[0]} - ${props.winningNumbers[1]}`;
-
-    return modalText
-};
-
 const WinnerModal = (props) => (
     <Modal style={styles.endModal} show={props.winningNumbers.length > 0}
            onHide={props.refreshOnModalClose}>

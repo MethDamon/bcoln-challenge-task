@@ -40,7 +40,8 @@ const initialState = {
     winners: [],
     winningNumbers: [],
     jackpot: 0,
-    lotteryIndex: null
+    lotteryIndex: null,
+    remainingTimeAbort: 999,
 };
 
 class App extends Component {
@@ -83,7 +84,6 @@ class App extends Component {
         const commitEvent = this.state.contract.events.NewCommit();
         commitEvent.on('data', async ({transactionHash}) => {
             if (!this.state.transactionHashes.includes(transactionHash)) {
-                console.log("commitEvent");
                 this.setState({
                     transactionHashes: [...this.state.transactionHashes, transactionHash]
                 });
@@ -137,7 +137,6 @@ class App extends Component {
         lotteryEndedEvent.on('data', async ({id, returnValues}) => {
                 console.log("ENDED , ", id);
                 if (!this.state.transactionHashes.includes(id)) {
-                    console.log("lotterEndedEvent");
                     this.setState({
                         transactionHashes: [...this.state.transactionHashes, id],
                         winners: returnValues.winners
@@ -161,12 +160,7 @@ class App extends Component {
 
         this.timer = setInterval(() => {
             this.getRemainingTime()
-        }, 1000);
-
-        //TODO remove after testing
-        this.timerBalance = setInterval(() => {
-            this.getBalance();
-        }, 5000);
+        }, 2000);
 
     }
 
@@ -189,29 +183,35 @@ class App extends Component {
         if (remainingTime <= 0 || this.state.currentPhase === 3) {
             remainingTime = 0;
         }
+        let openPhase = new Date(this.state.timestamps['start']);
+        let abort = openPhase.setSeconds(openPhase.getSeconds() + this.state.timers['TO_ABORT']);
+        let remainingTimeAbort = abort - Date.now();
+        //If payout phase then just show 0
+        if(openPhase.getFullYear()==1970){
+            remainingTimeAbort=999;
+        }else if (remainingTimeAbort <= 0) {
+            remainingTimeAbort = 0;
+        }
+        console.log(remainingTime)
         this.setState({
-            timeLeft: remainingTime
+            timeLeft: remainingTime,
+            remainingTimeAbort
         });
     }
 
-    async getBalance() {
-        if (this.state.user) {
-            let balance = await this.state.contract.methods
+    async getJackpot() {
+        return await this.state.contract.methods
                 .getBalance()
                 .call({from: this.state.user})
                 .then(res => {
-                    return this.hexToNumberString(res._hex)
+                    return this.state.web3.utils.fromWei(this.hexToNumberString(res._hex))/2;
                 });
-            return this.state.web3.utils.fromWei(balance)
-
-        }
     }
 
     getUser() {
         return this.state.web3.eth
             .getAccounts()
             .then(addresses => {
-                console.log(addresses)
                 return addresses[0];
             })
             .catch(err => {
@@ -224,7 +224,6 @@ class App extends Component {
             .getCurrentTimestamp()
             .call({from: this.state.user})
             .then(res => {
-                console.log("TIMESTAMPS: ", res)
                 return (({open, start, payout, reveal}) => {
                     open = new Date(this.hexToNumber(open._hex) * 1000);
                     start = new Date(this.hexToNumber(start._hex) * 1000);
@@ -242,7 +241,7 @@ class App extends Component {
             .then(res => {
                 return (({TIME_LEFT_START, TO_ABORT, WAIT_TO_GO_TO_REVEAL, TO_REVEAL}) => {
                     TIME_LEFT_START = this.hexToNumber(TIME_LEFT_START._hex);
-                    TO_ABORT = this.hexToNumber(TO_ABORT._hex) * 1000;
+                    TO_ABORT = this.hexToNumber(TO_ABORT._hex);
                     WAIT_TO_GO_TO_REVEAL = this.hexToNumber(WAIT_TO_GO_TO_REVEAL._hex);
                     TO_REVEAL = this.hexToNumber(TO_REVEAL._hex);
                     return {TIME_LEFT_START, TO_ABORT, WAIT_TO_GO_TO_REVEAL, TO_REVEAL}
@@ -277,12 +276,9 @@ class App extends Component {
             fee: await this.getFee(),
             timers: await this.getTimers(),
             hasCommitted: await this.hasCommitted(),
-        });
-
-        this.setState({
-            jackpot: await this.getBalance() / 2,
+            jackpot: await this.getJackpot(),
             lotteryIndex: await this.getLotteryIndex()
-        })
+        });
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time

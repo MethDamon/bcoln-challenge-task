@@ -58,10 +58,9 @@ const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft, jackpot}) =
                                         'background-color, color, opacity'
                                 }}
                                 duration={600}
-                                formatValue={(n) => {
-                                    let splittedNum = (''+n).split('.');
-                                    if (splittedNum.length > 3) {
-                                        return `${n.toFixed(5)} ETH`
+                                formatValue={n=>{
+                                    if(n%1!==0){
+                                        return `${n.toFixed(4)} ETH`
                                     }
                                     return `${n} ETH`
                                 }}/>
