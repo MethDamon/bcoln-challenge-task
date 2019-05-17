@@ -96,14 +96,15 @@ class Lottery extends Component {
 
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
-        let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
-        if (!!chosenNumbers && commitTimestamps.toString() === this.props.timestamps['commit'].toString()) {
+        let lotteryIndex = await this.props.cookies.get('lotteryIndex');
+
+        if (!!chosenNumbers && lotteryIndex.toString() === this.props.lotteryIndex.toString()) {
             this.setState({
                 chosenNumbers
             })
         } else {
             this.props.cookies.remove('chosenNumbers', {path: '/'});
-            this.props.cookies.remove('commitTimestamp', {path: '/'});
+            this.props.cookies.remove('lotteryIndex', {path: '/'});
 
         }
         this.createTable();
@@ -179,10 +180,11 @@ class Lottery extends Component {
                 })
                 .on('confirmation',(confirmationNumber)=>{
                     if(confirmationNumber===1){
+                        console.log(this.state.chosenNumbers)
                         this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
                         //save the timestamp of the commit phase and used it as id for saving only the numbers
                         //of the current lottery
-                        this.props.cookies.set('commitTimestamp', this.props.timestamps['commit'], {path: '/'});
+                        this.props.cookies.set('lotteryIndex', this.props.lotteryIndex, {path: '/'});
                         this.props.transactionNotification('close',tx);
                         this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
                     }

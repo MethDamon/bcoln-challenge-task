@@ -22,25 +22,25 @@
       "signature": "0x15c4a99f"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.7+commit.6da8b019\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"name\":\"input\",\"type\":\"bytes\"}],\"name\":\"generateWinningNumbers\",\"outputs\":[{\"name\":\"winning_numbers\",\"type\":\"uint8[2]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/ilecipi/Workspace/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol\":\"WinningNumbersGenerator\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/ilecipi/Workspace/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol\":{\"keccak256\":\"0xcac5acda2c7bb7d1066a192cd9627bf25c27231bc71b4a5fa0dbc9b143f026f4\",\"urls\":[\"bzzr://04301dedc9da729aa3027965896c366fc205abfab7bea7701d9f3d647a10444d\"]},\"solidity-bytes-utils/contracts/BytesLib.sol\":{\"keccak256\":\"0xdd38cd94f336b6f3a7ab680b0c1c1b8b61af23a0197d80ee9c15ea883dab486a\",\"urls\":[\"bzzr://cef8ba4556f0f07f985124f66111f46a5491cb184ed286bb953b37809041f588\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b50610407806100206000396000f3fe608060405234801561001057600080fd5b5060043610610048576000357c01000000000000000000000000000000000000000000000000000000009004806315c4a99f1461004d575b600080fd5b6101066004803603602081101561006357600080fd5b810190808035906020019064010000000081111561008057600080fd5b82018360208201111561009257600080fd5b803590602001918460018302840111640100000000831117156100b457600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f820116905080830192505050505050509192919290505050610144565b6040518082600260200280838360005b83811015610131578082015181840152602081019050610116565b5050505090500191505060405180910390f35b61014c6103b9565b606061018d610168600060018661027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060606101d06101ab600160028761027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060006101e860008461039190919063ffffffff16565b9050600061020060008461039190919063ffffffff16565b9050600160108360ff168161021157fe5b06019150600160108260ff168161022457fe5b060190508060ff168260ff1614156102535760108160ff16141561024b5760019050610252565b6001810190505b5b6040518060400160405280600160ff168152602001600260ff16815250945050505050919050565b60608183018451101561028d57600080fd5b60608215600081146102aa576040519150602082016040526102fb565b6040519150601f8416801560200281840101858101878315602002848b0101015b818310156102e857805183526020830192506020810190506102cb565b50868552601f19601f8301166040525050505b50809150509392505050565b6060806040519050835180825260208201818101602087015b8183101561033d5780518352602083019250602081019050610320565b50855192508351830184528091508282019050602086015b818310156103725780518352602083019250602081019050610355565b50601f19601f8851850115830101166040525050508091505092915050565b600060208201835110156103a457600080fd5b60008260208501015190508091505092915050565b604051806040016040528060029060208202803883398082019150509050509056fea165627a7a72305820c9fd7be8d2ace4131b0610ad265ecee6743a70ac14b8c382e54460a9917fa8590029",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b5060043610610048576000357c01000000000000000000000000000000000000000000000000000000009004806315c4a99f1461004d575b600080fd5b6101066004803603602081101561006357600080fd5b810190808035906020019064010000000081111561008057600080fd5b82018360208201111561009257600080fd5b803590602001918460018302840111640100000000831117156100b457600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f820116905080830192505050505050509192919290505050610144565b6040518082600260200280838360005b83811015610131578082015181840152602081019050610116565b5050505090500191505060405180910390f35b61014c6103b9565b606061018d610168600060018661027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060606101d06101ab600160028761027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060006101e860008461039190919063ffffffff16565b9050600061020060008461039190919063ffffffff16565b9050600160108360ff168161021157fe5b06019150600160108260ff168161022457fe5b060190508060ff168260ff1614156102535760108160ff16141561024b5760019050610252565b6001810190505b5b6040518060400160405280600160ff168152602001600260ff16815250945050505050919050565b60608183018451101561028d57600080fd5b60608215600081146102aa576040519150602082016040526102fb565b6040519150601f8416801560200281840101858101878315602002848b0101015b818310156102e857805183526020830192506020810190506102cb565b50868552601f19601f8301166040525050505b50809150509392505050565b6060806040519050835180825260208201818101602087015b8183101561033d5780518352602083019250602081019050610320565b50855192508351830184528091508282019050602086015b818310156103725780518352602083019250602081019050610355565b50601f19601f8851850115830101166040525050508091505092915050565b600060208201835110156103a457600080fd5b60008260208501015190508091505092915050565b604051806040016040528060029060208202803883398082019150509050509056fea165627a7a72305820c9fd7be8d2ace4131b0610ad265ecee6743a70ac14b8c382e54460a9917fa8590029",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.7+commit.6da8b019\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":true,\"inputs\":[{\"name\":\"input\",\"type\":\"bytes\"}],\"name\":\"generateWinningNumbers\",\"outputs\":[{\"name\":\"winning_numbers\",\"type\":\"uint8[2]\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/erionsula/Workspace/UZH/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol\":\"WinningNumbersGenerator\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/erionsula/Workspace/UZH/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol\":{\"keccak256\":\"0xcac5acda2c7bb7d1066a192cd9627bf25c27231bc71b4a5fa0dbc9b143f026f4\",\"urls\":[\"bzzr://04301dedc9da729aa3027965896c366fc205abfab7bea7701d9f3d647a10444d\"]},\"solidity-bytes-utils/contracts/BytesLib.sol\":{\"keccak256\":\"0xdd38cd94f336b6f3a7ab680b0c1c1b8b61af23a0197d80ee9c15ea883dab486a\",\"urls\":[\"bzzr://cef8ba4556f0f07f985124f66111f46a5491cb184ed286bb953b37809041f588\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610407806100206000396000f3fe608060405234801561001057600080fd5b5060043610610048576000357c01000000000000000000000000000000000000000000000000000000009004806315c4a99f1461004d575b600080fd5b6101066004803603602081101561006357600080fd5b810190808035906020019064010000000081111561008057600080fd5b82018360208201111561009257600080fd5b803590602001918460018302840111640100000000831117156100b457600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f820116905080830192505050505050509192919290505050610144565b6040518082600260200280838360005b83811015610131578082015181840152602081019050610116565b5050505090500191505060405180910390f35b61014c6103b9565b606061018d610168600060018661027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060606101d06101ab600160028761027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060006101e860008461039190919063ffffffff16565b9050600061020060008461039190919063ffffffff16565b9050600160108360ff168161021157fe5b06019150600160108260ff168161022457fe5b060190508060ff168260ff1614156102535760108160ff16141561024b5760019050610252565b6001810190505b5b6040518060400160405280600160ff168152602001600260ff16815250945050505050919050565b60608183018451101561028d57600080fd5b60608215600081146102aa576040519150602082016040526102fb565b6040519150601f8416801560200281840101858101878315602002848b0101015b818310156102e857805183526020830192506020810190506102cb565b50868552601f19601f8301166040525050505b50809150509392505050565b6060806040519050835180825260208201818101602087015b8183101561033d5780518352602083019250602081019050610320565b50855192508351830184528091508282019050602086015b818310156103725780518352602083019250602081019050610355565b50601f19601f8851850115830101166040525050508091505092915050565b600060208201835110156103a457600080fd5b60008260208501015190508091505092915050565b604051806040016040528060029060208202803883398082019150509050509056fea165627a7a7230582030de8946420c99c622ddf08e42d652d0eb6b0c65c78358c4506b3fbe5027fa3c0029",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b5060043610610048576000357c01000000000000000000000000000000000000000000000000000000009004806315c4a99f1461004d575b600080fd5b6101066004803603602081101561006357600080fd5b810190808035906020019064010000000081111561008057600080fd5b82018360208201111561009257600080fd5b803590602001918460018302840111640100000000831117156100b457600080fd5b91908080601f016020809104026020016040519081016040528093929190818152602001838380828437600081840152601f19601f820116905080830192505050505050509192919290505050610144565b6040518082600260200280838360005b83811015610131578082015181840152602081019050610116565b5050505090500191505060405180910390f35b61014c6103b9565b606061018d610168600060018661027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060606101d06101ab600160028761027b9092919063ffffffff16565b6040518060400160405280601f8152602001600081525061030790919063ffffffff16565b905060006101e860008461039190919063ffffffff16565b9050600061020060008461039190919063ffffffff16565b9050600160108360ff168161021157fe5b06019150600160108260ff168161022457fe5b060190508060ff168260ff1614156102535760108160ff16141561024b5760019050610252565b6001810190505b5b6040518060400160405280600160ff168152602001600260ff16815250945050505050919050565b60608183018451101561028d57600080fd5b60608215600081146102aa576040519150602082016040526102fb565b6040519150601f8416801560200281840101858101878315602002848b0101015b818310156102e857805183526020830192506020810190506102cb565b50868552601f19601f8301166040525050505b50809150509392505050565b6060806040519050835180825260208201818101602087015b8183101561033d5780518352602083019250602081019050610320565b50855192508351830184528091508282019050602086015b818310156103725780518352602083019250602081019050610355565b50601f19601f8851850115830101166040525050508091505092915050565b600060208201835110156103a457600080fd5b60008260208501015190508091505092915050565b604051806040016040528060029060208202803883398082019150509050509056fea165627a7a7230582030de8946420c99c622ddf08e42d652d0eb6b0c65c78358c4506b3fbe5027fa3c0029",
   "sourceMap": "80:922:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;80:922:2;;;;;;;",
   "deployedSourceMap": "80:922:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;80:922:2;;;;;;;;;;;;;;;;;;;;247:753;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;247:753:2;;;;;;;;;;21:11:-1;8;5:28;2:2;;;46:1;43;36:12;2:2;247:753:2;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;247:753:2;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;39:11;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;247:753:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;93:3;85:6;81:16;74:27;137:4;133:9;126:4;121:3;117:14;113:30;106:37;;169:3;161:6;157:16;147:26;;247:753:2;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;247:753:2;;;;;;;;;;;;;;;;;320:31;;:::i;:::-;363:15;381:33;396:17;408:1;411;396:5;:11;;:17;;;;;:::i;:::-;381:7;;;;;;;;;;;;;;;;;:14;;:33;;;;:::i;:::-;363:51;;424:15;442:33;457:17;469:1;472;457:5;:11;;:17;;;;;:::i;:::-;442:7;;;;;;;;;;;;;;;;;:14;;:33;;;;:::i;:::-;424:51;;485:26;520:12;530:1;520:2;:9;;:12;;;;:::i;:::-;485:48;;543:27;579:12;589:1;579:2;:9;;:12;;;;:::i;:::-;543:49;;649:1;646:2;625:20;:23;;;;;;;;:25;602:48;;709:1;706:2;684:21;:24;;;;;;;;:26;660:50;;748:21;724:45;;:20;:45;;;720:251;;;814:2;789:21;:27;;;785:176;;;860:1;836:25;;785:176;;;945:1;923:21;:23;899:47;;785:176;720:251;980:13;;;;;;;;988:1;980:13;;;;;;991:1;980:13;;;;;;;;;;;247:753;;;:::o;9430:2536:3:-;9570:12;9633:7;9624:6;:16;9606:6;:13;:35;;9598:44;;;;;;9653:22;9723:7;9716:15;9749:1;9744:1967;;;;11852:4;11846:11;11833:24;;11903:4;11892:9;11888:20;11882:4;11875:34;9709:2214;;9744:1967;9926:4;9920:11;9907:24;;10585:2;10576:7;10572:16;10967:9;10960:17;10954:4;10950:28;10938:9;10927;10923:25;10919:60;11015:7;11011:2;11007:16;11267:6;11253:9;11246:17;11240:4;11236:28;11224:9;11216:6;11212:22;11208:57;11204:70;11041:425;11300:3;11296:2;11293:11;11041:425;;;11444:2;11438:9;11434:2;11427:21;11341:4;11337:2;11333:13;11327:19;;11381:4;11377:2;11373:13;11367:19;;11041:425;;;11045:247;11502:7;11491:9;11484:26;11692:2;11688:7;11683:2;11679;11675:11;11671:25;11665:4;11658:39;9751:1960;;;9709:2214;;11950:9;11943:16;;;9430:2536;;;;;:::o;348:2956::-;482:12;510:22;715:4;709:11;696:24;;872:9;866:16;913:6;902:9;895:25;1155:4;1144:9;1140:20;1304:6;1300:2;1296:15;1498:4;1487:9;1483:20;1325:525;1525:3;1521:2;1518:11;1325:525;;;1832:2;1826:9;1822:2;1815:21;1632:4;1628:2;1624:13;1618:19;;1668:4;1664:2;1660:13;1654:19;;1325:525;;;1329:188;2067:10;2061:17;2051:27;;2127:9;2121:16;2113:6;2109:29;2098:9;2091:48;2283:3;2277:9;;2428:6;2424:2;2420:15;2413:22;;2497:4;2485:10;2481:21;2449:221;2524:3;2520:2;2517:11;2449:221;;;2652:2;2646:9;2642:2;2635:21;2561:4;2557:2;2553:13;2547:19;;2597:4;2593:2;2589:13;2583:19;;2449:221;;;2453:63;3204:2;3200:7;3181:2;3166:9;3160:16;3152:6;3148:29;3141:37;3136:3;3132:47;3128:56;3109:151;3103:4;3096:165;552:2719;;;3288:9;3281:16;;;348:2956;;;;:::o;13165:283::-;13239:7;13293:2;13284:6;:11;13266:6;:13;:30;;13258:39;;;;;;13307:16;13398:6;13391:4;13383:6;13379:17;13375:30;13369:37;13357:49;;13433:8;13426:15;;;13165:283;;;;:::o;80:922:2:-;;;;;;;;;;;29:2:-1;21:6;17:15;117:4;105:10;97:6;88:34;148:4;140:6;136:17;126:27;;0:157;80:922:2;;;;:::o",
   "source": "pragma solidity ^0.5.7;\n\nimport \"solidity-bytes-utils/contracts/BytesLib.sol\";\n\ncontract WinningNumbersGenerator {\n    using BytesLib for bytes;\n    bytes constant padding = hex\"00000000000000000000000000000000000000000000000000000000000000\";\n    function generateWinningNumbers(bytes memory input) public view returns (uint8[2] memory winning_numbers) {\n        bytes memory b1 = padding.concat(input.slice(0, 1));\n        bytes memory b2 = padding.concat(input.slice(1, 2));\n        uint8 first_winning_number = uint8(b1.toUint(0));\n        uint8 second_winning_number = uint8(b2.toUint(0));\n        first_winning_number = first_winning_number%16+1;\n        second_winning_number = second_winning_number%16+1;\n        if (first_winning_number == second_winning_number) {\n            if (second_winning_number == 16) {\n                second_winning_number = 1;\n            } else{\n                second_winning_number = second_winning_number+1;\n            }\n        }\n        return [1, 2];\n    }\n}",
-  "sourcePath": "/Users/ilecipi/Workspace/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol",
+  "sourcePath": "/Users/erionsula/Workspace/UZH/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol",
   "ast": {
-    "absolutePath": "/Users/ilecipi/Workspace/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol",
+    "absolutePath": "/Users/erionsula/Workspace/UZH/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol",
     "exportedSymbols": {
       "WinningNumbersGenerator": [
-        1070
+        1089
       ]
     },
-    "id": 1071,
+    "id": 1090,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 971,
+        "id": 990,
         "literals": [
           "solidity",
           "^",
@@ -53,10 +53,10 @@
       {
         "absolutePath": "solidity-bytes-utils/contracts/BytesLib.sol",
         "file": "solidity-bytes-utils/contracts/BytesLib.sol",
-        "id": 972,
+        "id": 991,
         "nodeType": "ImportDirective",
-        "scope": 1071,
-        "sourceUnit": 1317,
+        "scope": 1090,
+        "sourceUnit": 1336,
         "src": "25:53:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -67,31 +67,31 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1070,
+        "id": 1089,
         "linearizedBaseContracts": [
-          1070
+          1089
         ],
         "name": "WinningNumbersGenerator",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 975,
+            "id": 994,
             "libraryName": {
               "contractScope": null,
-              "id": 973,
+              "id": 992,
               "name": "BytesLib",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1316,
+              "referencedDeclaration": 1335,
               "src": "125:8:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_BytesLib_$1316",
+                "typeIdentifier": "t_contract$_BytesLib_$1335",
                 "typeString": "library BytesLib"
               }
             },
             "nodeType": "UsingForDirective",
             "src": "119:25:2",
             "typeName": {
-              "id": 974,
+              "id": 993,
               "name": "bytes",
               "nodeType": "ElementaryTypeName",
               "src": "138:5:2",
@@ -103,10 +103,10 @@
           },
           {
             "constant": true,
-            "id": 978,
+            "id": 997,
             "name": "padding",
             "nodeType": "VariableDeclaration",
-            "scope": 1070,
+            "scope": 1089,
             "src": "149:92:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -115,7 +115,7 @@
               "typeString": "bytes"
             },
             "typeName": {
-              "id": 976,
+              "id": 995,
               "name": "bytes",
               "nodeType": "ElementaryTypeName",
               "src": "149:5:2",
@@ -127,7 +127,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "00000000000000000000000000000000000000000000000000000000000000",
-              "id": 977,
+              "id": 996,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -146,21 +146,21 @@
           },
           {
             "body": {
-              "id": 1068,
+              "id": 1087,
               "nodeType": "Block",
               "src": "353:647:2",
               "statements": [
                 {
                   "assignments": [
-                    988
+                    1007
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 988,
+                      "id": 1007,
                       "name": "b1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "363:15:2",
                       "stateVariable": false,
                       "storageLocation": "memory",
@@ -169,7 +169,7 @@
                         "typeString": "bytes"
                       },
                       "typeName": {
-                        "id": 987,
+                        "id": 1006,
                         "name": "bytes",
                         "nodeType": "ElementaryTypeName",
                         "src": "363:5:2",
@@ -182,7 +182,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 997,
+                  "id": 1016,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -192,7 +192,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "30",
-                            "id": 993,
+                            "id": 1012,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -210,7 +210,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "31",
-                            "id": 994,
+                            "id": 1013,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -239,32 +239,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 991,
+                            "id": 1010,
                             "name": "input",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 980,
+                            "referencedDeclaration": 999,
                             "src": "396:5:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 992,
+                          "id": 1011,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "slice",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1125,
+                          "referencedDeclaration": 1144,
                           "src": "396:11:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$_t_uint256_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256,uint256) pure returns (bytes memory)"
                           }
                         },
-                        "id": 995,
+                        "id": 1014,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -288,32 +288,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 989,
+                        "id": 1008,
                         "name": "padding",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 978,
+                        "referencedDeclaration": 997,
                         "src": "381:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory",
                           "typeString": "bytes memory"
                         }
                       },
-                      "id": 990,
+                      "id": 1009,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "concat",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1088,
+                      "referencedDeclaration": 1107,
                       "src": "381:14:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_bytes_memory_ptr_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                         "typeString": "function (bytes memory,bytes memory) pure returns (bytes memory)"
                       }
                     },
-                    "id": 996,
+                    "id": 1015,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -332,15 +332,15 @@
                 },
                 {
                   "assignments": [
-                    999
+                    1018
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 999,
+                      "id": 1018,
                       "name": "b2",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "424:15:2",
                       "stateVariable": false,
                       "storageLocation": "memory",
@@ -349,7 +349,7 @@
                         "typeString": "bytes"
                       },
                       "typeName": {
-                        "id": 998,
+                        "id": 1017,
                         "name": "bytes",
                         "nodeType": "ElementaryTypeName",
                         "src": "424:5:2",
@@ -362,7 +362,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1008,
+                  "id": 1027,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -372,7 +372,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "31",
-                            "id": 1004,
+                            "id": 1023,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -390,7 +390,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "32",
-                            "id": 1005,
+                            "id": 1024,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -419,32 +419,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1002,
+                            "id": 1021,
                             "name": "input",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 980,
+                            "referencedDeclaration": 999,
                             "src": "457:5:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 1003,
+                          "id": 1022,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "slice",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1125,
+                          "referencedDeclaration": 1144,
                           "src": "457:11:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$_t_uint256_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256,uint256) pure returns (bytes memory)"
                           }
                         },
-                        "id": 1006,
+                        "id": 1025,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -468,32 +468,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 1000,
+                        "id": 1019,
                         "name": "padding",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 978,
+                        "referencedDeclaration": 997,
                         "src": "442:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory",
                           "typeString": "bytes memory"
                         }
                       },
-                      "id": 1001,
+                      "id": 1020,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "concat",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1088,
+                      "referencedDeclaration": 1107,
                       "src": "442:14:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_bytes_memory_ptr_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                         "typeString": "function (bytes memory,bytes memory) pure returns (bytes memory)"
                       }
                     },
-                    "id": 1007,
+                    "id": 1026,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -512,15 +512,15 @@
                 },
                 {
                   "assignments": [
-                    1010
+                    1029
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1010,
+                      "id": 1029,
                       "name": "first_winning_number",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "485:26:2",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -529,7 +529,7 @@
                         "typeString": "uint8"
                       },
                       "typeName": {
-                        "id": 1009,
+                        "id": 1028,
                         "name": "uint8",
                         "nodeType": "ElementaryTypeName",
                         "src": "485:5:2",
@@ -542,7 +542,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1017,
+                  "id": 1036,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -552,7 +552,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "30",
-                            "id": 1014,
+                            "id": 1033,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -577,32 +577,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1012,
+                            "id": 1031,
                             "name": "b1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 988,
+                            "referencedDeclaration": 1007,
                             "src": "520:2:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 1013,
+                          "id": 1032,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "toUint",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1255,
+                          "referencedDeclaration": 1274,
                           "src": "520:9:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$returns$_t_uint256_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256) pure returns (uint256)"
                           }
                         },
-                        "id": 1015,
+                        "id": 1034,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -624,7 +624,7 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 1011,
+                      "id": 1030,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -637,7 +637,7 @@
                       },
                       "typeName": "uint8"
                     },
-                    "id": 1016,
+                    "id": 1035,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -656,15 +656,15 @@
                 },
                 {
                   "assignments": [
-                    1019
+                    1038
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1019,
+                      "id": 1038,
                       "name": "second_winning_number",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "543:27:2",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -673,7 +673,7 @@
                         "typeString": "uint8"
                       },
                       "typeName": {
-                        "id": 1018,
+                        "id": 1037,
                         "name": "uint8",
                         "nodeType": "ElementaryTypeName",
                         "src": "543:5:2",
@@ -686,7 +686,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1026,
+                  "id": 1045,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -696,7 +696,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "30",
-                            "id": 1023,
+                            "id": 1042,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -721,32 +721,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1021,
+                            "id": 1040,
                             "name": "b2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 999,
+                            "referencedDeclaration": 1018,
                             "src": "579:2:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 1022,
+                          "id": 1041,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "toUint",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1255,
+                          "referencedDeclaration": 1274,
                           "src": "579:9:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$returns$_t_uint256_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256) pure returns (uint256)"
                           }
                         },
-                        "id": 1024,
+                        "id": 1043,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -768,7 +768,7 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 1020,
+                      "id": 1039,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -781,7 +781,7 @@
                       },
                       "typeName": "uint8"
                     },
-                    "id": 1025,
+                    "id": 1044,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -801,18 +801,18 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1033,
+                    "id": 1052,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1027,
+                      "id": 1046,
                       "name": "first_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1010,
+                      "referencedDeclaration": 1029,
                       "src": "602:20:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -827,7 +827,7 @@
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
                       },
-                      "id": 1032,
+                      "id": 1051,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -838,18 +838,18 @@
                           "typeIdentifier": "t_uint8",
                           "typeString": "uint8"
                         },
-                        "id": 1030,
+                        "id": 1049,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 1028,
+                          "id": 1047,
                           "name": "first_winning_number",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1010,
+                          "referencedDeclaration": 1029,
                           "src": "625:20:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint8",
@@ -861,7 +861,7 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "3136",
-                          "id": 1029,
+                          "id": 1048,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -887,7 +887,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1031,
+                        "id": 1050,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -914,25 +914,25 @@
                       "typeString": "uint8"
                     }
                   },
-                  "id": 1034,
+                  "id": 1053,
                   "nodeType": "ExpressionStatement",
                   "src": "602:48:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1041,
+                    "id": 1060,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1035,
+                      "id": 1054,
                       "name": "second_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1019,
+                      "referencedDeclaration": 1038,
                       "src": "660:21:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -947,7 +947,7 @@
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
                       },
-                      "id": 1040,
+                      "id": 1059,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -958,18 +958,18 @@
                           "typeIdentifier": "t_uint8",
                           "typeString": "uint8"
                         },
-                        "id": 1038,
+                        "id": 1057,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 1036,
+                          "id": 1055,
                           "name": "second_winning_number",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1019,
+                          "referencedDeclaration": 1038,
                           "src": "684:21:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint8",
@@ -981,7 +981,7 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "3136",
-                          "id": 1037,
+                          "id": 1056,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -1007,7 +1007,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1039,
+                        "id": 1058,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1034,7 +1034,7 @@
                       "typeString": "uint8"
                     }
                   },
-                  "id": 1042,
+                  "id": 1061,
                   "nodeType": "ExpressionStatement",
                   "src": "660:50:2"
                 },
@@ -1045,18 +1045,18 @@
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     },
-                    "id": 1045,
+                    "id": 1064,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "argumentTypes": null,
-                      "id": 1043,
+                      "id": 1062,
                       "name": "first_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1010,
+                      "referencedDeclaration": 1029,
                       "src": "724:20:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -1067,11 +1067,11 @@
                     "operator": "==",
                     "rightExpression": {
                       "argumentTypes": null,
-                      "id": 1044,
+                      "id": 1063,
                       "name": "second_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1019,
+                      "referencedDeclaration": 1038,
                       "src": "748:21:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -1085,11 +1085,11 @@
                     }
                   },
                   "falseBody": null,
-                  "id": 1063,
+                  "id": 1082,
                   "nodeType": "IfStatement",
                   "src": "720:251:2",
                   "trueBody": {
-                    "id": 1062,
+                    "id": 1081,
                     "nodeType": "Block",
                     "src": "771:200:2",
                     "statements": [
@@ -1100,18 +1100,18 @@
                             "typeIdentifier": "t_uint8",
                             "typeString": "uint8"
                           },
-                          "id": 1048,
+                          "id": 1067,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
                             "argumentTypes": null,
-                            "id": 1046,
+                            "id": 1065,
                             "name": "second_winning_number",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1019,
+                            "referencedDeclaration": 1038,
                             "src": "789:21:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint8",
@@ -1123,7 +1123,7 @@
                           "rightExpression": {
                             "argumentTypes": null,
                             "hexValue": "3136",
-                            "id": 1047,
+                            "id": 1066,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -1145,25 +1145,25 @@
                           }
                         },
                         "falseBody": {
-                          "id": 1060,
+                          "id": 1079,
                           "nodeType": "Block",
                           "src": "881:80:2",
                           "statements": [
                             {
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 1058,
+                                "id": 1077,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "leftHandSide": {
                                   "argumentTypes": null,
-                                  "id": 1054,
+                                  "id": 1073,
                                   "name": "second_winning_number",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 1019,
+                                  "referencedDeclaration": 1038,
                                   "src": "899:21:2",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint8",
@@ -1178,18 +1178,18 @@
                                     "typeIdentifier": "t_uint8",
                                     "typeString": "uint8"
                                   },
-                                  "id": 1057,
+                                  "id": 1076,
                                   "isConstant": false,
                                   "isLValue": false,
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "leftExpression": {
                                     "argumentTypes": null,
-                                    "id": 1055,
+                                    "id": 1074,
                                     "name": "second_winning_number",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 1019,
+                                    "referencedDeclaration": 1038,
                                     "src": "923:21:2",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_uint8",
@@ -1201,7 +1201,7 @@
                                   "rightExpression": {
                                     "argumentTypes": null,
                                     "hexValue": "31",
-                                    "id": 1056,
+                                    "id": 1075,
                                     "isConstant": false,
                                     "isLValue": false,
                                     "isPure": true,
@@ -1228,35 +1228,35 @@
                                   "typeString": "uint8"
                                 }
                               },
-                              "id": 1059,
+                              "id": 1078,
                               "nodeType": "ExpressionStatement",
                               "src": "899:47:2"
                             }
                           ]
                         },
-                        "id": 1061,
+                        "id": 1080,
                         "nodeType": "IfStatement",
                         "src": "785:176:2",
                         "trueBody": {
-                          "id": 1053,
+                          "id": 1072,
                           "nodeType": "Block",
                           "src": "818:58:2",
                           "statements": [
                             {
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 1051,
+                                "id": 1070,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "leftHandSide": {
                                   "argumentTypes": null,
-                                  "id": 1049,
+                                  "id": 1068,
                                   "name": "second_winning_number",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 1019,
+                                  "referencedDeclaration": 1038,
                                   "src": "836:21:2",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint8",
@@ -1268,7 +1268,7 @@
                                 "rightHandSide": {
                                   "argumentTypes": null,
                                   "hexValue": "31",
-                                  "id": 1050,
+                                  "id": 1069,
                                   "isConstant": false,
                                   "isLValue": false,
                                   "isPure": true,
@@ -1289,7 +1289,7 @@
                                   "typeString": "uint8"
                                 }
                               },
-                              "id": 1052,
+                              "id": 1071,
                               "nodeType": "ExpressionStatement",
                               "src": "836:25:2"
                             }
@@ -1306,7 +1306,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1064,
+                        "id": 1083,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1324,7 +1324,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "32",
-                        "id": 1065,
+                        "id": 1084,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1340,7 +1340,7 @@
                         "value": "2"
                       }
                     ],
-                    "id": 1066,
+                    "id": 1085,
                     "isConstant": false,
                     "isInlineArray": true,
                     "isLValue": false,
@@ -1353,30 +1353,30 @@
                       "typeString": "uint8[2] memory"
                     }
                   },
-                  "functionReturnParameters": 986,
-                  "id": 1067,
+                  "functionReturnParameters": 1005,
+                  "id": 1086,
                   "nodeType": "Return",
                   "src": "980:13:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 1069,
+            "id": 1088,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "generateWinningNumbers",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 981,
+              "id": 1000,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 980,
+                  "id": 999,
                   "name": "input",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1069,
+                  "scope": 1088,
                   "src": "279:18:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1385,7 +1385,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 979,
+                    "id": 998,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "279:5:2",
@@ -1401,15 +1401,15 @@
               "src": "278:20:2"
             },
             "returnParameters": {
-              "id": 986,
+              "id": 1005,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 985,
+                  "id": 1004,
                   "name": "winning_numbers",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1069,
+                  "scope": 1088,
                   "src": "320:31:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1419,7 +1419,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 982,
+                      "id": 1001,
                       "name": "uint8",
                       "nodeType": "ElementaryTypeName",
                       "src": "320:5:2",
@@ -1428,11 +1428,11 @@
                         "typeString": "uint8"
                       }
                     },
-                    "id": 984,
+                    "id": 1003,
                     "length": {
                       "argumentTypes": null,
                       "hexValue": "32",
-                      "id": 983,
+                      "id": 1002,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -1460,31 +1460,31 @@
               ],
               "src": "319:33:2"
             },
-            "scope": 1070,
+            "scope": 1089,
             "src": "247:753:2",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1071,
+        "scope": 1090,
         "src": "80:922:2"
       }
     ],
     "src": "0:1002:2"
   },
   "legacyAST": {
-    "absolutePath": "/Users/ilecipi/Workspace/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol",
+    "absolutePath": "/Users/erionsula/Workspace/UZH/bcoln-challenge-task/contracts/WinningNumbersGenerator.sol",
     "exportedSymbols": {
       "WinningNumbersGenerator": [
-        1070
+        1089
       ]
     },
-    "id": 1071,
+    "id": 1090,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 971,
+        "id": 990,
         "literals": [
           "solidity",
           "^",
@@ -1497,10 +1497,10 @@
       {
         "absolutePath": "solidity-bytes-utils/contracts/BytesLib.sol",
         "file": "solidity-bytes-utils/contracts/BytesLib.sol",
-        "id": 972,
+        "id": 991,
         "nodeType": "ImportDirective",
-        "scope": 1071,
-        "sourceUnit": 1317,
+        "scope": 1090,
+        "sourceUnit": 1336,
         "src": "25:53:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1511,31 +1511,31 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1070,
+        "id": 1089,
         "linearizedBaseContracts": [
-          1070
+          1089
         ],
         "name": "WinningNumbersGenerator",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 975,
+            "id": 994,
             "libraryName": {
               "contractScope": null,
-              "id": 973,
+              "id": 992,
               "name": "BytesLib",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1316,
+              "referencedDeclaration": 1335,
               "src": "125:8:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_BytesLib_$1316",
+                "typeIdentifier": "t_contract$_BytesLib_$1335",
                 "typeString": "library BytesLib"
               }
             },
             "nodeType": "UsingForDirective",
             "src": "119:25:2",
             "typeName": {
-              "id": 974,
+              "id": 993,
               "name": "bytes",
               "nodeType": "ElementaryTypeName",
               "src": "138:5:2",
@@ -1547,10 +1547,10 @@
           },
           {
             "constant": true,
-            "id": 978,
+            "id": 997,
             "name": "padding",
             "nodeType": "VariableDeclaration",
-            "scope": 1070,
+            "scope": 1089,
             "src": "149:92:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1559,7 +1559,7 @@
               "typeString": "bytes"
             },
             "typeName": {
-              "id": 976,
+              "id": 995,
               "name": "bytes",
               "nodeType": "ElementaryTypeName",
               "src": "149:5:2",
@@ -1571,7 +1571,7 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "00000000000000000000000000000000000000000000000000000000000000",
-              "id": 977,
+              "id": 996,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1590,21 +1590,21 @@
           },
           {
             "body": {
-              "id": 1068,
+              "id": 1087,
               "nodeType": "Block",
               "src": "353:647:2",
               "statements": [
                 {
                   "assignments": [
-                    988
+                    1007
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 988,
+                      "id": 1007,
                       "name": "b1",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "363:15:2",
                       "stateVariable": false,
                       "storageLocation": "memory",
@@ -1613,7 +1613,7 @@
                         "typeString": "bytes"
                       },
                       "typeName": {
-                        "id": 987,
+                        "id": 1006,
                         "name": "bytes",
                         "nodeType": "ElementaryTypeName",
                         "src": "363:5:2",
@@ -1626,7 +1626,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 997,
+                  "id": 1016,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -1636,7 +1636,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "30",
-                            "id": 993,
+                            "id": 1012,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -1654,7 +1654,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "31",
-                            "id": 994,
+                            "id": 1013,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -1683,32 +1683,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 991,
+                            "id": 1010,
                             "name": "input",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 980,
+                            "referencedDeclaration": 999,
                             "src": "396:5:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 992,
+                          "id": 1011,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "slice",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1125,
+                          "referencedDeclaration": 1144,
                           "src": "396:11:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$_t_uint256_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256,uint256) pure returns (bytes memory)"
                           }
                         },
-                        "id": 995,
+                        "id": 1014,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1732,32 +1732,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 989,
+                        "id": 1008,
                         "name": "padding",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 978,
+                        "referencedDeclaration": 997,
                         "src": "381:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory",
                           "typeString": "bytes memory"
                         }
                       },
-                      "id": 990,
+                      "id": 1009,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "concat",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1088,
+                      "referencedDeclaration": 1107,
                       "src": "381:14:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_bytes_memory_ptr_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                         "typeString": "function (bytes memory,bytes memory) pure returns (bytes memory)"
                       }
                     },
-                    "id": 996,
+                    "id": 1015,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1776,15 +1776,15 @@
                 },
                 {
                   "assignments": [
-                    999
+                    1018
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 999,
+                      "id": 1018,
                       "name": "b2",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "424:15:2",
                       "stateVariable": false,
                       "storageLocation": "memory",
@@ -1793,7 +1793,7 @@
                         "typeString": "bytes"
                       },
                       "typeName": {
-                        "id": 998,
+                        "id": 1017,
                         "name": "bytes",
                         "nodeType": "ElementaryTypeName",
                         "src": "424:5:2",
@@ -1806,7 +1806,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1008,
+                  "id": 1027,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -1816,7 +1816,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "31",
-                            "id": 1004,
+                            "id": 1023,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -1834,7 +1834,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "32",
-                            "id": 1005,
+                            "id": 1024,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -1863,32 +1863,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1002,
+                            "id": 1021,
                             "name": "input",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 980,
+                            "referencedDeclaration": 999,
                             "src": "457:5:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 1003,
+                          "id": 1022,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "slice",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1125,
+                          "referencedDeclaration": 1144,
                           "src": "457:11:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$_t_uint256_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256,uint256) pure returns (bytes memory)"
                           }
                         },
-                        "id": 1006,
+                        "id": 1025,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1912,32 +1912,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 1000,
+                        "id": 1019,
                         "name": "padding",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 978,
+                        "referencedDeclaration": 997,
                         "src": "442:7:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes_memory",
                           "typeString": "bytes memory"
                         }
                       },
-                      "id": 1001,
+                      "id": 1020,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "concat",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 1088,
+                      "referencedDeclaration": 1107,
                       "src": "442:14:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_bytes_memory_ptr_$returns$_t_bytes_memory_ptr_$bound_to$_t_bytes_memory_ptr_$",
                         "typeString": "function (bytes memory,bytes memory) pure returns (bytes memory)"
                       }
                     },
-                    "id": 1007,
+                    "id": 1026,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1956,15 +1956,15 @@
                 },
                 {
                   "assignments": [
-                    1010
+                    1029
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1010,
+                      "id": 1029,
                       "name": "first_winning_number",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "485:26:2",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -1973,7 +1973,7 @@
                         "typeString": "uint8"
                       },
                       "typeName": {
-                        "id": 1009,
+                        "id": 1028,
                         "name": "uint8",
                         "nodeType": "ElementaryTypeName",
                         "src": "485:5:2",
@@ -1986,7 +1986,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1017,
+                  "id": 1036,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -1996,7 +1996,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "30",
-                            "id": 1014,
+                            "id": 1033,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -2021,32 +2021,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1012,
+                            "id": 1031,
                             "name": "b1",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 988,
+                            "referencedDeclaration": 1007,
                             "src": "520:2:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 1013,
+                          "id": 1032,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "toUint",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1255,
+                          "referencedDeclaration": 1274,
                           "src": "520:9:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$returns$_t_uint256_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256) pure returns (uint256)"
                           }
                         },
-                        "id": 1015,
+                        "id": 1034,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2068,7 +2068,7 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 1011,
+                      "id": 1030,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -2081,7 +2081,7 @@
                       },
                       "typeName": "uint8"
                     },
-                    "id": 1016,
+                    "id": 1035,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2100,15 +2100,15 @@
                 },
                 {
                   "assignments": [
-                    1019
+                    1038
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 1019,
+                      "id": 1038,
                       "name": "second_winning_number",
                       "nodeType": "VariableDeclaration",
-                      "scope": 1068,
+                      "scope": 1087,
                       "src": "543:27:2",
                       "stateVariable": false,
                       "storageLocation": "default",
@@ -2117,7 +2117,7 @@
                         "typeString": "uint8"
                       },
                       "typeName": {
-                        "id": 1018,
+                        "id": 1037,
                         "name": "uint8",
                         "nodeType": "ElementaryTypeName",
                         "src": "543:5:2",
@@ -2130,7 +2130,7 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 1026,
+                  "id": 1045,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
@@ -2140,7 +2140,7 @@
                           {
                             "argumentTypes": null,
                             "hexValue": "30",
-                            "id": 1023,
+                            "id": 1042,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -2165,32 +2165,32 @@
                           ],
                           "expression": {
                             "argumentTypes": null,
-                            "id": 1021,
+                            "id": 1040,
                             "name": "b2",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 999,
+                            "referencedDeclaration": 1018,
                             "src": "579:2:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes_memory_ptr",
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 1022,
+                          "id": 1041,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "toUint",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1255,
+                          "referencedDeclaration": 1274,
                           "src": "579:9:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_bytes_memory_ptr_$_t_uint256_$returns$_t_uint256_$bound_to$_t_bytes_memory_ptr_$",
                             "typeString": "function (bytes memory,uint256) pure returns (uint256)"
                           }
                         },
-                        "id": 1024,
+                        "id": 1043,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2212,7 +2212,7 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 1020,
+                      "id": 1039,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -2225,7 +2225,7 @@
                       },
                       "typeName": "uint8"
                     },
-                    "id": 1025,
+                    "id": 1044,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2245,18 +2245,18 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1033,
+                    "id": 1052,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1027,
+                      "id": 1046,
                       "name": "first_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1010,
+                      "referencedDeclaration": 1029,
                       "src": "602:20:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -2271,7 +2271,7 @@
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
                       },
-                      "id": 1032,
+                      "id": 1051,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2282,18 +2282,18 @@
                           "typeIdentifier": "t_uint8",
                           "typeString": "uint8"
                         },
-                        "id": 1030,
+                        "id": 1049,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 1028,
+                          "id": 1047,
                           "name": "first_winning_number",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1010,
+                          "referencedDeclaration": 1029,
                           "src": "625:20:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint8",
@@ -2305,7 +2305,7 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "3136",
-                          "id": 1029,
+                          "id": 1048,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -2331,7 +2331,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1031,
+                        "id": 1050,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -2358,25 +2358,25 @@
                       "typeString": "uint8"
                     }
                   },
-                  "id": 1034,
+                  "id": 1053,
                   "nodeType": "ExpressionStatement",
                   "src": "602:48:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 1041,
+                    "id": 1060,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 1035,
+                      "id": 1054,
                       "name": "second_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1019,
+                      "referencedDeclaration": 1038,
                       "src": "660:21:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -2391,7 +2391,7 @@
                         "typeIdentifier": "t_uint8",
                         "typeString": "uint8"
                       },
-                      "id": 1040,
+                      "id": 1059,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2402,18 +2402,18 @@
                           "typeIdentifier": "t_uint8",
                           "typeString": "uint8"
                         },
-                        "id": 1038,
+                        "id": 1057,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "argumentTypes": null,
-                          "id": 1036,
+                          "id": 1055,
                           "name": "second_winning_number",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1019,
+                          "referencedDeclaration": 1038,
                           "src": "684:21:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_uint8",
@@ -2425,7 +2425,7 @@
                         "rightExpression": {
                           "argumentTypes": null,
                           "hexValue": "3136",
-                          "id": 1037,
+                          "id": 1056,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -2451,7 +2451,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1039,
+                        "id": 1058,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -2478,7 +2478,7 @@
                       "typeString": "uint8"
                     }
                   },
-                  "id": 1042,
+                  "id": 1061,
                   "nodeType": "ExpressionStatement",
                   "src": "660:50:2"
                 },
@@ -2489,18 +2489,18 @@
                       "typeIdentifier": "t_uint8",
                       "typeString": "uint8"
                     },
-                    "id": 1045,
+                    "id": 1064,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftExpression": {
                       "argumentTypes": null,
-                      "id": 1043,
+                      "id": 1062,
                       "name": "first_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1010,
+                      "referencedDeclaration": 1029,
                       "src": "724:20:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -2511,11 +2511,11 @@
                     "operator": "==",
                     "rightExpression": {
                       "argumentTypes": null,
-                      "id": 1044,
+                      "id": 1063,
                       "name": "second_winning_number",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1019,
+                      "referencedDeclaration": 1038,
                       "src": "748:21:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint8",
@@ -2529,11 +2529,11 @@
                     }
                   },
                   "falseBody": null,
-                  "id": 1063,
+                  "id": 1082,
                   "nodeType": "IfStatement",
                   "src": "720:251:2",
                   "trueBody": {
-                    "id": 1062,
+                    "id": 1081,
                     "nodeType": "Block",
                     "src": "771:200:2",
                     "statements": [
@@ -2544,18 +2544,18 @@
                             "typeIdentifier": "t_uint8",
                             "typeString": "uint8"
                           },
-                          "id": 1048,
+                          "id": 1067,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "leftExpression": {
                             "argumentTypes": null,
-                            "id": 1046,
+                            "id": 1065,
                             "name": "second_winning_number",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1019,
+                            "referencedDeclaration": 1038,
                             "src": "789:21:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_uint8",
@@ -2567,7 +2567,7 @@
                           "rightExpression": {
                             "argumentTypes": null,
                             "hexValue": "3136",
-                            "id": 1047,
+                            "id": 1066,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
@@ -2589,25 +2589,25 @@
                           }
                         },
                         "falseBody": {
-                          "id": 1060,
+                          "id": 1079,
                           "nodeType": "Block",
                           "src": "881:80:2",
                           "statements": [
                             {
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 1058,
+                                "id": 1077,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "leftHandSide": {
                                   "argumentTypes": null,
-                                  "id": 1054,
+                                  "id": 1073,
                                   "name": "second_winning_number",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 1019,
+                                  "referencedDeclaration": 1038,
                                   "src": "899:21:2",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint8",
@@ -2622,18 +2622,18 @@
                                     "typeIdentifier": "t_uint8",
                                     "typeString": "uint8"
                                   },
-                                  "id": 1057,
+                                  "id": 1076,
                                   "isConstant": false,
                                   "isLValue": false,
                                   "isPure": false,
                                   "lValueRequested": false,
                                   "leftExpression": {
                                     "argumentTypes": null,
-                                    "id": 1055,
+                                    "id": 1074,
                                     "name": "second_winning_number",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 1019,
+                                    "referencedDeclaration": 1038,
                                     "src": "923:21:2",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_uint8",
@@ -2645,7 +2645,7 @@
                                   "rightExpression": {
                                     "argumentTypes": null,
                                     "hexValue": "31",
-                                    "id": 1056,
+                                    "id": 1075,
                                     "isConstant": false,
                                     "isLValue": false,
                                     "isPure": true,
@@ -2672,35 +2672,35 @@
                                   "typeString": "uint8"
                                 }
                               },
-                              "id": 1059,
+                              "id": 1078,
                               "nodeType": "ExpressionStatement",
                               "src": "899:47:2"
                             }
                           ]
                         },
-                        "id": 1061,
+                        "id": 1080,
                         "nodeType": "IfStatement",
                         "src": "785:176:2",
                         "trueBody": {
-                          "id": 1053,
+                          "id": 1072,
                           "nodeType": "Block",
                           "src": "818:58:2",
                           "statements": [
                             {
                               "expression": {
                                 "argumentTypes": null,
-                                "id": 1051,
+                                "id": 1070,
                                 "isConstant": false,
                                 "isLValue": false,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "leftHandSide": {
                                   "argumentTypes": null,
-                                  "id": 1049,
+                                  "id": 1068,
                                   "name": "second_winning_number",
                                   "nodeType": "Identifier",
                                   "overloadedDeclarations": [],
-                                  "referencedDeclaration": 1019,
+                                  "referencedDeclaration": 1038,
                                   "src": "836:21:2",
                                   "typeDescriptions": {
                                     "typeIdentifier": "t_uint8",
@@ -2712,7 +2712,7 @@
                                 "rightHandSide": {
                                   "argumentTypes": null,
                                   "hexValue": "31",
-                                  "id": 1050,
+                                  "id": 1069,
                                   "isConstant": false,
                                   "isLValue": false,
                                   "isPure": true,
@@ -2733,7 +2733,7 @@
                                   "typeString": "uint8"
                                 }
                               },
-                              "id": 1052,
+                              "id": 1071,
                               "nodeType": "ExpressionStatement",
                               "src": "836:25:2"
                             }
@@ -2750,7 +2750,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 1064,
+                        "id": 1083,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -2768,7 +2768,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "32",
-                        "id": 1065,
+                        "id": 1084,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -2784,7 +2784,7 @@
                         "value": "2"
                       }
                     ],
-                    "id": 1066,
+                    "id": 1085,
                     "isConstant": false,
                     "isInlineArray": true,
                     "isLValue": false,
@@ -2797,30 +2797,30 @@
                       "typeString": "uint8[2] memory"
                     }
                   },
-                  "functionReturnParameters": 986,
-                  "id": 1067,
+                  "functionReturnParameters": 1005,
+                  "id": 1086,
                   "nodeType": "Return",
                   "src": "980:13:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 1069,
+            "id": 1088,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "generateWinningNumbers",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 981,
+              "id": 1000,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 980,
+                  "id": 999,
                   "name": "input",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1069,
+                  "scope": 1088,
                   "src": "279:18:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2829,7 +2829,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 979,
+                    "id": 998,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "279:5:2",
@@ -2845,15 +2845,15 @@
               "src": "278:20:2"
             },
             "returnParameters": {
-              "id": 986,
+              "id": 1005,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 985,
+                  "id": 1004,
                   "name": "winning_numbers",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1069,
+                  "scope": 1088,
                   "src": "320:31:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2863,7 +2863,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 982,
+                      "id": 1001,
                       "name": "uint8",
                       "nodeType": "ElementaryTypeName",
                       "src": "320:5:2",
@@ -2872,11 +2872,11 @@
                         "typeString": "uint8"
                       }
                     },
-                    "id": 984,
+                    "id": 1003,
                     "length": {
                       "argumentTypes": null,
                       "hexValue": "32",
-                      "id": 983,
+                      "id": 1002,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -2904,14 +2904,14 @@
               ],
               "src": "319:33:2"
             },
-            "scope": 1070,
+            "scope": 1089,
             "src": "247:753:2",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 1071,
+        "scope": 1090,
         "src": "80:922:2"
       }
     ],
@@ -2922,15 +2922,15 @@
     "version": "0.5.7+commit.6da8b019.Emscripten.clang"
   },
   "networks": {
-    "3": {
+    "5777": {
       "events": {},
       "links": {},
-      "address": "0x4E5EBf3e9F4a58D050C0d4a2251c99EAeEae5c98",
-      "transactionHash": "0x39286fc2182d64b37193b3ea0f295d37142372810e1ed4057a58b908674e1b0e"
+      "address": "0xF00320843Fd77f0ED756Fe022371FC9f50De890A",
+      "transactionHash": "0xbc470e2e8ba037a0dd6880d13c57b5b3b0e078f72534b4e1c89f12bd7ae06141"
     }
   },
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-05-17T08:54:23.558Z",
+  "updatedAt": "2019-05-17T12:22:07.264Z",
   "devdoc": {
     "methods": {}
   },

@@ -26,6 +26,10 @@ const styles = {
     Info: {
         fontWeight: "bold"
     },
+    TimeLeft: {
+        fontWeight: "bold",
+        float: "right"
+    },
     Jackpot: {
         fontWeight: "bold",
         fontSize: 17,
@@ -34,13 +38,18 @@ const styles = {
 };
 
 const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft, jackpot}) =>{
-    console.log(jackpot)
     return(
         <div style={styles.Panel}>
+            { gameStatus !== 'OPEN' ? (
+                <h5 style={styles.TimeLeft}>Time left: {getTimeString(timeLeft)}</h5>
+            ): null}
+            <br/>
+            <br/>
             <img style={styles.LotteryLogo} src={lotto} alt="Logo" />
+            <br/>
             <div>
                 <h5 style={styles.Jackpot}>Jackpot</h5>
-                <AnimatedNumber component="text" value={jackpot}
+                <AnimatedNumber value={jackpot}
                                 stepPrecision={4}
                                 style={{
                                     transition: '0.8s ease-out',
@@ -52,9 +61,7 @@ const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft, jackpot}) =
                                 formatValue={n => `${n} ETH` }/>
             </div>
             <h5 style={styles.Info}>Current Number Of Players: {nrOfPlayers}</h5>
-            {/*<div style={styles.Info}>Current Fee: {currentFee} WEI</div>*/}
             <h5 style={styles.Info}>Lottery Status: <GameStatusBadge status={gameStatus}/></h5>
-            <h5 style={styles.Info}>Time left: {getTimeString(timeLeft)}</h5>
         </div>
     );
 };

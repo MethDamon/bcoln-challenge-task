@@ -66,7 +66,8 @@ class App extends Component {
             transactionHashes: [],
             winners: [],
             winningNumbers: [],
-            jackpot: 0
+            jackpot: 0,
+            lotteryIndex: null
         }
     }
 
@@ -225,14 +226,13 @@ class App extends Component {
             .getCurrentTimestamp()
             .call({from: this.state.user})
             .then(res => {
-                console.log("TIMESTAMPS: ", res.commit._hex)
-                console.log("TIMESTAMPS: ", res[0]._hex)
-                return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
-                    commit = new Date(this.hexToNumber(commit._hex) * 1000);
-                    commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex) * 1000);
+                console.log("TIMESTAMPS: ", res)
+                return (({open, start, payout, reveal}) => {
+                    open = new Date(this.hexToNumber(open._hex) * 1000);
+                    start = new Date(this.hexToNumber(start._hex) * 1000);
                     payout = new Date(this.hexToNumber(payout._hex) * 1000);
                     reveal = new Date(this.hexToNumber(reveal._hex) * 1000);
-                    return {commit, commit_and_ready_for_reveal, payout, reveal}
+                    return {open, start, payout, reveal}
                 })(res);
             })
     }
@@ -242,12 +242,12 @@ class App extends Component {
             .getTimers()
             .call({from: this.state.user})
             .then(res => {
-                return (({LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}) => {
-                    LEFT_COMMIT_AND_REVEAL = this.hexToNumber(LEFT_COMMIT_AND_REVEAL._hex);
+                return (({TIME_LEFT_START, TO_ABORT, WAIT_TO_GO_TO_REVEAL, TO_REVEAL}) => {
+                    TIME_LEFT_START = this.hexToNumber(TIME_LEFT_START._hex);
                     TO_ABORT = this.hexToNumber(TO_ABORT._hex) * 1000;
-                    WAIT_TO_GO_TO_REVEAL_PHASE = this.hexToNumber(WAIT_TO_GO_TO_REVEAL_PHASE._hex);
+                    WAIT_TO_GO_TO_REVEAL = this.hexToNumber(WAIT_TO_GO_TO_REVEAL._hex);
                     TO_REVEAL = this.hexToNumber(TO_REVEAL._hex);
-                    return {LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}
+                    return {TIME_LEFT_START, TO_ABORT, WAIT_TO_GO_TO_REVEAL, TO_REVEAL}
                 })(res);
             })
     }
@@ -269,16 +269,6 @@ class App extends Component {
             })
     }
 
-    async getJackpot() {
-        return await this.state.contract.methods
-            .getJackpot()
-            .call({from: this.state.user})
-            .then(res => {
-                console.log(this.hexToNumber(res._hex))
-                return 23
-            })
-    }
-
     async loadDataFromSC() {
 
         this.setState({
@@ -292,7 +282,8 @@ class App extends Component {
         });
 
         this.setState({
-            jackpot: await this.getBalance() / 2
+            jackpot: await this.getBalance() / 2,
+            lotteryIndex: await this.getLotteryIndex()
         })
         //await  this.getNumberOfPlayers();
         //Load jackpot
@@ -354,6 +345,15 @@ class App extends Component {
             })
     }
 
+    getLotteryIndex() {
+        return this.state.contract.methods
+            .getLotteryIndex()
+            .call({from: this.state.user})
+            .then(res => {
+                return this.hexToNumber(res._hex)
+            })
+    }
+
     hasCommitted() {
         return this.state.contract.methods
             .user_committed()
@@ -366,9 +366,9 @@ class App extends Component {
     getTimerForPhase(phase) {
         switch (phase) {
             case 0:
-                return this.state.timers['LEFT_COMMIT_AND_REVEAL'];
+                return this.state.timers['TIME_LEFT_START'];
             case 1:
-                return this.state.timers['WAIT_TO_GO_TO_REVEAL_PHASE'];
+                return this.state.timers['WAIT_TO_GO_TO_REVEAL'];
             case 2:
                 return this.state.timers['TO_REVEAL'];
             case 3:
@@ -379,9 +379,9 @@ class App extends Component {
     getPhaseForTimestamp(status) {
         switch (status) {
             case 0:
-                return 'commit';
+                return 'open';
             case 1:
-                return 'commit_and_ready_for_reveal';
+                return 'start';
             case 2:
                 return 'reveal';
             case 3:

@@ -21,7 +21,7 @@ const GameStatusBadge = ({status}) =>(
 );
 
 const getStyle = (status) => {
-    return status === 'COMMITTED' ? styles.committed : status === 'READY FOR REVEAL' ? styles.readyForReveal: styles.reveal
+    return status === 'OPEN' ? styles.committed : status === 'STARTED' ? styles.readyForReveal: styles.reveal
 };
 
 export default GameStatusBadge

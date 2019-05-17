@@ -19,6 +19,7 @@ const Routes = ({state, cookies, transactionNotification, refreshOnModalClose}) 
                   cookies={cookies}
                   timeLeft={state.timeLeft}
                   hasCommitted={state.hasCommitted}
+                  lotteryIndex={state.lotteryIndex}
                   transactionNotification={transactionNotification}/>)
         }/>
         <Route path="/lottery" render={(props) => (
@@ -34,6 +35,7 @@ const Routes = ({state, cookies, transactionNotification, refreshOnModalClose}) 
                      timeLeft={state.timeLeft}
                      timestamps={state.timestamps}
                      hasCommitted={state.hasCommitted}
+                     lotteryIndex={state.lotteryIndex}
                      transactionNotification={transactionNotification}/>
         )
         }/>
@@ -52,6 +54,7 @@ const Routes = ({state, cookies, transactionNotification, refreshOnModalClose}) 
                     hasCommitted={state.hasCommitted}
                     transactionNotification={transactionNotification}
                     winners={state.winners}
+                    lotteryIndex={state.lotteryIndex}
                     refreshOnModalClose={refreshOnModalClose}
                     winningNumbers={state.winningNumbers}/>
         )

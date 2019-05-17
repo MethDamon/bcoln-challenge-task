@@ -10,7 +10,7 @@ const styles = {
         position: "relative",
         top: "25vh",
         width: "50%",
-        fontSize: '25px'
+        fontSize: '30px'
     },
     body: {
         display: "flex",
@@ -46,17 +46,17 @@ const WinnerModal = (props) => (
     <Modal style={styles.endModal} show={props.winningNumbers.length > 0}
            onHide={props.refreshOnModalClose}>
         <Modal.Header>
-            <Modal.Title style={{fontWeight: "bold", fontSize: "35px", textAlign: "center"}}>
+            <Modal.Title style={{fontWeight: "bold", fontSize: "40px", textAlign: "center"}}>
                 {props.winners.includes(props.user) ? (
-                        <div>
-                            {"Congratulations!"}
-                            <ModalTitle>{"You won the lottery"}</ModalTitle>
-                        </div>
+                    <div>
+                        {"Congratulations!"}
+                        <ModalTitle>{"You won the lottery"}</ModalTitle>
+                    </div>
                 ) : (
                     <div style={{color: "red"}}>
                         {"You Lost!"}
                     </div>
-                    )}
+                )}
             </Modal.Title>
         </Modal.Header>
         <Divider/>
@@ -64,7 +64,7 @@ const WinnerModal = (props) => (
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 <img style={{width: 150}} src={lottery} alt="Logo" />
                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                    <h3 style={{fontSize: "16px", textAlign: "center", fontWeight: "bold"}}>{"Winning Numbers:"}</h3>
+                    <h3 style={{fontSize: "21px", textAlign: "center", fontWeight: "bold"}}>{"Winning Numbers:"}</h3>
                     <div style={{display: 'flex', justifyContent: "space-evenly", marginTop: 20}}>
                         {props.winningNumbers.map(n => (
                             <div style={{fontSize: "30px", textAlign: "center", fontWeight: "bold", color: "white", background: "linear-gradient(60deg, #ffa726, #fb8c00)", borderRadius: "50%", width: 45}}>

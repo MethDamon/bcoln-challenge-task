@@ -6,7 +6,7 @@ contract WinningNumbersGeneratorInterface {
 }
 
 contract DLottery {
-    enum Phase { Commit, CommitAndReadyForReveal, Reveal, Payout }
+    enum Phase { Open, Started, Reveal, Payout }
 
     struct Lottery {
         Phase current_phase;
@@ -26,7 +26,8 @@ contract DLottery {
     //uint256 constant ENTRY_FEE = 581273793610390;
     uint256 constant ENTRY_FEE = (1 ether)/2;
     address owner;
-    uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
+    //uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
+    uint256 constant TIME_LEFT_START_PHASE = 60; // 30 seconds
     uint256 constant TIME_TO_ABORT =  10 * 60; // 10 minutes
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 10; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
@@ -37,8 +38,8 @@ contract DLottery {
 
     // time stamps of when the phases were entered
     struct TimeStamps {
-        uint256 commit;
-        uint256 commit_and_ready_for_reveal;
+        uint256 open;
+        uint256 start;
         uint256 reveal;
         uint256 payout;
     }
@@ -69,9 +70,8 @@ contract DLottery {
         winningNumbersGenerator = WinningNumbersGeneratorInterface(_winningNumbersGeneratorAddress);
         owner = msg.sender;
         Lottery memory initialLottery;
-        initialLottery.current_phase = Phase.Commit;
+        initialLottery.current_phase = Phase.Open;
         initialLottery.jackpot = address(this).balance/2;
-        initialLottery.current_timestamps = TimeStamps(block.timestamp, 0, 0, 0);
         lotteries.push(initialLottery);
     }
 
@@ -79,9 +79,9 @@ contract DLottery {
         return lotteries[currentLotteryIndex].committed;
     }
 
-    function getCurrentTimestamp() public view returns (uint256 commit, uint256 commit_and_ready_for_reveal, uint256 reveal, uint256 payout) {
-        return (lotteries[currentLotteryIndex].current_timestamps.commit,
-                lotteries[currentLotteryIndex].current_timestamps.commit_and_ready_for_reveal,
+    function getCurrentTimestamp() public view returns (uint256 open, uint256 start, uint256 reveal, uint256 payout) {
+        return (lotteries[currentLotteryIndex].current_timestamps.open,
+                lotteries[currentLotteryIndex].current_timestamps.start,
                 lotteries[currentLotteryIndex].current_timestamps.reveal,
                 lotteries[currentLotteryIndex].current_timestamps.payout);
     }
@@ -100,28 +100,32 @@ contract DLottery {
         return address(this).balance;
     }
 
+    function getLotteryIndex() public view returns (uint256) {
+        return currentLotteryIndex;
+    }
+
     function getTimers() public pure
-    returns (uint256 LEFT_COMMIT_AND_REVEAL, uint256 TO_ABORT, uint256 WAIT_TO_GO_TO_REVEAL_PHASE, uint256 TO_REVEAL) {
-        return (TIME_LEFT_COMMIT_AND_REVEAL,TIME_TO_ABORT,TIME_WAIT_TO_GO_TO_REVEAL_PHASE,TIME_TO_REVEAL);
+    returns (uint256 TIME_LEFT_START, uint256 TO_ABORT, uint256 WAIT_TO_GO_TO_REVEAL, uint256 TO_REVEAL) {
+        return (TIME_LEFT_START_PHASE,TIME_TO_ABORT,TIME_WAIT_TO_GO_TO_REVEAL_PHASE,TIME_TO_REVEAL);
     }
     function user_committed() public view returns (bool) {
         return !(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] == '');
     }
     function commit(bytes32 hash) public payable {
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] == '', 'User must not have already committed.');
-        require(msg.value >= ENTRY_FEE, 'Message has to have exactly the value for entrying the lottery.');
-        require(lotteries[currentLotteryIndex].current_phase == Phase.Commit || lotteries[currentLotteryIndex].current_phase == Phase.CommitAndReadyForReveal,
-            'Current phase needs to be Commit or CommitAndReadyForReveal.');
-        if (lotteries[currentLotteryIndex].current_phase == Phase.CommitAndReadyForReveal) {
-            require((block.timestamp - lotteries[currentLotteryIndex].current_timestamps.commit_and_ready_for_reveal) < TIME_LEFT_COMMIT_AND_REVEAL, 'Time to commit is over.');
+        require(msg.value >= ENTRY_FEE, 'Message has to have exactly the value for entering the lottery.');
+        require(lotteries[currentLotteryIndex].current_phase == Phase.Open || lotteries[currentLotteryIndex].current_phase == Phase.Started,
+            'Current phase needs to be Open or Started.');
+        if (lotteries[currentLotteryIndex].current_phase == Phase.Started) {
+            require((block.timestamp - lotteries[currentLotteryIndex].current_timestamps.start) < TIME_LEFT_START_PHASE, 'Time to commit is over.');
         }
         lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] = hash;
         uint256 new_number_of_participants = lotteries[currentLotteryIndex].committed.push(msg.sender);
-        if (lotteries[currentLotteryIndex].current_phase == Phase.Commit && new_number_of_participants == NUMBER_OF_REQUIRED_PARTICIPANTS) {
-            // Automatically go to commit and ready to reveal phase
-            emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.CommitAndReadyForReveal);
-            lotteries[currentLotteryIndex].current_phase = Phase.CommitAndReadyForReveal;
-            lotteries[currentLotteryIndex].current_timestamps.commit_and_ready_for_reveal = now;
+        if (lotteries[currentLotteryIndex].current_phase == Phase.Open && new_number_of_participants == NUMBER_OF_REQUIRED_PARTICIPANTS) {
+            // first user enters lottery -> lottery starts
+            emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Started);
+            lotteries[currentLotteryIndex].current_phase = Phase.Started;
+            lotteries[currentLotteryIndex].current_timestamps.start = now;
         }
         emit NewCommit(msg.sender, hash);
         time_stamps.push(now);
@@ -129,12 +133,12 @@ contract DLottery {
         block_difficulties.push(block.difficulty);
     }
     function reset() public {
-        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Commit);
+        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Open);
 
         Lottery memory newLottery;
         newLottery.jackpot = address(this).balance/2;
-        newLottery.current_timestamps = TimeStamps(block.timestamp, 0, 0, 0);
-        newLottery.current_phase = Phase.Commit;
+        newLottery.current_timestamps = TimeStamps(0, 0, 0, 0);
+        newLottery.current_phase = Phase.Open;
 
         lotteries.push(newLottery);
         currentLotteryIndex = currentLotteryIndex + 1;
@@ -142,9 +146,9 @@ contract DLottery {
     }
 
     function goToRevealPhase() payable public {
-        require(lotteries[currentLotteryIndex].current_phase == Phase.CommitAndReadyForReveal, 'Current phase needs to be CommitAndReadyForReveal');
+        require(lotteries[currentLotteryIndex].current_phase == Phase.Started, 'Current phase needs to be Started');
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'Sender of the message must have committed numbers.');
-        require((now - lotteries[currentLotteryIndex].current_timestamps.commit_and_ready_for_reveal) >=
+        require((now - lotteries[currentLotteryIndex].current_timestamps.start) >=
             TIME_WAIT_TO_GO_TO_REVEAL_PHASE, 'Waiting time needs to be over.');
         emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Reveal);
         lotteries[currentLotteryIndex].current_phase = Phase.Reveal;
