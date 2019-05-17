@@ -2,6 +2,10 @@ import React from 'react';
 import { Panel } from 'rsuite';
 import lotto from '../assets/lotto.png'
 import GameStatusBadge from "./GameStatusBadge";
+import AnimatedNumber from 'react-animated-number';
+import prettyBytes from 'pretty-bytes';
+
+
 
 const styles = {
     Panel: {
@@ -10,6 +14,8 @@ const styles = {
         color: "white",
         boxShadow: "0 1px 3px 0 rgba(0,0,0,.5)",
         width: 450,
+        padding: "8px",
+        borderRadius: "6px",
     },
     PanelHeader: {
         color: "white"
@@ -19,18 +25,37 @@ const styles = {
     },
     Info: {
         fontWeight: "bold"
+    },
+    Jackpot: {
+        fontWeight: "bold",
+        fontSize: 17,
+        margin: "5px"
     }
 };
 
-const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft}) =>{
+const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft, jackpot}) =>{
+    console.log(jackpot)
     return(
-        <Panel header={<img style={styles.LotteryLogo} src={lotto} alt="Logo" />} style={styles.Panel}>
-
-            <h4 style={styles.Info}>Current Number Of Players: {nrOfPlayers}</h4>
+        <div style={styles.Panel}>
+            <img style={styles.LotteryLogo} src={lotto} alt="Logo" />
+            <div>
+                <h5 style={styles.Jackpot}>Jackpot</h5>
+                <AnimatedNumber component="text" value={jackpot}
+                                stepPrecision={4}
+                                style={{
+                                    transition: '0.8s ease-out',
+                                    fontSize: 18,
+                                    transitionProperty:
+                                        'background-color, color, opacity'
+                                }}
+                                duration={600}
+                                formatValue={n => `${n} ETH` }/>
+            </div>
+            <h5 style={styles.Info}>Current Number Of Players: {nrOfPlayers}</h5>
             {/*<div style={styles.Info}>Current Fee: {currentFee} WEI</div>*/}
-            <h4 style={styles.Info}>Lottery Status: <GameStatusBadge status={gameStatus}/></h4>
-            <h4 style={styles.Info}>Time left: {getTimeString(timeLeft)}</h4>
-        </Panel>
+            <h5 style={styles.Info}>Lottery Status: <GameStatusBadge status={gameStatus}/></h5>
+            <h5 style={styles.Info}>Time left: {getTimeString(timeLeft)}</h5>
+        </div>
     );
 };
 

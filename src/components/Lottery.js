@@ -43,8 +43,10 @@ const styles = {
         flexDirection: "row",
         justifyContent: "center",
         flexWrap: "wrap",
-        borderColor: "#afafaf"
-    },
+        borderRadius: "6px",
+        border: "1px solid rgb(175,175,175)"
+
+},
     betButton: {
         width: 250,
         height: 50,
@@ -241,15 +243,16 @@ class Lottery extends Component {
                             currentBet={this.props.fee}
                             gameStatus={GAME_STATUS[this.props.currentPhase]}
                             timeLeft={this.props.timeLeft}
+                            jackpot={this.props.jackpot}
                         />
                     </div>
                     <div style={styles.CurrentGameContainer}>
-                        <Panel style={styles.Ticket}
-                               header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>} bordered>
+                        <div style={styles.Ticket}>
+                            <h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>
                             <div style={styles.TicketNumbers}>
                                 {this.state.table}
                             </div>
-                        </Panel>
+                        </div>
                     </div>
                     <div style={styles.buttonGroup}>
                         <Button style={styles.abortRevealButton}

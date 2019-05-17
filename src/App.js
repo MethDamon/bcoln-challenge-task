@@ -14,7 +14,6 @@ import DLottery from "./abis/DLottery"
 import Routes from './routes/index'
 import {Notification} from "rsuite";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
-import GAME_STATUS from "./const/GameStatus";
 
 let web3 = window.web3;
 
@@ -67,6 +66,7 @@ class App extends Component {
             transactionHashes: [],
             winners: [],
             winningNumbers: [],
+            jackpot: 0
         }
     }
 
@@ -203,8 +203,8 @@ class App extends Component {
                 .then(res => {
                     return this.hexToNumberString(res._hex)
                 });
+            return this.state.web3.utils.fromWei(balance)
 
-            console.log(this.state.web3.utils.fromWei(balance))
         }
     }
 
@@ -269,11 +269,20 @@ class App extends Component {
             })
     }
 
+    async getJackpot() {
+        return await this.state.contract.methods
+            .getJackpot()
+            .call({from: this.state.user})
+            .then(res => {
+                console.log(this.hexToNumber(res._hex))
+                return 23
+            })
+    }
+
     async loadDataFromSC() {
+
         this.setState({
             user: await this.getUser(),
-        });
-        this.setState({
             timestamps: await this.getCurrentTimestamp(),
             currentPhase: await this.getCurrentPhase(),
             committed: await this.getCommitted(),
@@ -281,6 +290,10 @@ class App extends Component {
             timers: await this.getTimers(),
             hasCommitted: await this.hasCommitted(),
         });
+
+        this.setState({
+            jackpot: await this.getBalance() / 2
+        })
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -293,7 +306,6 @@ class App extends Component {
             .getCurrentPhase()
             .call({from: this.state.user})
             .then(res => {
-                console.log("CURRENT PHASE", res)
                 return res
             })
     }

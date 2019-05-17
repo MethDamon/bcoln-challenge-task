@@ -7,6 +7,7 @@ import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import { withRouter, Redirect } from 'react-router-dom'
+import WinnerModal from "../views/WinnerModal";
 
 let web3 = window.web3;
 
@@ -33,7 +34,7 @@ const styles = {
         height: 50,
         marginBottom: 10,
         marginTop: 10,
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 800,
         background: "linear-gradient(0deg, #ffa726, #fb8c00)",
         color: "#FFFFFF",
@@ -44,7 +45,7 @@ const styles = {
         marginTop: 20,
         marginBottom: 100,
         borderRadius: 7,
-        fontSize: 30
+        fontSize: 25
     }
 };
 
@@ -64,15 +65,17 @@ class Home extends Component {
     }
 
     render() {
+        console.log(this.props.jackpot)
         return(
             <div style={{height:'70vh'}}>
-            <Panel style={styles.HomeContainer}>
+                <Panel style={styles.HomeContainer}>
                 <Panel style={styles.Container}>
                     < CurrentGame style={styles.CurrentGame}
                                   nrOfPlayers={this.props.committed}
                                   currentBet={this.props.fee}
                                   gameStatus={GAME_STATUS[this.props.currentPhase]}
                                   timeLeft={this.props.timeLeft}
+                                  jackpot={this.props.jackpot}
                     />
                     <InputGroup inside style={styles.Inputs}>
                         <InputGroup.Addon>
@@ -110,9 +113,9 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         web3,
         contract,
         cookies,
-        timeLeft
+        timeLeft,
     };
-}
+};
 
 const mapActionsToProps = (dispatch) => {
     return {
