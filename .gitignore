@@ -22,10 +22,10 @@ src/Environment.js
 
 #Compiled contracts
 src/abis/*.json
+*.json
 
 # firebase
 .firebase/*
 firebase/*
 /build/*
 ./build/*
-
