@@ -58,7 +58,13 @@ const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft, jackpot}) =
                                         'background-color, color, opacity'
                                 }}
                                 duration={600}
-                                formatValue={n => `${n} ETH` }/>
+                                formatValue={(n) => {
+                                    let splittedNum = (''+n).split('.');
+                                    if (splittedNum.length > 3) {
+                                        return `${n.toFixed(5)} ETH`
+                                    }
+                                    return `${n} ETH`
+                                }}/>
             </div>
             <h5 style={styles.Info}>Current Number Of Players: {nrOfPlayers}</h5>
             <h5 style={styles.Info}>Lottery Status: <GameStatusBadge status={gameStatus}/></h5>

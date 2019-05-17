@@ -8,8 +8,8 @@ import styled from 'styled-components'
 const styles = {
     endModal: {
         position: "relative",
-        top: "25vh",
-        width: "50%",
+        top: "5vh",
+        width: "40%",
         fontSize: '30px'
     },
     body: {
@@ -61,7 +61,7 @@ const WinnerModal = (props) => (
         </Modal.Header>
         <Divider/>
         <Modal.Body>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 30}}>
                 <img style={{width: 150}} src={lottery} alt="Logo" />
                 <div style={{display: 'flex', flexDirection: 'column'}}>
                     <h3 style={{fontSize: "21px", textAlign: "center", fontWeight: "bold"}}>{"Winning Numbers:"}</h3>

@@ -26,6 +26,23 @@ const Loader = styled.div`
     border-color: red;
 `;
 
+const initialState = {
+    isLoading: true,
+    user: '',
+    timestamps: {},
+    committed: 0,
+    currentPhase: '',
+    fee: 0,
+    timers: {},
+    timeLeft: -1,
+    hasCommitted: false,
+    transactionHashes: [],
+    winners: [],
+    winningNumbers: [],
+    jackpot: 0,
+    lotteryIndex: null
+};
+
 class App extends Component {
 
     constructor() {
@@ -50,24 +67,10 @@ class App extends Component {
             DLottery.abi,
             CONTRACT_ADDRESS
         );
-
         this.state = {
-            isLoading: true,
+            ...initialState,
             web3: web3Instance,
             contract: dLotteryContract,
-            user: '',
-            timestamps: {},
-            committed: 0,
-            currentPhase: '',
-            fee: 0,
-            timers: {},
-            timeLeft: -1,
-            hasCommitted: false,
-            transactionHashes: [],
-            winners: [],
-            winningNumbers: [],
-            jackpot: 0,
-            lotteryIndex: null
         }
     }
 
@@ -152,8 +155,6 @@ class App extends Component {
                     transactionHashes: [...this.state.transactionHashes, id],
                     winningNumbers: [...this.state.winningNumbers, wNumber]
                 });
-                console.log('Winning Numbers -->', this.state.winningNumbers);
-                //await this.loadDataFromSC();
             }
         });
 
@@ -170,11 +171,8 @@ class App extends Component {
     }
 
     refreshOnModalClose(){
-            this.loadDataFromSC();
-            this.setState({
-                winners: [],
-                winningNumbers: []
-            })
+        this.props.history.push("/join");
+        window.location.reload()
     }
 
     componentWillUnmount() {

@@ -43,7 +43,8 @@ const styles = {
         flexDirection: "row",
         justifyContent: "center",
         flexWrap: "wrap",
-        borderColor: "#afafaf"
+        borderRadius: "6px",
+        border: "1px solid rgb(175,175,175)"
     },
     betButton: {
         width: 250,
@@ -167,8 +168,6 @@ class Reveal extends Component {
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
-
-
     }
 
     constructor() {
@@ -177,35 +176,6 @@ class Reveal extends Component {
             chosenNumbers: [-1, -1],
             counter: 0,
         }
-    }
-
-    revealButton() {
-        let tmp = Object.assign([], this.state.chosenNumbers);
-        tmp = tmp.sort((a, b) => {
-            return a - b
-        });
-        if (tmp.includes(-1)) {
-            return "Re-select your numbers";
-        } else {
-            return `Reveal your numbers: ${tmp[0]}, ${tmp[1]}`;
-        }
-    }
-
-    winningModal() {
-        let modalText = [];
-        if (this.props.winners.includes(this.props.user)) {
-            modalText[0] = 'Congratulations! You won the lottery!';
-        } else {
-            modalText[0] = 'You lost!\n'
-        }
-        if (this.props.winners.length > 0) {
-            modalText[1] = `${this.props.winners.length} participant won the lottery`;
-        } else {
-            modalText[1] = 'Nobody won the jackpot\n'
-        }
-        modalText[2] = `Extracted numbers: ${this.props.winningNumbers[0]} - ${this.props.winningNumbers[1]}`;
-
-        return modalText
     }
 
     abortCommitPhase() {
@@ -253,16 +223,16 @@ class Reveal extends Component {
                                           currentBet={this.props.fee}
                                           gameStatus={GAME_STATUS[this.props.currentPhase]}
                                           timeLeft={this.props.timeLeft}
+                                          jackpot={this.props.jackpot}
                             />
                         </div>
                         <div style={styles.CurrentGameContainer}>
-                            <Panel style={styles.Ticket}
-                                   header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>}
-                                   bordered>
+                            <div style={styles.Ticket}>
+                                <h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>
                                 <div style={styles.TicketNumbers}>
                                     {this.state.table}
                                 </div>
-                            </Panel>
+                            </div>
                         </div>
                         <div style={styles.buttonGroup}>
                             <Button style={styles.abortRevealButton}
@@ -271,26 +241,16 @@ class Reveal extends Component {
                                     }
                                     }
                             >
-                                Abort Commit Phase
+                                Abort
                             </Button>
                             <Button style={styles.betButton}
                                     color="green"
                                     disabled={this.state.chosenNumbers.includes(-1)}
                                     onClick={() => {
                                         this.revealNumbers()
-                                    }
-                                    }
+                                    }}
                             >
-                                {this.revealButton()}
-                            </Button>
-                            <Button style={styles.betButton}
-                                    color="green"
-                                    onClick={() => {
-                                        this.payout()
-                                    }
-                                    }
-                            >
-                                REVEAL
+                                Reveal
                             </Button>
                         </div>
                     </Panel>

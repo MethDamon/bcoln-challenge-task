@@ -45,8 +45,7 @@ const styles = {
         flexWrap: "wrap",
         borderRadius: "6px",
         border: "1px solid rgb(175,175,175)"
-
-},
+    },
     betButton: {
         width: 250,
         height: 50,
@@ -97,6 +96,8 @@ class Lottery extends Component {
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
         let lotteryIndex = await this.props.cookies.get('lotteryIndex');
+
+        console.log("MOUNTED")
 
         if (!!chosenNumbers && lotteryIndex.toString() === this.props.lotteryIndex.toString()) {
             this.setState({
@@ -262,7 +263,7 @@ class Lottery extends Component {
                                     this.reset()
                                 }
                                 }>
-                            Abort Commit Phase
+                            Abort
                         </Button>
                         {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
                         this.props.timeLeft === 0 ? (
