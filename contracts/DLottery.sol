@@ -111,6 +111,9 @@ contract DLottery {
     function user_committed() public view returns (bool) {
         return !(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] == '');
     }
+    function load() public payable {
+        require(msg.sender == owner, 'User must be owner of contract');
+    }
     function commit(bytes32 hash) public payable {
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] == '', 'User must not have already committed.');
         require(msg.value >= ENTRY_FEE, 'Message has to have exactly the value for entering the lottery.');
