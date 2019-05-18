@@ -192,7 +192,6 @@ class App extends Component {
         }else if (remainingTimeAbort <= 0) {
             remainingTimeAbort = 0;
         }
-        console.log(remainingTime)
         this.setState({
             timeLeft: remainingTime,
             remainingTimeAbort

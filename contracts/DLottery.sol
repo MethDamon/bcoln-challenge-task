@@ -29,7 +29,7 @@ contract DLottery {
     //uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
     uint256 constant TIME_LEFT_START_PHASE = 5*60; // 30 seconds
     uint256 constant TIME_TO_ABORT =  20 * 60; // 10 minutes
-    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 2*60; // 30 seconds
+    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 1*60; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
     uint256[] private time_stamps;
@@ -112,8 +112,16 @@ contract DLottery {
         return !(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] == '');
     }
     function load() public payable {
-        require(msg.sender == owner, 'User must be owner of contract');
+        //require(msg.sender == owner, 'User must be owner of contract');
+        emit NewCommit(msg.sender,'');
     }
+    function withdraw() public payable {
+        require(msg.sender == owner, 'User must be owner of contract');
+        require(lotteries[currentLotteryIndex].current_phase == Phase.Open);
+        address(msg.sender).transfer(address(this).balance);
+        emit NewCommit(msg.sender,'');
+    }
+
     function commit(bytes32 hash) public payable {
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] == '', 'User must not have already committed.');
         require(msg.value >= ENTRY_FEE, 'Message has to have exactly the value for entering the lottery.');
@@ -135,14 +143,19 @@ contract DLottery {
         block_numbers.push(block.number);
         block_difficulties.push(block.difficulty);
     }
-    function reset() public {
-        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Open);
+    function abort() public {
+        require(lotteries[currentLotteryIndex].current_phase != Phase.Open);
+        require((now - lotteries[currentLotteryIndex].current_timestamps.start) >=
+            TIME_TO_ABORT, 'Abort time needs to be over.');
+        resetLottery();
+    }
 
+    function resetLottery() private {
         Lottery memory newLottery;
         newLottery.jackpot = address(this).balance/2;
         newLottery.current_timestamps = TimeStamps(0, 0, 0, 0);
+        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Open);
         newLottery.current_phase = Phase.Open;
-
         lotteries.push(newLottery);
         currentLotteryIndex = currentLotteryIndex + 1;
         emit Reset(msg.sender);
@@ -217,6 +230,6 @@ contract DLottery {
             }
         }
         emit LotteryEnded(winners);
-        reset();
+        resetLottery();
     }
 }
