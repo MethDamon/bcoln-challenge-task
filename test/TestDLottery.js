@@ -1,16 +1,24 @@
 const DLottery = artifacts.require('./contracts/DLottery');
+const WinningNumbersGenerator = artifacts.require('./contract/WinningNumbersGenerator');
 
 contract("DLottery", accounts => {
+
+    let generator;
+    let lottery;
+
+    beforeEach(async function() {
+        generator = await WinningNumbersGenerator.new();
+        lottery = await DLottery.new(generator.address);
+    });
+
     it("should initialize the phase correctly", async () => {
-        let instance = await DLottery.deployed();
-        let phase = await instance.current_phase.call();
+        let phase = await lottery.getCurrentPhase.call();
         assert.equal(phase, 0);
     });
 
-    it('should be able to commit correctly', async(web3) => {
-        let instance = await DLottery.deployed();
-        let entry_fee = await instance.getFee.call();
-        let hash = web3.eth.util.soliditySha3('test');
-        await instance.commit.call("sdsd", {value: entry_fee});
+    it('should be able to commit correctly', async() => {
+        let entry_fee = await lottery.getFee.call();
+        let hash = web3.utils.soliditySha3('test');
+        await lottery.commit.call(hash, {value: entry_fee});
     });
 });
