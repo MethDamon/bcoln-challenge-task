@@ -21,9 +21,15 @@ contract("DLottery", accounts => {
         assert.equal(oldBalance, 0);
         let entry_fee = await lottery.getFee();
         let hash = web3.utils.soliditySha3('test');
+        let committed = await lottery.getCommitted();
+        assert.equal(committed.length, 0);
         await lottery.commit(hash, {value: entry_fee});
         let newBalance = await lottery.getBalance();
         assert.equal(web3.utils.toWei(newBalance, 'wei'), web3.utils.toWei(oldBalance + entry_fee, 'wei'));
+        let newPhase = await lottery.getCurrentPhase();
+        committed = await lottery.getCommitted();
+        assert.equal(committed.length, 1);
+        assert.equal(committed[0], accounts[0]);
     });
 
     it('should be able to load the contracts jackpot', async() => {
@@ -33,4 +39,6 @@ contract("DLottery", accounts => {
         let newBalance = await lottery.getBalance();
         assert.equal(web3.utils.toWei(oldBalance + load, 'wei'), web3.utils.toWei(newBalance, 'wei'));    
     });
+
+
 });
