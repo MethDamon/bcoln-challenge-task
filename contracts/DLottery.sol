@@ -222,6 +222,12 @@ contract DLottery {
             TIME_WAIT_TO_GO_TO_REVEAL_PHASE, 'Waiting time needs to be over.');
         switchToRevealPhase();
     }
+
+    function switchToRevealPhase() private {
+        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Reveal);
+        lotteries[currentLotteryIndex].current_phase = Phase.Reveal;
+        lotteries[currentLotteryIndex].current_timestamps.reveal = block.timestamp;
+    }
     
     // Function to reveal numbers
     // Used by participants to reveal their numbers in the reveal phase
