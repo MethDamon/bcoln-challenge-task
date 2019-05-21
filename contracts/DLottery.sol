@@ -32,6 +32,8 @@ contract DLottery {
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 1*60; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
+    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 2;
+
     uint256[] private time_stamps;
     uint256[] private block_numbers;
     uint256[] private block_difficulties;
@@ -142,6 +144,10 @@ contract DLottery {
         time_stamps.push(now);
         block_numbers.push(block.number);
         block_difficulties.push(block.difficulty);
+        if (lotteries[currentLotteryIndex].current_phase == Phase.Started && new_number_of_participants == NUMBER_OF_MAX_PARTICIPANTS) {
+            // first user enters lottery -> lottery starts
+            switchToRevealPhase();
+        }
     }
     function abort() public {
         require(lotteries[currentLotteryIndex].current_phase != Phase.Open);
@@ -161,14 +167,18 @@ contract DLottery {
         emit Reset(msg.sender);
     }
 
+    function switchToRevealPhase() private {
+        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Reveal);
+        lotteries[currentLotteryIndex].current_phase = Phase.Reveal;
+        lotteries[currentLotteryIndex].current_timestamps.reveal = block.timestamp;
+    }
+
     function goToRevealPhase() payable public {
         require(lotteries[currentLotteryIndex].current_phase == Phase.Started, 'Current phase needs to be Started');
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'Sender of the message must have committed numbers.');
         require((now - lotteries[currentLotteryIndex].current_timestamps.start) >=
             TIME_WAIT_TO_GO_TO_REVEAL_PHASE, 'Waiting time needs to be over.');
-        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Reveal);
-        lotteries[currentLotteryIndex].current_phase = Phase.Reveal;
-        lotteries[currentLotteryIndex].current_timestamps.reveal = block.timestamp;
+        switchToRevealPhase();
     }
     function reveal(uint8 firstNumber, uint8 secondNumber) payable public {
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
