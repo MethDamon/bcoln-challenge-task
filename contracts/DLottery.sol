@@ -15,7 +15,11 @@ contract DLottery {
         address[] revealed;
         mapping(address => bytes32) addresses_to_committed_numbers;
         mapping(uint256 => mapping(uint256 => address[])) revealed_numbers_to_addresses;
-        mapping(address => uint8[2]) addresses_to_revealed_numbers;
+        mapping(address => uint256[2]) addresses_to_revealed_numbers;
+        uint256[] all_numbers;
+        uint256[] time_stamps;
+        uint256[] block_numbers;
+        uint256[] block_difficulties;
         TimeStamps current_timestamps;
     }
 
@@ -33,11 +37,9 @@ contract DLottery {
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
     uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 2;
-
     uint256[] private time_stamps;
     uint256[] private block_numbers;
     uint256[] private block_difficulties;
-
     // time stamps of when the phases were entered
     struct TimeStamps {
         uint256 open;
@@ -52,8 +54,8 @@ contract DLottery {
     );
     event NewReveal(
         address sender,
-        uint8 first_number,
-        uint8 second_number
+        uint256 first_number,
+        uint256 second_number
     );
     event Reset(
         address sender
@@ -144,6 +146,10 @@ contract DLottery {
         time_stamps.push(now);
         block_numbers.push(block.number);
         block_difficulties.push(block.difficulty);
+
+        lotteries[currentLotteryIndex].time_stamps.push(now);
+        lotteries[currentLotteryIndex].block_numbers.push(block.number);
+        lotteries[currentLotteryIndex].block_difficulties.push(block.difficulty);
         if (lotteries[currentLotteryIndex].current_phase == Phase.Started && new_number_of_participants == NUMBER_OF_MAX_PARTICIPANTS) {
             // first user enters lottery -> lottery starts
             switchToRevealPhase();
@@ -180,7 +186,7 @@ contract DLottery {
             TIME_WAIT_TO_GO_TO_REVEAL_PHASE, 'Waiting time needs to be over.');
         switchToRevealPhase();
     }
-    function reveal(uint8 firstNumber, uint8 secondNumber) payable public {
+    function reveal(uint256 firstNumber, uint256 secondNumber) payable public {
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'User must have committed numbers.');
         require(lotteries[currentLotteryIndex].addresses_to_revealed_numbers[msg.sender].length != 0, 'User must not have aready revealed numbers.');
         require(lotteries[currentLotteryIndex].current_phase == Phase.Reveal, 'Current phase needs to be Reveal.');
@@ -189,13 +195,15 @@ contract DLottery {
         bytes32 hashed = keccak256(input);
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] == hashed, 'Hash must be the same as the one that is stored.');
         lotteries[currentLotteryIndex].revealed_numbers_to_addresses[firstNumber][secondNumber].push(msg.sender);
-        uint8[2] memory numbers = [firstNumber, secondNumber];
+        uint256[2] memory numbers = [firstNumber, secondNumber];
+        lotteries[currentLotteryIndex].all_numbers.push(firstNumber);
+        lotteries[currentLotteryIndex].all_numbers.push(secondNumber);
         lotteries[currentLotteryIndex].addresses_to_revealed_numbers[msg.sender] =  numbers;
         lotteries[currentLotteryIndex].revealed.push(msg.sender);
         emit NewReveal(msg.sender, firstNumber, secondNumber);
-        time_stamps.push(block.timestamp);
-        block_numbers.push(block.number);
-        block_difficulties.push(block.difficulty);
+        lotteries[currentLotteryIndex].time_stamps.push(block.timestamp);
+        lotteries[currentLotteryIndex].block_numbers.push(block.number);
+        lotteries[currentLotteryIndex].block_difficulties.push(block.difficulty);
         // Check if everyone that committed also revealed
         // Go to payout phase if yes
         if (lotteries[currentLotteryIndex].committed.length == lotteries[currentLotteryIndex].revealed.length) {
@@ -219,7 +227,8 @@ contract DLottery {
         }
         emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Payout);
         lotteries[currentLotteryIndex].current_phase = Phase.Payout;
-        bytes memory input = abi.encode(keccak256(abi.encode(block_difficulties, block_numbers, time_stamps)));
+        Lottery memory current_lottery = lotteries[currentLotteryIndex];
+        bytes memory input = abi.encode(keccak256(abi.encode(current_lottery.all_numbers, current_lottery.block_difficulties, current_lottery.block_numbers, current_lottery.time_stamps)));
         uint8[2] memory winning_numbers = winningNumbersGenerator.generateWinningNumbers(input);
         uint8 first_winning_number = winning_numbers[0];
         uint8 second_winning_number = winning_numbers[1];
