@@ -143,7 +143,6 @@ contract DLottery {
     
     // Function that allows the contract to receive funds
     function load() public payable {
-        //require(msg.sender == owner, 'User must be owner of contract');
         emit NewCommit(msg.sender,'');
     }
     
