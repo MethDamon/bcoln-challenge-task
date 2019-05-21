@@ -48,15 +48,13 @@ contract DLottery {
     // entry fee, uint256 constant ENTRY_FEE = 581273793610390;
     uint256 constant ENTRY_FEE = (1 ether)/10;
     address owner;
+    //uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
     uint256 constant TIME_LEFT_START_PHASE = 5*60; // 30 seconds
     uint256 constant TIME_TO_ABORT =  20 * 60; // 10 minutes
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 1*60; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
-    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 2;
-    uint256[] private time_stamps;
-    uint256[] private block_numbers;
-    uint256[] private block_difficulties;
+
 
     // time stamps of when the phases were entered
     struct TimeStamps {
@@ -145,6 +143,7 @@ contract DLottery {
     
     // Function that allows the contract to receive funds
     function load() public payable {
+        //require(msg.sender == owner, 'User must be owner of contract');
         emit NewCommit(msg.sender,'');
     }
     
@@ -179,17 +178,9 @@ contract DLottery {
             lotteries[currentLotteryIndex].current_timestamps.start = now;
         }
         emit NewCommit(msg.sender, hash);
-        time_stamps.push(now);
-        block_numbers.push(block.number);
-        block_difficulties.push(block.difficulty);
-
         lotteries[currentLotteryIndex].time_stamps.push(now);
         lotteries[currentLotteryIndex].block_numbers.push(block.number);
         lotteries[currentLotteryIndex].block_difficulties.push(block.difficulty);
-        if (lotteries[currentLotteryIndex].current_phase == Phase.Started && new_number_of_participants == NUMBER_OF_MAX_PARTICIPANTS) {
-            // first user enters lottery -> lottery starts
-            switchToRevealPhase();
-        }
     }
     
     // Aborts the current running lottery, can be called by everyone but requires the
@@ -219,10 +210,6 @@ contract DLottery {
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'Sender of the message must have committed numbers.');
         require((now - lotteries[currentLotteryIndex].current_timestamps.start) >=
             TIME_WAIT_TO_GO_TO_REVEAL_PHASE, 'Waiting time needs to be over.');
-        switchToRevealPhase();
-    }
-
-    function switchToRevealPhase() private {
         emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Reveal);
         lotteries[currentLotteryIndex].current_phase = Phase.Reveal;
         lotteries[currentLotteryIndex].current_timestamps.reveal = block.timestamp;
@@ -257,6 +244,12 @@ contract DLottery {
             payout();
         }
     }
+
+    event Log (
+        uint256 number
+    );
+
+    event Log2 (bytes b);
     
     // Payout method
     // Gets called automatically if everyone that committed also revealed (see reveal() method)
@@ -276,10 +269,12 @@ contract DLottery {
         Lottery memory current_lottery = lotteries[currentLotteryIndex];
         
         // Get the winning numbers from the second smart contracts
-        bytes memory input = abi.encode(keccak256(abi.encode(current_lottery.all_numbers, current_lottery.block_difficulties, current_lottery.block_numbers, current_lottery.time_stamps)));
+        bytes memory input = abi.encode(current_lottery.all_numbers, current_lottery.block_difficulties, current_lottery.block_numbers, current_lottery.time_stamps);
         uint8[2] memory winning_numbers = winningNumbersGenerator.generateWinningNumbers(input);
         uint8 first_winning_number = winning_numbers[0];
         uint8 second_winning_number = winning_numbers[1];
+        emit Log(first_winning_number);
+        emit Log(second_winning_number);
         
         // Get the participants that chose the winning numbers
         address[] memory winners = lotteries[currentLotteryIndex].revealed_numbers_to_addresses[first_winning_number][second_winning_number];
