@@ -43,14 +43,20 @@ const WinnerModal = (props) => (
             </Modal.Title>
         </Modal.Header>
         <Divider/>
+        <h3 style={{fontSize: "21px", textAlign: "center", fontWeight: "bold"}}>{'Number of Winners: '}</h3>
+        <div style={{display: 'flex', justifyContent: "space-evenly", marginTop: 20}}>
+            <div style={{fontSize: "30px", textAlign: "center", fontWeight: "bold", color: "white", background: "linear-gradient(60deg, #ffa726, #fb8c00)", borderRadius: "50%", width: 45}}>
+                {props.winners.length}
+            </div>
+        </div>
         <Modal.Body>
             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 30}}>
                 <img style={{width: 150}} src={lottery} alt="Logo" />
                 <div style={{display: 'flex', flexDirection: 'column'}}>
                     <h3 style={{fontSize: "21px", textAlign: "center", fontWeight: "bold"}}>{"Winning Numbers:"}</h3>
                     <div style={{display: 'flex', justifyContent: "space-evenly", marginTop: 20}}>
-                        {props.winningNumbers.map(n => (
-                            <div style={{fontSize: "30px", textAlign: "center", fontWeight: "bold", color: "white", background: "linear-gradient(60deg, #ffa726, #fb8c00)", borderRadius: "50%", width: 45}}>
+                        {props.winningNumbers.map((n, index )=> (
+                            <div key={index} style={{fontSize: "30px", textAlign: "center", fontWeight: "bold", color: "white", background: "linear-gradient(60deg, #ffa726, #fb8c00)", borderRadius: "50%", width: 45}}>
                                 {n}
                             </div>
                         ))}
