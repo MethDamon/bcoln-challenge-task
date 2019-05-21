@@ -50,6 +50,7 @@ class App extends Component {
         super();
         this.transactionNotification = this.transactionNotification.bind(this);
         this.refreshOnModalClose = this.refreshOnModalClose.bind(this);
+        this.changePath = this.changePath.bind(this);
         let CONTRACT_ADDRESS;
         let web3Instance = null;
 
@@ -72,6 +73,7 @@ class App extends Component {
             ...initialState,
             web3: web3Instance,
             contract: dLotteryContract,
+            path: window.location.pathname,
         }
     }
 
@@ -382,6 +384,12 @@ class App extends Component {
         }
     }
 
+    changePath(location){
+        this.setState({
+            path: location
+        })
+    }
+
     render() {
         return (
             <div className="App">
@@ -398,7 +406,9 @@ class App extends Component {
                                 <div style={{height: '5px'}}/>)}
                             <div>
                                 <BrowserRouter>
-                                    <Header/>
+                                    <Header changePath = {(location)=>{
+                                        this.changePath(location);
+                                }} state={this.state}/>
                                     <div id="style-7" style={{overflowY: 'auto'}}>
                                         <Routes state={this.state} cookies={this.props.cookies}
                                                 transactionNotification={(type, key, title, message) => this.transactionNotification(type, key, title, message)}
