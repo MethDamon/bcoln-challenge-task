@@ -48,7 +48,6 @@ contract DLottery {
     // entry fee, uint256 constant ENTRY_FEE = 581273793610390;
     uint256 constant ENTRY_FEE = (1 ether)/10;
     address owner;
-    //uint256 constant TIME_LEFT_COMMIT_AND_REVEAL = 60; // 30 seconds
     uint256 constant TIME_LEFT_START_PHASE = 5*60; // 30 seconds
     uint256 constant TIME_TO_ABORT =  20 * 60; // 10 minutes
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 1*60; // 30 seconds
@@ -58,6 +57,7 @@ contract DLottery {
     uint256[] private time_stamps;
     uint256[] private block_numbers;
     uint256[] private block_difficulties;
+
     // time stamps of when the phases were entered
     struct TimeStamps {
         uint256 open;
@@ -145,7 +145,6 @@ contract DLottery {
     
     // Function that allows the contract to receive funds
     function load() public payable {
-        //require(msg.sender == owner, 'User must be owner of contract');
         emit NewCommit(msg.sender,'');
     }
     
@@ -258,12 +257,6 @@ contract DLottery {
             payout();
         }
     }
-
-    event Log (
-        uint256 number
-    );
-
-    event Log2 (bytes b);
     
     // Payout method
     // Gets called automatically if everyone that committed also revealed (see reveal() method)
@@ -287,8 +280,6 @@ contract DLottery {
         uint8[2] memory winning_numbers = winningNumbersGenerator.generateWinningNumbers(input);
         uint8 first_winning_number = winning_numbers[0];
         uint8 second_winning_number = winning_numbers[1];
-        emit Log(first_winning_number);
-        emit Log(second_winning_number);
         
         // Get the participants that chose the winning numbers
         address[] memory winners = lotteries[currentLotteryIndex].revealed_numbers_to_addresses[first_winning_number][second_winning_number];
