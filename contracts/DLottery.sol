@@ -11,6 +11,7 @@ contract DLottery {
     struct Lottery {
         Phase current_phase;
         uint256 jackpot;
+        uint8[2] winning_numbers;
         address[] committed;
         address[] revealed;
         mapping(address => bytes32) addresses_to_committed_numbers;
@@ -23,7 +24,7 @@ contract DLottery {
         TimeStamps current_timestamps;
     }
 
-    Lottery[] lotteries;
+    mapping(uint => Lottery) lotteries;
     uint256 currentLotteryIndex = 0;
 
     WinningNumbersGeneratorInterface private winningNumbersGenerator;
@@ -34,9 +35,9 @@ contract DLottery {
     uint256 constant TIME_LEFT_START_PHASE = 5*60; // 30 seconds
     uint256 constant TIME_TO_ABORT =  20 * 60; // 10 minutes
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 1*60; // 30 seconds
-    uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
+    uint256 constant TIME_TO_REVEAL = 10 * 6; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
-    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 2;
+    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 1;
     uint256[] private time_stamps;
     uint256[] private block_numbers;
     uint256[] private block_difficulties;
@@ -73,10 +74,9 @@ contract DLottery {
         require(_winningNumbersGeneratorAddress != address(0));
         winningNumbersGenerator = WinningNumbersGeneratorInterface(_winningNumbersGeneratorAddress);
         owner = msg.sender;
-        Lottery memory initialLottery;
+        Lottery storage initialLottery = lotteries[currentLotteryIndex];
         initialLottery.current_phase = Phase.Open;
         initialLottery.jackpot = address(this).balance/2;
-        lotteries.push(initialLottery);
     }
 
     function getCommitted() public view returns (address[] memory) {
@@ -163,13 +163,12 @@ contract DLottery {
     }
 
     function resetLottery() private {
-        Lottery memory newLottery;
+        currentLotteryIndex++;
+        Lottery storage newLottery = lotteries[currentLotteryIndex];
         newLottery.jackpot = address(this).balance/2;
         newLottery.current_timestamps = TimeStamps(0, 0, 0, 0);
         emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Open);
         newLottery.current_phase = Phase.Open;
-        lotteries.push(newLottery);
-        currentLotteryIndex = currentLotteryIndex + 1;
         emit Reset(msg.sender);
     }
 
@@ -230,18 +229,18 @@ contract DLottery {
         Lottery memory current_lottery = lotteries[currentLotteryIndex];
         bytes memory input = abi.encode(keccak256(abi.encode(current_lottery.all_numbers, current_lottery.block_difficulties, current_lottery.block_numbers, current_lottery.time_stamps)));
         uint8[2] memory winning_numbers = winningNumbersGenerator.generateWinningNumbers(input);
+        lotteries[currentLotteryIndex].winning_numbers = winning_numbers;
         uint8 first_winning_number = winning_numbers[0];
         uint8 second_winning_number = winning_numbers[1];
         emit Log(first_winning_number);
         emit Log(second_winning_number);
         address[] memory winners = lotteries[currentLotteryIndex].revealed_numbers_to_addresses[first_winning_number][second_winning_number];
+        lotteries[currentLotteryIndex].jackpot = address(this).balance / 2;
+
         // Check if there are any winners
         if (winners.length != 0) {
-            // Get half of this contracts balance
-            uint256 balance = address(this).balance;
-            require(balance > 0, 'Contract needs to have balance.');
-            uint256 price = balance / 2;
-            uint256 price_per_winner = price / winners.length;
+            require(lotteries[currentLotteryIndex].jackpot > 0, 'Contract needs to have balance.');
+            uint256 price_per_winner = lotteries[currentLotteryIndex].jackpot / winners.length;
             // Payout the prices
             for (uint i = 0; i < winners.length; i++) {
                 address payable winners_address = address(uint160(winners[i]));
@@ -250,5 +249,26 @@ contract DLottery {
         }
         emit LotteryEnded(winners);
         resetLottery();
+    }
+
+    function getLotteries() public view returns ( uint256[] memory jackpots, uint8[] memory winning_numbers_per_lottery, uint256[] memory winners_per_lottery) {
+
+        // At least one Lottery has ended
+        if (currentLotteryIndex >= 1){
+
+            jackpots = new uint256[](currentLotteryIndex);
+            // 2 winning numbers per lottery need to be stored
+            winning_numbers_per_lottery = new uint8[](currentLotteryIndex * 2);
+            winners_per_lottery = new uint256[](currentLotteryIndex);
+
+            for (uint i = 0; i < currentLotteryIndex; i++) {
+                    jackpots[i] = lotteries[i].jackpot;
+                    winning_numbers_per_lottery[i*2] = lotteries[i].winning_numbers[0];
+                    winning_numbers_per_lottery[i*2+1] = lotteries[i].winning_numbers[1];
+                    winners_per_lottery[i] = (lotteries[i].revealed_numbers_to_addresses[lotteries[i].winning_numbers[0]][lotteries[i].winning_numbers[1]]).length;
+            }
+        }
+
+        return (jackpots, winning_numbers_per_lottery, winners_per_lottery);
     }
 }

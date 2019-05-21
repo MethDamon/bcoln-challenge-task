@@ -1,0 +1,154 @@
+import React, {Component} from 'react';
+import {connect} from 'react-redux'
+import 'rsuite/dist/styles/rsuite.min.css';
+import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
+import {withRouter} from 'react-router-dom';
+import {Card, CardContent} from "semantic-ui-react";
+import CardHeader from "../views/CardHeader";
+import {Typography} from "@material-ui/core";
+import {Button, Divider, Icon, Loader} from "rsuite";
+
+const styles = {
+    HistoryContainer: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "85vh",
+        justifyContent: "space-evenly",
+        overflow: "scroll",
+        overflowY: "auto",
+        overflowX: "hidden"
+    },
+    SummaryContainer: {
+        width: 400,
+        height: 240,
+        background: "white",
+        borderRadius: "15px 15px 15px 15px"
+    },
+    Container: {
+        width: 600,
+        height: "35vh",
+        background: "white",
+        borderRadius: "15px 15px 15px 15px"
+    },
+    hr: {
+        border: 0,
+        width: "100%",
+        background:"rgba(177,180,177,0.78)",
+        height: "1px",
+    },
+    Info: {
+        display: "flex",
+        alignItems: "baseline",
+        justifyContent: "center",
+        fontWeight: "bold",
+        fontSize: 16,
+    }
+};
+
+class History extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            jackpots: null,
+            winningNumbersPerLottery: null,
+            totalWinners: null
+        }
+    }
+
+    componentDidMount() {
+        this.getLotteries();
+    }
+
+    getLotteries = async () => {
+        await this.props.contract.methods
+            .getLotteries()
+            .call({from: this.props.user})
+            .then(res => {
+                console.log(res)
+                this.setState({
+                    jackpots: res.jackpots.map(num => this.props.web3.utils.fromWei(this.props.web3.utils.hexToNumberString(num._hex))),
+                    winningNumbersPerLottery: res.winning_numbers_per_lottery,
+                    totalWinners : res.winners_per_lottery.map(num => this.props.web3.utils.hexToNumberString(num._hex)),
+                })
+                console.log(this.state)
+            });
+    };
+
+    render() {
+
+        return (
+            <div style={styles.HistoryContainer}>
+                <div style={styles.SummaryContainer}>
+                    <Card>
+                        <CardHeader title='Summary' backgroundColor='linear-gradient(0deg, #26c6da, #00acc1)' borderRadius={"15px 15px 0 0"} boxShadow={"0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(0, 188, 212, 0.4)"} justifyContent={"center"}/>
+                        <CardContent style={{padding: 23, display: "flex", flexDirection: "column", justifyContent: "center", height: 174}}>
+                            {this.state.jackpots !== null && this.state.winningNumbersPerLottery !== null ? (
+                                <CardContent style={{padding: 23, display: "flex", flexDirection: "column", alignItems: "center"}}>
+                                    <div>
+                                        <Typography component="p" align="justify" color="textSecondary" style={{fontWeight: "bold", marginBottom: 5}}>
+                                            Total Amount Awarded:
+                                        </Typography>
+                                        <div style={styles.Info}>
+                                            {this.state.jackpots.reduce((total, jackpot) => total + Number(jackpot), 0)}
+                                            <Icon style={{marginLeft: 3}} icon={"money"} size="sm" />
+                                        </div>
+                                    </div>
+                                    <hr style={styles.hr}/>
+                                    <div>
+                                        <Typography component="p" align="justify" color="textSecondary" style={{fontWeight: "bold", marginBottom: 5}}>
+                                            Winning Tickets:
+                                        </Typography>
+                                        <div style={styles.Info}>
+                                            {this.state.totalWinners.length}
+                                            <Icon style={{marginLeft: 3}} icon={"ticket"} size="sm" />
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            ):(
+                                <Loader/>
+                            )}
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div style={styles.Container}>
+                    <Card>
+                        <CardHeader title='Played Lotteries' backgroundColor='linear-gradient(0deg, rgb(255, 167, 38), rgb(251, 140, 0))' borderRadius={"15px 15px 0 0"} boxShadow={"0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"}/>
+                        <CardContent>
+
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        );
+    }
+}
+
+const mapStateToProps = (state, {user, remainingTimeAbort, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, hasCommitted, transactionNotification}) => {
+    return {
+        isLoading: state.ui.isLoading,
+        user,
+        committed,
+        currentPhase,
+        fee,
+        web3,
+        contract,
+        cookies,
+        timeLeft,
+        timestamps,
+        hasCommitted,
+        transactionNotification,
+        remainingTimeAbort
+    };
+}
+
+const mapActionsToProps = (dispatch) => {
+    return {
+        startLoading: () => dispatch(uiStartLoading()),
+        stopLoading: () => dispatch(uiStopLoading()),
+    }
+};
+
+export default withRouter(connect(mapStateToProps, mapActionsToProps)(History));
