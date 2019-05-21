@@ -1,6 +1,6 @@
 pragma solidity ^0.5.7;
 
-import "./BytesLib.sol";
+import "solidity-bytes-utils/contracts/BytesLib.sol";
 
 contract WinningNumbersGenerator {
     
