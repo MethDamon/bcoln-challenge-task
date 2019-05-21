@@ -11,10 +11,10 @@ const Container = styled.div`
   color: white;
 `;
 
-const CardHeader = ({ title , iconName, backgroundColor, position, width, zIndex, borderRadius, boxShadow, justifyContent}) => (
+const CardHeader = ({ title , iconName, backgroundColor, position, width, zIndex, borderRadius, boxShadow, justifyContent, marginLeft}) => (
     <Container style={{background: backgroundColor, position: position, width: width, zIndex: zIndex, borderRadius: borderRadius, boxShadow: boxShadow, justifyContent}}>
-        <Icon icon={iconName} size="2x" />
-        <h2>{title}</h2>
+        <Icon style={{marginLeft: marginLeft}} icon={iconName} size="2x" />
+        <h2 style={{marginLeft: marginLeft}}>{title}</h2>
     </Container>
 );
 

@@ -6,7 +6,8 @@ import {withRouter} from 'react-router-dom';
 import {Card, CardContent} from "semantic-ui-react";
 import CardHeader from "../views/CardHeader";
 import {Typography} from "@material-ui/core";
-import {Button, Divider, Icon, Loader} from "rsuite";
+import {Icon, Loader} from "rsuite";
+import PlayedLottery from "../views/PlayedLottery"
 
 const styles = {
     HistoryContainer: {
@@ -25,9 +26,9 @@ const styles = {
         background: "white",
         borderRadius: "15px 15px 15px 15px"
     },
-    Container: {
+    PlayedLotteriesContainer: {
         width: 600,
-        height: "35vh",
+        height: 800,
         background: "white",
         borderRadius: "15px 15px 15px 15px"
     },
@@ -92,17 +93,17 @@ class History extends Component {
                                         </Typography>
                                         <div style={styles.Info}>
                                             {this.state.jackpots.reduce((total, jackpot) => total + Number(jackpot), 0)}
-                                            <Icon style={{marginLeft: 3}} icon={"money"} size="sm" />
+                                            <Icon style={{marginLeft: 4}} icon={"money"} size="sm" />
                                         </div>
                                     </div>
                                     <hr style={styles.hr}/>
                                     <div>
                                         <Typography component="p" align="justify" color="textSecondary" style={{fontWeight: "bold", marginBottom: 5}}>
-                                            Winning Tickets:
+                                            Total Winning Tickets:
                                         </Typography>
                                         <div style={styles.Info}>
-                                            {this.state.totalWinners.length}
-                                            <Icon style={{marginLeft: 3}} icon={"ticket"} size="sm" />
+                                            {this.state.totalWinners.reduce((total, winners) => total + Number(winners), 0)}
+                                            <Icon style={{marginLeft: 4}} icon={"ticket"} size="sm" />
                                         </div>
                                     </div>
                                 </CardContent>
@@ -113,11 +114,22 @@ class History extends Component {
                     </Card>
                 </div>
 
-                <div style={styles.Container}>
+                <div style={styles.PlayedLotteriesContainer}>
                     <Card>
-                        <CardHeader title='Played Lotteries' backgroundColor='linear-gradient(0deg, rgb(255, 167, 38), rgb(251, 140, 0))' borderRadius={"15px 15px 0 0"} boxShadow={"0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"}/>
-                        <CardContent>
-
+                        <CardHeader title='Played Lotteries' iconName={"history"} backgroundColor='linear-gradient(0deg, rgb(255, 167, 38), rgb(251, 140, 0))' borderRadius={"15px 15px 0 0"} boxShadow={"0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"} marginLeft={12}/>
+                        <CardContent style={{padding: 23, overflow: "hidden"}}>
+                            {this.state.jackpots !== null && this.state.winningNumbersPerLottery !== null && this.state.totalWinners !== null ? (
+                                <div>
+                                    {this.state.totalWinners.map((winner, i) => (
+                                        <div>
+                                            <PlayedLottery winner={winner} winningNumbers={[this.state.winningNumbersPerLottery[i*2], this.state.winningNumbersPerLottery[i*2+1]]} jackpot={this.state.jackpots[i]} lotteryIndex={i+1}/>
+                                            <hr style={styles.hr}/>
+                                        </div>
+                                        ))}
+                                </div>
+                            ):(
+                                <Loader/>
+                            )}
                         </CardContent>
                     </Card>
                 </div>
