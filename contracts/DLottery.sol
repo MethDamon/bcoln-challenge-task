@@ -54,8 +54,10 @@ contract DLottery {
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 1*60; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 60; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
-
-
+    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 2;
+    uint256[] private time_stamps;
+    uint256[] private block_numbers;
+    uint256[] private block_difficulties;
     // time stamps of when the phases were entered
     struct TimeStamps {
         uint256 open;
@@ -178,9 +180,17 @@ contract DLottery {
             lotteries[currentLotteryIndex].current_timestamps.start = now;
         }
         emit NewCommit(msg.sender, hash);
+        time_stamps.push(now);
+        block_numbers.push(block.number);
+        block_difficulties.push(block.difficulty);
+
         lotteries[currentLotteryIndex].time_stamps.push(now);
         lotteries[currentLotteryIndex].block_numbers.push(block.number);
         lotteries[currentLotteryIndex].block_difficulties.push(block.difficulty);
+        if (lotteries[currentLotteryIndex].current_phase == Phase.Started && new_number_of_participants == NUMBER_OF_MAX_PARTICIPANTS) {
+            // first user enters lottery -> lottery starts
+            switchToRevealPhase();
+        }
     }
     
     // Aborts the current running lottery, can be called by everyone but requires the
@@ -210,9 +220,7 @@ contract DLottery {
         require(lotteries[currentLotteryIndex].addresses_to_committed_numbers[msg.sender] != '', 'Sender of the message must have committed numbers.');
         require((now - lotteries[currentLotteryIndex].current_timestamps.start) >=
             TIME_WAIT_TO_GO_TO_REVEAL_PHASE, 'Waiting time needs to be over.');
-        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Reveal);
-        lotteries[currentLotteryIndex].current_phase = Phase.Reveal;
-        lotteries[currentLotteryIndex].current_timestamps.reveal = block.timestamp;
+        switchToRevealPhase();
     }
     
     // Function to reveal numbers
