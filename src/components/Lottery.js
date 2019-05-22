@@ -232,7 +232,9 @@ class Lottery extends Component {
             return (<Redirect to="/reveal"/>)
         }
         return (
-            <div style={{height: '70vh'}}>
+            <div id="style-7" style={{height: '80vh',  overflow: "scroll",
+                overflowY: "auto",
+                overflowX: "hidden"}}>
                 <Panel style={styles.HomeContainer}>
                     <Panel style={styles.Container}>
                         <div style={styles.CurrentGameContainer}>

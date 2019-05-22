@@ -8,6 +8,8 @@ import CardHeader from "../views/CardHeader";
 import {Typography} from "@material-ui/core";
 import {Icon, Loader} from "rsuite";
 import PlayedLottery from "../views/PlayedLottery"
+import './History.css';
+
 
 const styles = {
     HistoryContainer: {
@@ -27,6 +29,8 @@ const styles = {
         borderRadius: "15px 15px 15px 15px"
     },
     PlayedLotteriesContainer: {
+
+        overflow: "auto",
         width: 600,
         height: "50vh",
         background: "white",
@@ -114,10 +118,10 @@ class History extends Component {
                     </Card>
                 </div>
 
-                <div style={styles.PlayedLotteriesContainer}>
+                <div id="scroll" style={styles.PlayedLotteriesContainer}>
                     <Card>
                         <CardHeader title='Played Lotteries' iconName={"history"} backgroundColor='linear-gradient(0deg, rgb(255, 167, 38), rgb(251, 140, 0))' borderRadius={"15px 15px 0 0"} boxShadow={"0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(255, 152, 0, 0.4)"} marginLeft={12}/>
-                        <CardContent style={{padding: 23, overflow: "hidden"}}>
+                        <CardContent style={{padding: 23}}>
                             {this.state.jackpots !== null && this.state.winningNumbersPerLottery !== null && this.state.totalWinners !== null ? (
                                 <div>
                                     {this.state.totalWinners.map((winner, i) => (

@@ -19,9 +19,7 @@ const Title = styled.p`
 
 const Container = styled.div`
   color: white;
-  position: absolute;
   width:100%;
-  bottom:10px;
 `;
 const GithubLink = styled.a`
   color: white;

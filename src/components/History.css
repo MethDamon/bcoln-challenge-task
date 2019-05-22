@@ -1,0 +1,6 @@
+
+
+#scroll::-webkit-scrollbar{
+  width: 0em;
+  background: transparent;
+}

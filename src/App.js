@@ -409,12 +409,13 @@ class App extends Component {
                                     <Header changePath = {(location)=>{
                                         this.changePath(location);
                                 }} state={this.state}/>
-                                    <div id="style-7" style={{overflowY: 'auto'}}>
+                                    <div id="style-7" style={{overflowY: 'auto', height:'100%'}}>
                                         <Routes state={this.state} cookies={this.props.cookies}
                                                 transactionNotification={(type, key, title, message) => this.transactionNotification(type, key, title, message)}
                                                 refreshOnModalClose = {()=> this.refreshOnModalClose()}/>
-                                    </div>
                                     <Footer/>
+                                    </div>
+
                                 </BrowserRouter>
                             </div>
                         </div>

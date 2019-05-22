@@ -66,7 +66,9 @@ class Home extends Component {
 
     render() {
         return(
-            <div style={{height:'70vh'}}>
+            <div style={{height:'80vh',  overflow: "scroll",
+                overflowY: "auto",
+                overflowX: "hidden"}}>
                 <Panel style={styles.HomeContainer}>
                 <Panel style={styles.Container}>
                     < CurrentGame style={styles.CurrentGame}
