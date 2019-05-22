@@ -65,7 +65,6 @@ class Home extends Component {
     }
 
     render() {
-        console.log(this.props.jackpot)
         return(
             <div style={{height:'70vh'}}>
                 <Panel style={styles.HomeContainer}>

@@ -45,8 +45,7 @@ const styles = {
         flexWrap: "wrap",
         borderRadius: "6px",
         border: "1px solid rgb(175,175,175)"
-
-},
+    },
     betButton: {
         width: 250,
         height: 50,
@@ -72,7 +71,7 @@ const styles = {
         float: "right",
         marginRight: 15,
         marginTop: 15,
-        marginBottom: -15,
+        marginBottom: 0,
         fontSize: 20,
         fontWeight: 800,
     },
@@ -96,14 +95,14 @@ class Lottery extends Component {
 
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
-        let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
-        if (!!chosenNumbers && commitTimestamps.toString() === this.props.timestamps['commit'].toString()) {
+        let lotteryIndex = await this.props.cookies.get('lotteryIndex');
+        if (!!chosenNumbers && lotteryIndex.toString() === this.props.lotteryIndex.toString()) {
             this.setState({
                 chosenNumbers
             })
         } else {
             this.props.cookies.remove('chosenNumbers', {path: '/'});
-            this.props.cookies.remove('commitTimestamp', {path: '/'});
+            this.props.cookies.remove('lotteryIndex', {path: '/'});
 
         }
         this.createTable();
@@ -120,7 +119,11 @@ class Lottery extends Component {
     }
 
     chooseNumber(n) {
-        if(this.props.hasCommitted) return;
+        if (this.props.hasCommitted) {
+            console.log("COMMITED")
+            return
+        }
+        ;
         let numbers = Object.assign([], this.state.chosenNumbers);
         let table = Object.assign([], this.state.table);
 
@@ -132,7 +135,8 @@ class Lottery extends Component {
             //update the numbers which are no longer selected
             if (lastSelected > 0) {
                 table[lastSelected - 1] = (
-                    <Slot key={lastSelected - 1} number={lastSelected} chosenNumbers={numbers} hasCommitted = {this.props.hasCommitted} callback={() => {
+                    <Slot key={lastSelected - 1} number={lastSelected} chosenNumbers={numbers}
+                          hasCommitted={this.props.hasCommitted} callback={() => {
                         this.chooseNumber(lastSelected)
                     }}/>
                 );
@@ -167,65 +171,59 @@ class Lottery extends Component {
             let first_number = sortedNumbers[0];
             let second_number = sortedNumbers[1];
             let toHash = this.props.web3.eth.abi.encodeParameters(['uint8', 'address', 'uint8'], [first_number, this.props.user, second_number]);
-            console.log('hash input', toHash);
             let hash = this.props.web3.utils.soliditySha3(toHash);
-            console.log('hash output', hash);
-            let tx = Math.random()*10000;
+            let tx = Math.random() * 10000;
             this.props.contract.methods
                 .commit(hash)
-                .send({from: this.props.user, value: this.props.fee}, )
-                .on('transactionHash',()=>{
-                    this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+                .send({from: this.props.user, value: this.props.fee},)
+                .on('transactionHash', () => {
+                    this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
                 })
-                .on('confirmation',(confirmationNumber)=>{
-                    if(confirmationNumber===1){
-                        this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
-                        //save the timestamp of the commit phase and used it as id for saving only the numbers
-                        //of the current lottery
-                        this.props.cookies.set('commitTimestamp', this.props.timestamps['commit'], {path: '/'});
-                        this.props.transactionNotification('close',tx);
-                        this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                .on('confirmation', (confirmationNumber) => {
+                    if (confirmationNumber === 1) {
+                        this.props.transactionNotification('close', tx);
+                        this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
                     }
                 });
+            this.props.cookies.set('chosenNumbers', this.state.chosenNumbers, {path: '/'});
+            //save the timestamp of the commit phase and used it as id for saving only the numbers
+            //of the current lottery
+            this.props.cookies.set('lotteryIndex', this.props.lotteryIndex, {path: '/'});
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
     }
 
     goToRevealPhase() {
-        let tx = Math.random()*10000;
+        let tx = Math.random() * 10000;
         this.props.contract.methods
             .goToRevealPhase()
             .send({from: this.props.user})
-            .on('transactionHash',()=>{
-                this.props.transactionNotification('open', tx,'Transaction Sent', 'Your transaction is being validated...');
+            .on('transactionHash', () => {
+                this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
             })
-            .on('confirmation',(confirmationNumber)=>{
-                if(confirmationNumber===1){
-                    this.props.transactionNotification('close',tx);
-                    this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+            .on('confirmation', (confirmationNumber) => {
+                if (confirmationNumber === 1) {
+                    this.props.transactionNotification('close', tx);
+                    this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
                 }
             });
     }
 
     reset() {
+        let tx = Math.random() * 10000;
         this.props.contract.methods
-            .reset()
-            .send({ from: this.props.user }, () => {
+            .abort()
+            .send({from: this.props.user})
+            .on('transactionHash', () => {
+                this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
+            })
+            .on('confirmation', (confirmationNumber) => {
+                if (confirmationNumber === 1) {
+                    this.props.transactionNotification('close', tx);
+                    this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
+                }
                 window.location.reload();
-                let tx = Math.random() * 10000;
-                this.props.contract.methods
-                    .reset()
-                    .send({ from: this.props.user })
-                    .on('transactionHash', () => {
-                        this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
-                    })
-                    .on('confirmation', (confirmationNumber) => {
-                        if (confirmationNumber === 1) {
-                            this.props.transactionNotification('close', tx);
-                            this.props.transactionNotification('success', Math.random() * 10000, 'Transaction Validated', 'Your transaction has been validated');
-                        }
-                    });
             });
     }
 
@@ -234,62 +232,66 @@ class Lottery extends Component {
             return (<Redirect to="/reveal"/>)
         }
         return (
-            <div style={{height:'70vh'}}>
-            <Panel style={styles.HomeContainer}>
-                <Panel style={styles.Container}>
-                    <div style={styles.CurrentGameContainer}>
-                        <CurrentGame
-                            nrOfPlayers={this.props.committed}
-                            currentBet={this.props.fee}
-                            gameStatus={GAME_STATUS[this.props.currentPhase]}
-                            timeLeft={this.props.timeLeft}
-                            jackpot={this.props.jackpot}
-                        />
-                    </div>
-                    <div style={styles.CurrentGameContainer}>
-                        <div style={styles.Ticket}>
-                            <h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>
-                            <div style={styles.TicketNumbers}>
-                                {this.state.table}
+            <div style={{height: '70vh'}}>
+                <Panel style={styles.HomeContainer}>
+                    <Panel style={styles.Container}>
+                        <div style={styles.CurrentGameContainer}>
+                            <CurrentGame
+                                nrOfPlayers={this.props.committed}
+                                currentBet={this.props.fee}
+                                gameStatus={GAME_STATUS[this.props.currentPhase]}
+                                timeLeft={this.props.timeLeft}
+                                jackpot={this.props.jackpot}
+                            />
+                        </div>
+                        <div style={styles.CurrentGameContainer}>
+                            <div style={styles.Ticket}>
+                                <h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>
+                                <div style={styles.TicketNumbers}>
+                                    {this.state.table}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div style={styles.buttonGroup}>
-                        <Button style={styles.abortRevealButton}
-                                onClick={() => {
-                                    this.reset()
-                                }
-                                }>
-                            Abort Commit Phase
-                        </Button>
-                        {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
-                        this.props.timeLeft === 0 ? (
-                            <Button style={styles.abortRevealButton}
+                        <div style={styles.buttonGroup}>
+                            <Button color="red"
+                                    style={styles.abortRevealButton}
+                                    disabled={this.props.remainingTimeAbort > 0 || GAME_STATUS[this.props.currentPhase] == GAME_STATUS[0]}
                                     onClick={() => {
-                                        this.goToRevealPhase()
+                                        this.reset()
                                     }
                                     }>
-                                {'Go to reveal phase'}
+                                Abort
                             </Button>
-                        ) : (
-                            <Button color="green"
-                                    style={styles.betButton}
-                                    disabled={this.state.chosenNumbers.includes(-1)||this.props.hasCommitted}
-                                    onClick={() => {
-                                        this.joinLottery()
-                                    }
-                                    }>
-                                Buy
-                            </Button>)}
-                    </div>
+                            {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[1] &&
+                            this.props.timeLeft === 0 ? (
+                                <Button color="red"
+                                        style={styles.abortRevealButton}
+                                        disabled={this.props.remainingTimeAbort == 0}
+                                        onClick={() => {
+                                            this.goToRevealPhase()
+                                        }
+                                        }>
+                                    {'Go to reveal phase'}
+                                </Button>
+                            ) : (
+                                <Button color="green"
+                                        style={styles.betButton}
+                                        disabled={this.state.chosenNumbers.includes(-1) || this.props.hasCommitted || this.props.remainingTimeAbort == 0}
+                                        onClick={() => {
+                                            this.joinLottery()
+                                        }
+                                        }>
+                                    Buy
+                                </Button>)}
+                        </div>
+                    </Panel>
                 </Panel>
-            </Panel>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, hasCommitted,transactionNotification}) => {
+const mapStateToProps = (state, {user, remainingTimeAbort, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, hasCommitted, transactionNotification}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -302,7 +304,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         timeLeft,
         timestamps,
         hasCommitted,
-        transactionNotification
+        transactionNotification,
+        remainingTimeAbort
     };
 }
 

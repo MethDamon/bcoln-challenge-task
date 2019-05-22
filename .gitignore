@@ -2,8 +2,6 @@
 
 # dependencies
 /node_modules
-/build/*
-./build/*
 # testing
 /coverage
 
@@ -22,6 +20,12 @@ backend/node_modules
 truffle/build/
 src/Environment.js
 
+#Compiled contracts
+src/abis/*.json
+*.json
+
 # firebase
 .firebase/*
 firebase/*
+/build/*
+./build/*

@@ -1,15 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
-import {Button, Panel, Modal} from 'rsuite';
+import {Button, Panel} from 'rsuite';
 import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min.css'
-import styled from 'styled-components';
-import {css} from '@emotion/core';
-import {Input, InputGroup, Icon} from 'rsuite';
 import CurrentGame from '../views/CurrentGame'
 import GAME_STATUS from '../const/GameStatus';
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
-import RingLoader from 'react-spinners/RingLoader';
 import {withRouter, Redirect} from 'react-router-dom';
+import WinnerModal from '../views/WinnerModal'
 
 import Slot from "../views/Slot";
 
@@ -46,7 +43,8 @@ const styles = {
         flexDirection: "row",
         justifyContent: "center",
         flexWrap: "wrap",
-        borderColor: "#afafaf"
+        borderRadius: "6px",
+        border: "1px solid rgb(175,175,175)"
     },
     betButton: {
         width: 250,
@@ -95,17 +93,15 @@ const styles = {
 class Reveal extends Component {
     async componentDidMount() {
         let chosenNumbers = await this.props.cookies.get('chosenNumbers');
-        let commitTimestamps = new Date(await this.props.cookies.get('commitTimestamp'));
-        //&& commitTimestamps.toString() === this.props.timestamps['commit'].toString()
+        let lotteryIndex = await this.props.cookies.get('lotteryIndex');
 
-        if (!!chosenNumbers && this.props.timestamps['commit'].toString() === commitTimestamps.toString()) {
+        if (!!chosenNumbers && this.props.lotteryIndex.toString() === lotteryIndex.toString()) {
             this.setState({
                 chosenNumbers
             })
         } else {
             this.props.cookies.remove('chosenNumbers', {path: '/'});
-            this.props.cookies.remove('commitTimestamp', {path: '/'});
-
+            this.props.cookies.remove('lotteryIndex', {path: '/'});
         }
         this.createTable()
     }
@@ -172,8 +168,6 @@ class Reveal extends Component {
         } else {
             alert("NUMBERS NOT CHOSEN")
         }
-
-
     }
 
     constructor() {
@@ -184,39 +178,10 @@ class Reveal extends Component {
         }
     }
 
-    revealButton() {
-        let tmp = Object.assign([], this.state.chosenNumbers);
-        tmp = tmp.sort((a, b) => {
-            return a - b
-        });
-        if (tmp.includes(-1)) {
-            return "Re-select your numbers";
-        } else {
-            return `Reveal your numbers: ${tmp[0]}, ${tmp[1]}`;
-        }
-    }
-
-    winningModal() {
-        let modalText = [];
-        if (this.props.winners.includes(this.props.user)) {
-            modalText[0] = 'Congratulations! You won the lottery!';
-        } else {
-            modalText[0] = 'You lost!\n'
-        }
-        if (this.props.winners.length > 0) {
-            modalText[1] = `${this.props.winners.length} participant won the lottery`;
-        } else {
-            modalText[1] = 'Nobody won the jackpot\n'
-        }
-        modalText[2] = `Extracted numbers: ${this.props.winningNumbers[0]} - ${this.props.winningNumbers[1]}`;
-
-        return modalText
-    }
-
     abortCommitPhase() {
         let tx = Math.random() * 10000;
         this.props.contract.methods
-            .reset()
+            .abort()
             .send({from: this.props.user})
             .on('transactionHash', () => {
                 this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
@@ -229,12 +194,12 @@ class Reveal extends Component {
             });
     }
 
-    payout() {
+    goToPayoutPhase() {
         let tx = Math.random() * 10000;
         this.props.contract.methods
             .payout()
             .send({from: this.props.user})
-            .on('transactionHash', (ss) => {
+            .on('transactionHash', () => {
                 this.props.transactionNotification('open', tx, 'Transaction Sent', 'Your transaction is being validated...');
             })
             .on('confirmation', (confirmationNumber) => {
@@ -258,74 +223,59 @@ class Reveal extends Component {
                                           currentBet={this.props.fee}
                                           gameStatus={GAME_STATUS[this.props.currentPhase]}
                                           timeLeft={this.props.timeLeft}
+                                          jackpot={this.props.jackpot}
                             />
                         </div>
                         <div style={styles.CurrentGameContainer}>
-                            <Panel style={styles.Ticket}
-                                   header={<h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>}
-                                   bordered>
+                            <div style={styles.Ticket}>
+                                <h3 style={{fontWeight: "bold", color: "#4e4e4e"}}>Lottery Ticket</h3>
                                 <div style={styles.TicketNumbers}>
                                     {this.state.table}
                                 </div>
-                            </Panel>
+                            </div>
                         </div>
                         <div style={styles.buttonGroup}>
-                            <Button style={styles.abortRevealButton}
+                            <Button color="red"
+                                style={styles.abortRevealButton}
+                                    disabled={this.props.remainingTimeAbort>0}
                                     onClick={() => {
                                         this.abortCommitPhase()
                                     }
                                     }
                             >
-                                Abort Commit Phase
+                                Abort
                             </Button>
-                            <Button style={styles.betButton}
-                                    color="green"
-                                    disabled={this.state.chosenNumbers.includes(-1)}
-                                    onClick={() => {
-                                        this.revealNumbers()
-                                    }
-                                    }
-                            >
-                                {this.revealButton()}
-                            </Button>
-                            <Button style={styles.betButton}
-                                    color="green"
-                                    onClick={() => {
-                                        this.payout()
-                                    }
-                                    }
-                            >
-                                REVEAL
-                            </Button>
+                            {GAME_STATUS[this.props.currentPhase] == GAME_STATUS[2] &&
+                            this.props.timeLeft === 0 ? (
+                                <Button color="red"
+                                        style={styles.abortRevealButton}
+                                        disabled={this.props.remainingTimeAbort==0}
+                                        onClick={() => {
+                                            this.goToPayoutPhase()
+                                        }
+                                        }>
+                                    {'Go to payout phase'}
+                                </Button>
+                            ) : (
+                                <Button style={styles.betButton}
+                                        color="green"
+                                        disabled={this.state.chosenNumbers.includes(-1)||this.props.remainingTimeAbort==0}
+                                        onClick={() => {
+                                            this.revealNumbers()
+                                        }}
+                                >
+                                    Reveal
+                                </Button>)}
                         </div>
                     </Panel>
                 </Panel>
-                <Modal style={styles.endModal} show={this.props.winningNumbers.length > 0}
-                       onHide={this.props.refreshOnModalClose}>
-                    <Modal.Header>
-                        <Modal.Title
-                            style={{fontWeight: "bold", fontSize: "40px"}}>{this.winningModal()[0]}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div>{this.winningModal()[1]}</div>
-                        <div>{this.winningModal()[2]}</div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button onClick={this.props.refreshOnModalClose} appearance="primary">
-                            Close
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                <WinnerModal {...this.props}/>
             </div>
         );
     }
 }
 
-// const props = ({user})=>{
-//     return {user}
-// }
-
-const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, winners, refreshOnModalClose, winningNumbers}) => {
+const mapStateToProps = (state, {user, committed, remainingTimeAbort, currentPhase, fee, web3, contract, cookies, timeLeft, timestamps, winners, refreshOnModalClose, winningNumbers}) => {
     return {
         isLoading: state.ui.isLoading,
         user,
@@ -339,7 +289,8 @@ const mapStateToProps = (state, {user, committed, currentPhase, fee, web3, contr
         timestamps,
         winners,
         refreshOnModalClose,
-        winningNumbers
+        winningNumbers,
+        remainingTimeAbort
     };
 }
 

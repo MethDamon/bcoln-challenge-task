@@ -26,6 +26,24 @@ const Loader = styled.div`
     border-color: red;
 `;
 
+const initialState = {
+    isLoading: true,
+    user: '',
+    timestamps: {},
+    committed: 0,
+    currentPhase: '',
+    fee: 0,
+    timers: {},
+    timeLeft: -1,
+    hasCommitted: false,
+    transactionHashes: [],
+    winners: [],
+    winningNumbers: [],
+    jackpot: 0,
+    lotteryIndex: null,
+    remainingTimeAbort: 999,
+};
+
 class App extends Component {
 
     constructor() {
@@ -50,23 +68,10 @@ class App extends Component {
             DLottery.abi,
             CONTRACT_ADDRESS
         );
-
         this.state = {
-            isLoading: true,
+            ...initialState,
             web3: web3Instance,
             contract: dLotteryContract,
-            user: '',
-            timestamps: {},
-            committed: 0,
-            currentPhase: '',
-            fee: 0,
-            timers: {},
-            timeLeft: -1,
-            hasCommitted: false,
-            transactionHashes: [],
-            winners: [],
-            winningNumbers: [],
-            jackpot: 0
         }
     }
 
@@ -79,7 +84,6 @@ class App extends Component {
         const commitEvent = this.state.contract.events.NewCommit();
         commitEvent.on('data', async ({transactionHash}) => {
             if (!this.state.transactionHashes.includes(transactionHash)) {
-                console.log("commitEvent");
                 this.setState({
                     transactionHashes: [...this.state.transactionHashes, transactionHash]
                 });
@@ -133,7 +137,6 @@ class App extends Component {
         lotteryEndedEvent.on('data', async ({id, returnValues}) => {
                 console.log("ENDED , ", id);
                 if (!this.state.transactionHashes.includes(id)) {
-                    console.log("lotterEndedEvent");
                     this.setState({
                         transactionHashes: [...this.state.transactionHashes, id],
                         winners: returnValues.winners
@@ -151,29 +154,19 @@ class App extends Component {
                     transactionHashes: [...this.state.transactionHashes, id],
                     winningNumbers: [...this.state.winningNumbers, wNumber]
                 });
-                console.log('Winning Numbers -->', this.state.winningNumbers);
-                //await this.loadDataFromSC();
             }
         });
 
 
         this.timer = setInterval(() => {
             this.getRemainingTime()
-        }, 1000);
-
-        //TODO remove after testing
-        this.timerBalance = setInterval(() => {
-            this.getBalance();
-        }, 5000);
+        }, 2000);
 
     }
 
     refreshOnModalClose(){
-            this.loadDataFromSC();
-            this.setState({
-                winners: [],
-                winningNumbers: []
-            })
+        this.props.history.push("/join");
+        window.location.reload()
     }
 
     componentWillUnmount() {
@@ -190,29 +183,34 @@ class App extends Component {
         if (remainingTime <= 0 || this.state.currentPhase === 3) {
             remainingTime = 0;
         }
+        let openPhase = new Date(this.state.timestamps['start']);
+        let abort = openPhase.setSeconds(openPhase.getSeconds() + this.state.timers['TO_ABORT']);
+        let remainingTimeAbort = abort - Date.now();
+        //If payout phase then just show 0
+        if(openPhase.getFullYear()==1970){
+            remainingTimeAbort=999;
+        }else if (remainingTimeAbort <= 0) {
+            remainingTimeAbort = 0;
+        }
         this.setState({
-            timeLeft: remainingTime
+            timeLeft: remainingTime,
+            remainingTimeAbort
         });
     }
 
-    async getBalance() {
-        if (this.state.user) {
-            let balance = await this.state.contract.methods
+    async getJackpot() {
+        return await this.state.contract.methods
                 .getBalance()
                 .call({from: this.state.user})
                 .then(res => {
-                    return this.hexToNumberString(res._hex)
+                    return this.state.web3.utils.fromWei(this.hexToNumberString(res._hex))/2;
                 });
-            return this.state.web3.utils.fromWei(balance)
-
-        }
     }
 
     getUser() {
         return this.state.web3.eth
             .getAccounts()
             .then(addresses => {
-                console.log(addresses)
                 return addresses[0];
             })
             .catch(err => {
@@ -225,14 +223,12 @@ class App extends Component {
             .getCurrentTimestamp()
             .call({from: this.state.user})
             .then(res => {
-                console.log("TIMESTAMPS: ", res.commit._hex)
-                console.log("TIMESTAMPS: ", res[0]._hex)
-                return (({commit, commit_and_ready_for_reveal, payout, reveal}) => {
-                    commit = new Date(this.hexToNumber(commit._hex) * 1000);
-                    commit_and_ready_for_reveal = new Date(this.hexToNumber(commit_and_ready_for_reveal._hex) * 1000);
+                return (({open, start, payout, reveal}) => {
+                    open = new Date(this.hexToNumber(open._hex) * 1000);
+                    start = new Date(this.hexToNumber(start._hex) * 1000);
                     payout = new Date(this.hexToNumber(payout._hex) * 1000);
                     reveal = new Date(this.hexToNumber(reveal._hex) * 1000);
-                    return {commit, commit_and_ready_for_reveal, payout, reveal}
+                    return {open, start, payout, reveal}
                 })(res);
             })
     }
@@ -242,12 +238,12 @@ class App extends Component {
             .getTimers()
             .call({from: this.state.user})
             .then(res => {
-                return (({LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}) => {
-                    LEFT_COMMIT_AND_REVEAL = this.hexToNumber(LEFT_COMMIT_AND_REVEAL._hex);
-                    TO_ABORT = this.hexToNumber(TO_ABORT._hex) * 1000;
-                    WAIT_TO_GO_TO_REVEAL_PHASE = this.hexToNumber(WAIT_TO_GO_TO_REVEAL_PHASE._hex);
+                return (({TIME_LEFT_START, TO_ABORT, WAIT_TO_GO_TO_REVEAL, TO_REVEAL}) => {
+                    TIME_LEFT_START = this.hexToNumber(TIME_LEFT_START._hex);
+                    TO_ABORT = this.hexToNumber(TO_ABORT._hex);
+                    WAIT_TO_GO_TO_REVEAL = this.hexToNumber(WAIT_TO_GO_TO_REVEAL._hex);
                     TO_REVEAL = this.hexToNumber(TO_REVEAL._hex);
-                    return {LEFT_COMMIT_AND_REVEAL, TO_ABORT, WAIT_TO_GO_TO_REVEAL_PHASE, TO_REVEAL}
+                    return {TIME_LEFT_START, TO_ABORT, WAIT_TO_GO_TO_REVEAL, TO_REVEAL}
                 })(res);
             })
     }
@@ -269,16 +265,6 @@ class App extends Component {
             })
     }
 
-    async getJackpot() {
-        return await this.state.contract.methods
-            .getJackpot()
-            .call({from: this.state.user})
-            .then(res => {
-                console.log(this.hexToNumber(res._hex))
-                return 23
-            })
-    }
-
     async loadDataFromSC() {
 
         this.setState({
@@ -289,11 +275,9 @@ class App extends Component {
             fee: await this.getFee(),
             timers: await this.getTimers(),
             hasCommitted: await this.hasCommitted(),
+            jackpot: await this.getJackpot(),
+            lotteryIndex: await this.getLotteryIndex()
         });
-
-        this.setState({
-            jackpot: await this.getBalance() / 2
-        })
         //await  this.getNumberOfPlayers();
         //Load jackpot
         //load time
@@ -354,6 +338,15 @@ class App extends Component {
             })
     }
 
+    getLotteryIndex() {
+        return this.state.contract.methods
+            .getLotteryIndex()
+            .call({from: this.state.user})
+            .then(res => {
+                return this.hexToNumber(res._hex)
+            })
+    }
+
     hasCommitted() {
         return this.state.contract.methods
             .user_committed()
@@ -366,9 +359,9 @@ class App extends Component {
     getTimerForPhase(phase) {
         switch (phase) {
             case 0:
-                return this.state.timers['LEFT_COMMIT_AND_REVEAL'];
+                return this.state.timers['TIME_LEFT_START'];
             case 1:
-                return this.state.timers['WAIT_TO_GO_TO_REVEAL_PHASE'];
+                return this.state.timers['WAIT_TO_GO_TO_REVEAL'];
             case 2:
                 return this.state.timers['TO_REVEAL'];
             case 3:
@@ -379,9 +372,9 @@ class App extends Component {
     getPhaseForTimestamp(status) {
         switch (status) {
             case 0:
-                return 'commit';
+                return 'open';
             case 1:
-                return 'commit_and_ready_for_reveal';
+                return 'start';
             case 2:
                 return 'reveal';
             case 3:
