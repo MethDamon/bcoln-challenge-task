@@ -269,22 +269,28 @@ class App extends Component {
 
     async loadDataFromSC() {
 
+        let user = await this.getUser();
+        this.setState({user: user});
+
+        let timestamps = await this.getCurrentTimestamp();
+        let currentPhase = await this.getCurrentPhase();
+        let committed = await this.getCommitted();
+        let fee = await this.getFee();
+        let timers = await this.getTimers();
+        let hasCommitted = await this.hasCommitted();
+        let  jackpot = await this.getJackpot();
+        let lotteryIndex = await this.getLotteryIndex();
+
         this.setState({
-            user: await this.getUser(),
-            timestamps: await this.getCurrentTimestamp(),
-            currentPhase: await this.getCurrentPhase(),
-            committed: await this.getCommitted(),
-            fee: await this.getFee(),
-            timers: await this.getTimers(),
-            hasCommitted: await this.hasCommitted(),
-            jackpot: await this.getJackpot(),
-            lotteryIndex: await this.getLotteryIndex()
+            timestamps: timestamps,
+            currentPhase: currentPhase,
+            committed: committed,
+            fee: fee,
+            timers: timers,
+            hasCommitted: hasCommitted,
+            jackpot: jackpot,
+            lotteryIndex: lotteryIndex
         });
-        //await  this.getNumberOfPlayers();
-        //Load jackpot
-        //load time
-        //load numberofPlayers
-        //load entryFee
     }
 
     getCurrentPhase() {
