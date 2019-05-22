@@ -25,6 +25,6 @@ contract WinningNumbersGenerator {
                 second_winning_number = second_winning_number+1;
             }
         }
-        return [1, 2];
+        return [first_winning_number, second_winning_number];
     }
 }

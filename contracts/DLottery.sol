@@ -53,7 +53,7 @@ contract DLottery {
     address owner;
     uint256 constant TIME_LEFT_START_PHASE = 2 * 60 * 60; // 2 hours
     uint256 constant TIME_TO_ABORT =  3 * 60 * 60; // 3 hours
-    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 30 *60 ; // 30 minutes
+    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 2 * 60 * 60 ; // 2 hours
     uint256 constant TIME_TO_REVEAL = 30 * 60; // 30 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
     uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 30;
