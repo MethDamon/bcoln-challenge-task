@@ -26,12 +26,6 @@ const ModalTitle = styled.h3`
 `;
 
 const WinnerModal = (props) => {
-    function getJackpot() {
-        if(props.winners.length===1){
-            return 2*props.jackpot/props.winningNumbers.length;
-        }
-        return props.jackpot/props.winningNumbers.length;
-    }
     return (
     <Modal style={styles.endModal} show={props.winningNumbers.length > 0}
            onHide={props.refreshOnModalClose}>
@@ -40,7 +34,7 @@ const WinnerModal = (props) => {
                 {props.winners.includes(props.user) ? (
                     <div>
                         {"Congratulations!"}
-                        <ModalTitle>{`You won ${getJackpot()} ETH`}</ModalTitle>
+                        <ModalTitle>{`You won ${props.jackpot/props.winners.length} ETH`}</ModalTitle>
                     </div>
                 ) : (
                     <div style={{color: "red"}}>

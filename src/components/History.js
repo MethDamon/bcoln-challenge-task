@@ -71,18 +71,23 @@ class History extends Component {
             .getLotteries()
             .call({from: this.props.user})
             .then(res => {
-                console.log(res)
                 this.setState({
                     jackpots: res.jackpots.map(num => this.props.web3.utils.fromWei(this.props.web3.utils.hexToNumberString(num._hex))),
                     winningNumbersPerLottery: res.winning_numbers_per_lottery,
                     totalWinners : res.winners_per_lottery.map(num => this.props.web3.utils.hexToNumberString(num._hex)),
-                })
-                console.log(this.state)
+                });
             });
     };
 
-    render() {
+    getTotalJackpot() {
+        let totalJackpot = 0;
+        this.state.totalWinners.forEach((n, index) => {
+            totalJackpot += (n > 0) ? Number(this.state.jackpots[index]) : 0
+        });
+        return totalJackpot
+    }
 
+    render() {
         return (
             <div style={styles.HistoryContainer}>
                 <div style={styles.SummaryContainer}>
@@ -96,7 +101,8 @@ class History extends Component {
                                             Total Amount Awarded:
                                         </Typography>
                                         <div style={styles.Info}>
-                                            {this.state.jackpots.reduce((total, jackpot) => total + Number(jackpot), 0)}
+                                            {this.getTotalJackpot()}
+
                                             <Icon style={{marginLeft: 4}} icon={"money"} size="sm" />
                                         </div>
                                     </div>
@@ -125,7 +131,7 @@ class History extends Component {
                             {this.state.jackpots !== null && this.state.winningNumbersPerLottery !== null && this.state.totalWinners !== null ? (
                                 <div>
                                     {this.state.totalWinners.map((winner, i) => (
-                                        <div>
+                                        <div key={i}>
                                             <PlayedLottery winner={winner} winningNumbers={[this.state.winningNumbersPerLottery[i*2], this.state.winningNumbersPerLottery[i*2+1]]} jackpot={this.state.jackpots[i]} lotteryIndex={i+1}/>
                                             <hr style={styles.hr}/>
                                         </div>

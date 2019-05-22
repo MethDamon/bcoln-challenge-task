@@ -1,11 +1,7 @@
 import React from 'react';
-import { Panel } from 'rsuite';
 import lotto from '../assets/lotto.png'
 import GameStatusBadge from "./GameStatusBadge";
 import AnimatedNumber from 'react-animated-number';
-import prettyBytes from 'pretty-bytes';
-
-
 
 const styles = {
     Panel: {
@@ -49,7 +45,7 @@ const CurrentGame = ({currentFee, nrOfPlayers, gameStatus, timeLeft, jackpot}) =
             <br/>
             <div>
                 <h5 style={styles.Jackpot}>Jackpot</h5>
-                <AnimatedNumber value={jackpot}
+                <AnimatedNumber value={Number(jackpot)}
                                 stepPrecision={4}
                                 style={{
                                     transition: '0.8s ease-out',

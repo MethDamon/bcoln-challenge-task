@@ -57,7 +57,7 @@ contract DLottery {
     uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 1*60; // 30 seconds
     uint256 constant TIME_TO_REVEAL = 10 * 6; // 10 minutes
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
-    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 2;
+    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 1;
 
     // time stamps of when the phases were entered
     struct TimeStamps {
