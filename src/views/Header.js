@@ -4,6 +4,7 @@ import 'rsuite/dist/styles/rsuite.min.css'; // or 'rsuite/dist/styles/rsuite.min
 import {uiStartLoading, uiStopLoading} from '../store/actions/uiActionCreators';
 import styled from 'styled-components'
 import {Icon} from "rsuite";
+import {Link} from "react-router-dom"
 
 const HeaderContainer = styled.div`
   font-size: 18px;
@@ -19,6 +20,7 @@ const Header = () => (
         <GithubLink href="https://github.com/MethDamon/bcoln-challenge-task" target="_blank">
             <Icon style={{float: 'left'}} icon="github" size='lg'/>
         </GithubLink>
+        <Icon  componentClass={Link} to={"load"} style={{float: 'right'}} icon='gear' size='lg' inverse={true}/>
     </HeaderContainer>
 );
 

@@ -28,7 +28,7 @@ const styles = {
     },
     PlayedLotteriesContainer: {
         width: 600,
-        height: 800,
+        height: "50vh",
         background: "white",
         borderRadius: "15px 15px 15px 15px"
     },
