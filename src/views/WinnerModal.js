@@ -25,7 +25,14 @@ const ModalTitle = styled.h3`
    color: #3a9c6c
 `;
 
-const WinnerModal = (props) => (
+const WinnerModal = (props) => {
+    function getJackpot() {
+        if(props.winners.length===1){
+            return 2*props.jackpot/props.winningNumbers.length;
+        }
+        return props.jackpot/props.winningNumbers.length;
+    }
+    return (
     <Modal style={styles.endModal} show={props.winningNumbers.length > 0}
            onHide={props.refreshOnModalClose}>
         <Modal.Header>
@@ -33,7 +40,7 @@ const WinnerModal = (props) => (
                 {props.winners.includes(props.user) ? (
                     <div>
                         {"Congratulations!"}
-                        <ModalTitle>{`You won ${props.jackpot/props.winningNumbers.length} ETH`}</ModalTitle>
+                        <ModalTitle>{`You won ${getJackpot()} ETH`}</ModalTitle>
                     </div>
                 ) : (
                     <div style={{color: "red"}}>
@@ -71,7 +78,7 @@ const WinnerModal = (props) => (
             </Button>
         </Modal.Footer>
     </Modal>
-);
+)};
 
 const mapStateToProps = (state) => {
     return {

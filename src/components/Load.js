@@ -82,8 +82,8 @@ class Load extends Component {
                 if(confirmationNumber===1){
                     this.props.transactionNotification('close',tx);
                     this.props.transactionNotification('success', Math.random()*10000,'Transaction Validated','Your transaction has been validated');
+                    return this.props.history.push('/join')
                 }
-                return this.props.history.push('/join')
             });
     }
 

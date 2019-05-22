@@ -199,12 +199,11 @@ contract DLottery {
     
     // Resets the lottery, only callable from within contract
     function resetLottery() private {
-
+        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Open);
         currentLotteryIndex++;
         Lottery storage newLottery = lotteries[currentLotteryIndex];
         newLottery.jackpot = address(this).balance/2;
         newLottery.current_timestamps = TimeStamps(0, 0, 0, 0);
-        emit PhaseChange(lotteries[currentLotteryIndex].current_phase, Phase.Open);
         newLottery.current_phase = Phase.Open;
         emit Reset(msg.sender);
     }

@@ -21,14 +21,12 @@ const Header = (props) => {
         <GithubLink href="https://github.com/MethDamon/bcoln-challenge-task" target="_blank">
             <Icon style={{float: 'left'}} icon="github" size='lg'/>
         </GithubLink>
-        {props.state.path == '/join' ? (
-            <Icon componentClass={Link} to={"load"} style={{float: 'right'}} icon='gear' size='lg' inverse={true} onClick={()=>{
-                props.changePath('/load')
-            }}/>
-        ) : (<Icon componentClass={Link} to={"join"} style={{float: 'right'}} icon='gear' size='lg' inverse={true} onClick={()=>{
-            props.changePath('/join')
-            }}/>
-        )}
+        <div class="icons" style={{float: 'right', display:'flex', flexDirection:'row'}}>
+            <Icon componentClass={Link} to={"join"} style={{flex:1, paddingRight: 15}} icon='home' size='lg' inverse={true}/>
+            <Icon componentClass={Link} to={"history"} style={{flex:1, paddingRight: 15}} icon='history' size='lg' inverse={true}/>
+            <Icon componentClass={Link} to={"load"} style={{flex:1, paddingRight: 15}} icon='gear' size='lg' inverse={true}/>
+        </div>
+
     </HeaderContainer>
     );
 }
