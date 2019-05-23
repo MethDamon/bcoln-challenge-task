@@ -128,7 +128,7 @@ class History extends Component {
                                 <div>
                                     {this.state.totalWinners.slice(0).reverse().map((winner, i) => (
                                         <div key={i}>
-                                            <PlayedLottery winner={winner} winningNumbers={[this.state.winningNumbersPerLottery[i*2], this.state.winningNumbersPerLottery[i*2+1]]} jackpot={this.state.jackpots[i]} lotteryIndex={this.state.totalWinners.length-i}/>
+                                            <PlayedLottery winner={winner} winningNumbers={[this.state.winningNumbersPerLottery[(this.state.totalWinners.length-i-1)*2], this.state.winningNumbersPerLottery[(this.state.totalWinners.length-i-1)*2+1]]} jackpot={this.state.jackpots[this.state.totalWinners.length-i-1]} lotteryIndex={this.state.totalWinners.length-i}/>
                                             <hr style={styles.hr}/>
                                         </div>
                                         ))}
