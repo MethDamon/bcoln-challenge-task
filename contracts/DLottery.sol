@@ -49,14 +49,14 @@ contract DLottery {
     // Reference to an instance of the winning number generator
     WinningNumbersGeneratorInterface private winningNumbersGenerator;
     // entry fee, uint256 constant ENTRY_FEE = 581273793610390;
-    uint256 constant ENTRY_FEE = (1 ether)/10;
+    uint256 constant ENTRY_FEE = (1 ether)/1;
     address owner;
-    uint256 constant TIME_LEFT_START_PHASE = 2 * 60 * 60; // 2 hours
+    uint256 constant TIME_LEFT_START_PHASE = 2 * 60 ; // 1 min
     uint256 constant TIME_TO_ABORT =  3 * 60 * 60; // 3 hours
-    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 2 * 60 * 60 ; // 2 hours
-    uint256 constant TIME_TO_REVEAL = 30 * 60; // 30 minutes
+    uint256 constant TIME_WAIT_TO_GO_TO_REVEAL_PHASE = 2 * 60  ; // 1 min
+    uint256 constant TIME_TO_REVEAL = 2* 60 ; // 30 seconds
     uint256 constant NUMBER_OF_REQUIRED_PARTICIPANTS = 1;
-    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 30;
+    uint256 constant NUMBER_OF_MAX_PARTICIPANTS = 2;
 
     // time stamps of when the phases were entered
     struct TimeStamps {

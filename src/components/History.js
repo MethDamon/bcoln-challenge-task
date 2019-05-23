@@ -29,7 +29,6 @@ const styles = {
         borderRadius: "15px 15px 15px 15px"
     },
     PlayedLotteriesContainer: {
-
         overflow: "auto",
         width: 600,
         height: "50vh",
