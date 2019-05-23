@@ -18,9 +18,6 @@ const styles = {
         alignItems: "center",
         height: "85vh",
         justifyContent: "space-evenly",
-        overflow: "scroll",
-        overflowY: "auto",
-        overflowX: "hidden"
     },
     SummaryContainer: {
         width: 400,
@@ -29,12 +26,11 @@ const styles = {
         borderRadius: "15px 15px 15px 15px"
     },
     PlayedLotteriesContainer: {
-
-        overflow: "auto",
+        overflow: "scroll",
         width: 600,
         height: "50vh",
         background: "white",
-        borderRadius: "15px 15px 15px 15px"
+        borderRadius: "15px 15px 15px 15px",
     },
     hr: {
         border: 0,

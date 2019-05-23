@@ -9,6 +9,8 @@ const Container = styled.div`
   flex-direction: row;
   align-items: baseline;
   color: white;
+  position: sticky;
+   top: 0
 `;
 
 const CardHeader = ({ title , iconName, backgroundColor, position, width, zIndex, borderRadius, boxShadow, justifyContent, marginLeft}) => (
