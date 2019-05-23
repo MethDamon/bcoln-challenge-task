@@ -7,7 +7,7 @@ import {
 
 const initialState = {
     isLoading: true,
-    isValidating: true,
+    isValidating: false,
 };
 
 
