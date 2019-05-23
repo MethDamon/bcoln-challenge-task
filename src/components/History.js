@@ -18,9 +18,6 @@ const styles = {
         alignItems: "center",
         height: "85vh",
         justifyContent: "space-evenly",
-        overflow: "scroll",
-        overflowY: "auto",
-        overflowX: "hidden"
     },
     SummaryContainer: {
         width: 400,
@@ -29,11 +26,11 @@ const styles = {
         borderRadius: "15px 15px 15px 15px"
     },
     PlayedLotteriesContainer: {
-        overflow: "auto",
+        overflow: "scroll",
         width: 600,
         height: "50vh",
         background: "white",
-        borderRadius: "15px 15px 15px 15px"
+        borderRadius: "15px 15px 15px 15px",
     },
     hr: {
         border: 0,
@@ -129,9 +126,9 @@ class History extends Component {
                         <CardContent style={{padding: 23}}>
                             {this.state.jackpots !== null && this.state.winningNumbersPerLottery !== null && this.state.totalWinners !== null ? (
                                 <div>
-                                    {this.state.totalWinners.map((winner, i) => (
+                                    {this.state.totalWinners.slice(0).reverse().map((winner, i) => (
                                         <div key={i}>
-                                            <PlayedLottery winner={winner} winningNumbers={[this.state.winningNumbersPerLottery[i*2], this.state.winningNumbersPerLottery[i*2+1]]} jackpot={this.state.jackpots[i]} lotteryIndex={i+1}/>
+                                            <PlayedLottery winner={winner} winningNumbers={[this.state.winningNumbersPerLottery[i*2], this.state.winningNumbersPerLottery[i*2+1]]} jackpot={this.state.jackpots[i]} lotteryIndex={reverted.length-i}/>
                                             <hr style={styles.hr}/>
                                         </div>
                                         ))}
